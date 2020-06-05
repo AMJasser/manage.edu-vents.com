@@ -139,8 +139,8 @@
         <section>
             <form action="/edu-vents" method="POST" enctype="multipart/form-data" name="eduventsForm" onsubmit="return validateForm()">
                 <h3>Add an EDU-vent</h3>
-                <input type="text" name="name" placeholder="Name" required>*
-                <label for="type">Type
+                <label>Name*<input type="text" name="name" id="name" placeholder="Name" required></label>
+                <label for="type">Type*
                     <select name="type" id="type" required>
                         <option>Any</option>
                         <option>College Admissions</option>
@@ -161,9 +161,9 @@
                         <option>Volunteering</option>
                         <option>Workshop</option>
                         <option>Other</option>
-                    </select>*
+                    </select>
                 </label>
-                <textarea name="description" placeholder="Description" required></textarea>*
+                <label>Description*<textarea name="description" id="description" placeholder="Description" required></textarea></label>
                 <label for="location">Select Location
                     <select name="location" id="location">
                         <option>Any</option>
@@ -173,15 +173,15 @@
                         <option>Other</option>
                     </select>
                 </label>
-                <input type="text" name="locationInfo" placeholder="Location Information">
-                <input type="url" name="googleMaps" placeholder="Google Maps">
-                <input type="url" name="urltoapp" placeholder="URL to Application">
+                <label>Location Information<input type="text" name="locationInfo" placeholder="Location Information"></label>
+                <label>Google Maps Link<input type="url" name="googleMaps" placeholder="Google Maps"></label>
+                <label>URL to Application<input type="url" name="urltoapp" placeholder="URL to Application"></label>
                 <label>Start Date <input type="date" name="date"></label>
                 <label>End Date <input type="date" name="endDate"></label>
-                <input type="file" name="img" required>*
-                <input dir="rtl" type="text" name="nameAr" placeholder="الاسم" required>*
-                <label for="type">النوع
-                    <select name="typeAr" id="type" required>
+                <label>Image*<input type="file" name="img" required></label>
+                <label dir="rtl" style="text-align: right;">الاسم*<input dir="rtl" type="text" name="nameAr" id="nameAr" placeholder="الاسم" required></label>
+                <label for="type" dir="rtl" style="text-align: right;">النوع*
+                    <select dir="ltr" name="typeAr" id="typeAr" id="type" required>
                         <option>الكل</option>
                         <option>تقديم الجامعات</option>
                         <option>الإعداد الجامعي</option>
@@ -201,11 +201,11 @@
                         <option>تطوع</option>
                         <option>ورشة عمل</option>
                         <option>أخرى</option>
-                    </select>*
+                    </select>
                 </label>
-                <textarea dir="rtl" name="descriptionAr" placeholder="الوصف" required></textarea>*
-                <label for="location">إختر الموقع
-                    <select name="locationAr" id="location">
+                <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="descriptionAr" id="descriptionAr" placeholder="الوصف" required></textarea></label>
+                <label for="location" dir="rtl" style="text-align: right;">إختر الموقع*
+                    <select dir="ltr" name="locationAr" id="locationAr">
                         <option>الكل</option>
                         <option>جدة</option>
                         <option>الرياض</option>
@@ -213,7 +213,7 @@
                         <option>أخرى</option>
                     </select>
                 </label>
-                <input dir="rtl" type="text" name="locationInfoAr" placeholder="معلومات الموقع">
+                <label dir="rtl" style="text-align: right;">معلومات الموقع*<input dir="rtl" type="text" name="locationInfoAr" placeholder="معلومات الموقع"></label>
                 <input type="submit">
             </form>
         </section>
@@ -336,8 +336,8 @@
         <section>
             <form action="/edu-vents" method="POST" enctype="multipart/form-data" name="eduventsForm" onsubmit="return validateForm()">
                 <h3>Add an EDU-vent</h3>
-                <input type="text" name="name" placeholder="Name" required>*
-                <label for="type">Type
+                <label>Name*<input type="text" name="name" id="name" placeholder="Name" required></label>
+                <label for="type">Type*
                     <select name="type" id="type" required>
                         <option>Any</option>
                         <option>College Admissions</option>
@@ -358,9 +358,9 @@
                         <option>Volunteering</option>
                         <option>Workshop</option>
                         <option>Other</option>
-                    </select>*
+                    </select>
                 </label>
-                <textarea name="description" placeholder="Description" required></textarea>*
+                <label>Description*<textarea name="description" id="description" placeholder="Description" required></textarea></label>
                 <label for="location">Select Location
                     <select name="location" id="location">
                         <option>Any</option>
@@ -370,15 +370,15 @@
                         <option>Other</option>
                     </select>
                 </label>
-                <input type="text" name="locationInfo" placeholder="Location Information">
-                <input type="url" name="googleMaps" placeholder="Google Maps">
-                <input type="url" name="urltoapp" placeholder="URL to Application">*      
+                <label>Location Information<input type="text" name="locationInfo" placeholder="Location Information"></label>
+                <label>Google Maps Link<input type="url" name="googleMaps" placeholder="Google Maps"></label>
+                <label>URL to Application<input type="url" name="urltoapp" placeholder="URL to Application"></label>   
                 <label>Start Date <input type="date" name="date"></label>
                 <label>End Date <input type="date" name="endDate"></label>
-                <input type="file" name="img" required>*
-                <input dir="rtl" type="text" name="nameAr" placeholder="الاسم" required>*
-                <label for="type">النوع
-                    <select name="typeAr" id="type" required>
+                <label>Image*<input type="file" name="img" required></label>
+                <label dir="rtl" style="text-align: right;">الاسم*<input dir="rtl" type="text" name="nameAr" id="nameAr" placeholder="الاسم" required></label>
+                <label for="type" dir="rtl" style="text-align: right;">النوع*
+                    <select dir="ltr" name="typeAr" id="typeAr" required>
                         <option>الكل</option>
                         <option>تقديم الجامعات</option>
                         <option>الإعداد الجامعي</option>
@@ -398,11 +398,11 @@
                         <option>تطوع</option>
                         <option>ورشة عمل</option>
                         <option>أخرى</option>
-                    </select>*
+                    </select>
                 </label>
-                <textarea dir="rtl" name="descriptionAr" placeholder="الوصف" required></textarea>*
-                <label for="location">إختر الموقع
-                    <select name="locationAr" id="location">
+                <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="descriptionAr" id="descriptionAr" placeholder="الوصف" required></textarea></label>
+                <label for="location" dir="rtl" style="text-align: right;">إختر الموقع
+                    <select dir="ltr" name="locationAr" id="location">
                         <option>الكل</option>
                         <option>جدة</option>
                         <option>الرياض</option>
@@ -410,7 +410,7 @@
                         <option>أخرى</option>
                     </select>
                 </label>
-                <input dir="rtl" type="text" name="locationInfoAr" placeholder="معلومات الموقع">
+                <label dir="rtl" style="text-align: right;">معلومات الموقع<input dir="rtl" type="text" name="locationInfoAr" placeholder="معلومات الموقع"></label>
                 <input type="submit">
             </form>
         </section>
@@ -493,8 +493,34 @@
 
 <script>
     function  validateForm() {
-        if (document.forms["eduventsForm"]["date"].value === "" && document.forms["eduventsForm"]["endDate"].value === "") {
+        var eduventForm = document.forms["eduventsForm"];
+
+        if (eduventForm["date"].value === "" && eduventForm["endDate"].value === "") {
             alert("Please submit at least one date.");
+            return false;
+        }
+        if (eduventForm["name"].value === "") {
+            alert("Please submit a name.");
+            return false;
+        }
+        if (eduventForm["type"].options[eduventForm["type"].selectedIndex].value === "Any" || eduventForm["type"].options[eduventForm["type"].selectedIndex].value  === "") {
+            alert("Please submit a type.");
+            return false;
+        }
+        if (eduventForm["description"].value === "") {
+            alert("Please submit a description.");
+            return false;
+        }
+        if (eduventForm["nameAr"].value === "") {
+            alert("Please submit an arabic name.");
+            return false;
+        }
+        if (eduventForm["typeAr"].options[eduventForm["typeAr"].selectedIndex].value === "الكل" || eduventForm["typeAr"].options[eduventForm["typeAr"].selectedIndex].value  === "") {
+            alert("Please submit an arabic type.");
+            return false;
+        }
+        if (eduventForm["descriptionAr"].value === "") {
+            alert("Please submit an arabic description.");
             return false;
         }
     }

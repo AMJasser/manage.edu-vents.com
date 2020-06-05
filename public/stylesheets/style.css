@@ -74,31 +74,39 @@ h2 { /*welcome <user>*/
     text-align: center;
 }
 
-.sections section input, .sections section textarea {
-    width: 75%;
-    padding: 10px 15px;
-    margin: 10px;
-    box-sizing: border-box;
-    border: 2px solid rgb(28,68,178);
-    background: white;
-    border-radius: 10px;
+.sections section form {
+    padding: 0 10%;
 }
 
 .sections section label {
     display: block;
+    text-align: left;
+    font-weight: bold;
+    font-size: 20px;
+    margin: 40px 0;
 }
 
-.sections section select {
+.sections section input, .sections section textarea {
+    width: 75%;
     padding: 10px 15px;
-    margin: 10px;
+    margin: 10px auto;
     box-sizing: border-box;
     border: 2px solid rgb(28,68,178);
     background: white;
     border-radius: 10px;
+    display: block;
+    width: 100%;
 }
 
-.sections section input[type=date] {
-    width: initial;
+.sections section select {
+    padding: 10px 15px;
+    margin: 10px auto;
+    box-sizing: border-box;
+    border: 2px solid rgb(28,68,178);
+    background: white;
+    border-radius: 10px;
+    display: block;
+    width: 100%;
 }
 
 .sections section input[type=submit], #submitbut {
