@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>EDU-vents</title>
+        <meta name="description" content="EDU-vents - This website was created solely for the help of Philomaths. It would show the most important educational events happening around the world, providing an easy-to-use portal for them.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="/images/seco.ico">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/stylesheets/style.css">
+
+        <script>
+            window.onload = function() {
+                var select = document.getElementById("changePic");
+                var fileInput = document.getElementById("img");
+
+                select.onchange = function() {
+                    if (select.value === "yes") {
+                        fileInput.style.display = "unset";
+                    } else {
+                        fileInput.style.display = "none";
+                    }
+                }
+            }
+        </script>
+
+        <% if (typeof msg !== "undefined") { %>
+            <script>alert("<%= msg %>")</script>
+        <% } %>
+    </head>
+    <body>
+        <div class="sections">
+            <section>
+                <% if (typeof eduvent.name !== "undefined") { %> <h1 dir="rtl">NAME: <%= eduvent.name %></h1> <% } %> 
+
+                <img width="750px" src="/uploads/<%= eduvent.imgPath %>">
+
+                <br>
+
+                <% if (typeof eduvent.type !== "undefined") { %> 
+                    <h3 dir="rtl">TYPE: <%= eduvent.type %></h3>
+                    <br>
+                <% } %> 
+
+                <% if (typeof eduvent.description !== "undefined") { %> 
+                    <p dir="rtl">DESC: <%= eduvent.description %></p>
+                    <br>
+                <% } %> 
+
+                <% 
+                if (typeof eduvent.startDate !== "undefined") {
+                    var startY = eduvent.startDate.getFullYear();
+                    var startM = eduvent.startDate.getMonth() + 1;
+                    startM = "0" + startM;
+                    var startD = "0" + eduvent.startDate.getDate();
+                    startD = "0" + startD;
+
+                    var startDate = startY + "-" + startM.slice(-2) + "-" + startD.slice(-2);
+                }
+                %>
+
+                <% 
+                if (typeof eduvent.endDate !== "undefined") {
+                    var endY = eduvent.endDate.getFullYear();
+                    var endM = eduvent.endDate.getMonth() + 1;
+                    endM = "0" + startM;
+                    var endD = "0" + eduvent.endDate.getDate();
+                    endD = "0" + startD;
+
+                    var endDate = endY + "-" + endM.slice(-2) + "-" + endD.slice(-2);
+                }
+                %>
+
+                <% if (typeof eduvent.startDate !== "undefined" && typeof eduvent.endDate !== "undefined") { %> 
+                    <h3>DATE: <%= startDate %> - <%= endDate %></h3>
+                    <br>
+                <% } else if (typeof eduvent.endDate !== "undefined") { %> 
+                    <h3>END DATE: <%= endDate %></h3>
+                    <br>
+                <% } else { %> 
+                    <h3>START DATE: <%= startDate %></h3>
+                    <br>
+                <% } %> 
+
+                <% if (typeof eduvent.location !== "undefined") { %> 
+                    <h3 dir="rtl">Location: <%= eduvent.location %></h3> 
+                    <br>
+                <% } %> 
+
+                <% if (typeof eduvent.locationInfo !== "undefined") { %> 
+                    <h3 dir="rtl">Location Information: <%= eduvent.locationInfo %></h3>
+                    <br> 
+                <% } %> 
+
+                <% if (typeof eduvent.googleMaps !== "undefined") { %> 
+                    <h3>Google Maps Link: <a href="<%= eduvent.googleMaps %>"><%= eduvent.googleMaps %></a></h3> 
+                    <br>
+                <% } %> 
+
+                <% if (isAdmin === true) { %> 
+                    <% if (typeof eduvent.clickCount !== "undefined") { %> 
+                        <h3>Click Count: <%= eduvent.clickCount %></h3> 
+                        <br>
+                    <% } %> 
+                <% } %> 
+
+                <% if (typeof eduvent.urltoapp !== "undefined") { %> 
+                    <h3>URL to Application: <a href="<%= eduvent.urltoapp %>"><%= eduvent.urltoapp %></a></h3>
+                <% } %> 
+
+                <% if (typeof eduvent.featuredUntil !== "undefined" && new Date < eduvent.featuredUntil) { %>
+                    <br>
+                    <h3>Featured Until: <%= eduvent.featuredUntil %></h3>
+                <% } %>
+                
+                <% if (eduvent.userId === userId || isAdmin === true) { %> 
+                    <form action="/edu-vents/ar/<%= eduvent._id %>?_method=DELETE" method="POST">
+                        <button class="delete">Delete</button>
+                    </form>
+
+                    <form action="/edu-vents/ar/<%= eduvent._id %>/edit" method="GET">
+                        <button class="edit">Edit</button>
+                    </form>
+
+                    <% if (isAdmin === true && (eduvent.featuredUntil === undefined || new Date < eduvent.featuredUntil)) { %> 
+                        <form action="/edu-vents/ar/<%= eduvent._id %>/feature" method="GET">
+                            <button>Feature</button>
+                        </form>
+                    <% } %> 
+                <% } %>
+
+                <a href="/">GO BACK</a>
+            </section>
+        </div>
+    </body>
+</html>

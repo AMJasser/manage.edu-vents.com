@@ -213,7 +213,7 @@ app.get("/edu-vents/en/:id", isLoggedIn, async function(req, res) {
 app.get("/edu-vents/ar/:id", isLoggedIn, async function(req, res) {
     try {
         var eduvent = await EduventAr.findOne({_id: req.params.id});
-        res.render("view", {eduvent: eduvent, userId: req.user._id.toHexString(), isAdmin: req.user.isAdmin}, function(err, html) {
+        res.render("viewAr", {eduvent: eduvent, userId: req.user._id.toHexString(), isAdmin: req.user.isAdmin}, function(err, html) {
             if (err) {
                 console.log(err);
                 res.render("error", {error: err});

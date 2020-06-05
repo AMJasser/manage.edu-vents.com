@@ -33,7 +33,7 @@
             <section>
                 <form action="/edu-vents/ar/<%= eduvent._id %>?_method=PATCH" method="POST" enctype="multipart/form-data">
                     <h3>تعديل إديوفنت</h3>
-                    <input type="text" name="nameAr" placeholder="الاسم" <% if (typeof eduvent.name !== "undefined") { %> value="<%= eduvent.name %>" <% } %>>
+                    <input dir="rtl" type="text" name="nameAr" placeholder="الاسم" <% if (typeof eduvent.name !== "undefined") { %> value="<%= eduvent.name %>" <% } %>>
                     <label for="type">النوع
                         <select name="typeAr" id="type">
                             <option <% if (eduvent.type === "الكل") {%> selected <% } %>>الكل</option>
@@ -57,7 +57,7 @@
                             <option <% if (eduvent.type === "أخرى") {%> selected <% } %>>أخرى</option>
                         </select>
                     </label>
-                    <textarea name="descriptionAr" placeholder="الوصف"><% if (typeof eduvent.description !== "undefined") { %> <%= eduvent.description %> <% } %></textarea>
+                    <textarea dir="rtl" name="descriptionAr" placeholder="الوصف"><% if (typeof eduvent.description !== "undefined") { %> <%= eduvent.description %> <% } %></textarea>
                     <label for="location">إختر الموقع
                         <select name="locationAr" id="location">
                             <option <% if (eduvent.location === "الكل") {%> selected <% } %>>الكل</option>
@@ -67,9 +67,9 @@
                             <option <% if (eduvent.location === "أخرى") {%> selected <% } %>>أخرى</option>
                         </select>
                     </label>
-                    <input type="text" name="locationInfoAr" placeholder="معلومات الموقع" <% if (typeof eduvent.locationInfo !== "undefined") { %> value="<%= eduvent.locationInfo %>" <% } %>>
-                    <input type="url" name="googleMaps" placeholder="Google Maps" <% if (typeof eduvent.googleMaps !== "undefined") { %> value="<%= eduvent.googleMaps %>" <% } %>>
-                    <input type="url" name="urltoapp" placeholder="URL to Application" <% if (typeof eduvent.urltoapp !== "undefined") { %> value="<%= eduvent.urltoapp %>" <% } %>>
+                    <input dir="rtl" type="text" name="locationInfoAr" placeholder="معلومات الموقع" <% if (typeof eduvent.locationInfo !== "undefined") { %> value="<%= eduvent.locationInfo %>" <% } %>>
+                    <input dir="rtl" type="url" name="googleMaps" placeholder="Google Maps" <% if (typeof eduvent.googleMaps !== "undefined") { %> value="<%= eduvent.googleMaps %>" <% } %>>
+                    <input dir="rtl" type="url" name="urltoapp" placeholder="URL to Application" <% if (typeof eduvent.urltoapp !== "undefined") { %> value="<%= eduvent.urltoapp %>" <% } %>>
 
                     <% 
                     if (typeof eduvent.startDate !== "undefined") {

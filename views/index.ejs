@@ -179,7 +179,7 @@
                 <label>Start Date <input type="date" name="date"></label>
                 <label>End Date <input type="date" name="endDate"></label>
                 <input type="file" name="img" required>*
-                <input type="text" name="nameAr" placeholder="الاسم" required>*
+                <input dir="rtl" type="text" name="nameAr" placeholder="الاسم" required>*
                 <label for="type">النوع
                     <select name="typeAr" id="type" required>
                         <option>الكل</option>
@@ -203,7 +203,7 @@
                         <option>أخرى</option>
                     </select>*
                 </label>
-                <textarea name="descriptionAr" placeholder="الوصف" required></textarea>*
+                <textarea dir="rtl" name="descriptionAr" placeholder="الوصف" required></textarea>*
                 <label for="location">إختر الموقع
                     <select name="locationAr" id="location">
                         <option>الكل</option>
@@ -213,7 +213,7 @@
                         <option>أخرى</option>
                     </select>
                 </label>
-                <input type="text" name="locationInfoAr" placeholder="معلومات الموقع">
+                <input dir="rtl" type="text" name="locationInfoAr" placeholder="معلومات الموقع">
                 <input type="submit">
             </form>
         </section>
@@ -258,8 +258,8 @@
                 <div class="edu-vent">
                     <img alt="EDU-vent img" src="/uploads/<%= eduvent.imgPath %>">
                     <div class="inner">
-                        <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
-                        <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
+                        <h2 dir="rtl"><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
+                        <p dir="rtl"><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
                         <form action="/edu-vents/ar/<%= eduvent._id %>?_method=DELETE" method="POST">
                             <button class="delete">Delete</button>
                         </form>
@@ -376,7 +376,7 @@
                 <label>Start Date <input type="date" name="date"></label>
                 <label>End Date <input type="date" name="endDate"></label>
                 <input type="file" name="img" required>*
-                <input type="text" name="nameAr" placeholder="الاسم" required>*
+                <input dir="rtl" type="text" name="nameAr" placeholder="الاسم" required>*
                 <label for="type">النوع
                     <select name="typeAr" id="type" required>
                         <option>الكل</option>
@@ -400,7 +400,7 @@
                         <option>أخرى</option>
                     </select>*
                 </label>
-                <textarea name="descriptionAr" placeholder="الوصف" required></textarea>*
+                <textarea dir="rtl" name="descriptionAr" placeholder="الوصف" required></textarea>*
                 <label for="location">إختر الموقع
                     <select name="locationAr" id="location">
                         <option>الكل</option>
@@ -410,7 +410,7 @@
                         <option>أخرى</option>
                     </select>
                 </label>
-                <input type="text" name="locationInfoAr" placeholder="معلومات الموقع">
+                <input dir="rtl" type="text" name="locationInfoAr" placeholder="معلومات الموقع">
                 <input type="submit">
             </form>
         </section>
