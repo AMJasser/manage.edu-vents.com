@@ -90,6 +90,24 @@
             </table>
         </section>
         <section>
+            <h3>Types</h3>
+            <table>
+                <% types.forEach(function(type) { %>
+                    <form style="display: block;" action="/type/<%= type._id %>" method="Post">
+                        <h4 style="font-size: 20px;">
+                            <%= type.en %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= type.ar %>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="submit" value="✕" style="display: inline;">
+                        </h4>
+                    </form>
+                <% }) %>
+            </table>
+            <form action="/type" method="POST">
+                <label>English Type<input type="text" name="typeEn" required></label>
+                <label>Arabic Type<input dir="ltr" type="text" name="typeAr" required></label>
+                <input type="submit">
+            </form>
+        </section>
+        <section>
             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
             <canvas id="chart"></canvas>
 
@@ -142,25 +160,9 @@
                 <label>Name*<input type="text" name="name" id="name" placeholder="Name" required></label>
                 <label for="type">Type*
                     <select name="type" id="type" required>
-                        <option>Any</option>
-                        <option>College Admissions</option>
-                        <option>College Prep</option>
-                        <option>Community Service</option>
-                        <option>Contest</option>
-                        <option>Course</option>
-                        <option>Educational Festival</option>
-                        <option>Exam Prep</option>
-                        <option>Expedition</option>
-                        <option>Fellowship</option>
-                        <option>Internship</option>
-                        <option>MUN</option>
-                        <option>Scholarship</option>
-                        <option>Sports</option>
-                        <option>Summer Camp</option>
-                        <option>Virtual Class</option>
-                        <option>Volunteering</option>
-                        <option>Workshop</option>
-                        <option>Other</option>
+                        <% types.forEach(function(type) { %>
+                            <option><%= type.en %></option>
+                        <% }) %>
                     </select>
                 </label>
                 <label>Description*<textarea name="description" id="description" placeholder="Description" required></textarea></label>
@@ -182,25 +184,9 @@
                 <label dir="rtl" style="text-align: right;">الاسم*<input dir="rtl" type="text" name="nameAr" id="nameAr" placeholder="الاسم" required></label>
                 <label for="type" dir="rtl" style="text-align: right;">النوع*
                     <select dir="ltr" name="typeAr" id="typeAr" id="type" required>
-                        <option>الكل</option>
-                        <option>تقديم الجامعات</option>
-                        <option>الإعداد الجامعي</option>
-                        <option>خدمة المجتمع</option>
-                        <option>مسابقة</option>
-                        <option>دورة</option>
-                        <option>مهرجان تعليمي</option>
-                        <option>تجهيز للإمتحانات</option>
-                        <option>رحلة</option>
-                        <option>زمالة</option>
-                        <option>تدريب</option>
-                        <option>محاكاة الأمم المتحدة</option>
-                        <option>منحة دراسية</option>
-                        <option>رياضة</option>
-                        <option>مخيم صيفي</option>
-                        <option>فصل افتراضي</option>
-                        <option>تطوع</option>
-                        <option>ورشة عمل</option>
-                        <option>أخرى</option>
+                        <% types.forEach(function(type) { %>
+                            <option><%= type.ar %></option>
+                        <% }) %>
                     </select>
                 </label>
                 <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="descriptionAr" id="descriptionAr" placeholder="الوصف" required></textarea></label>
@@ -339,25 +325,9 @@
                 <label>Name*<input type="text" name="name" id="name" placeholder="Name" required></label>
                 <label for="type">Type*
                     <select name="type" id="type" required>
-                        <option>Any</option>
-                        <option>College Admissions</option>
-                        <option>College Prep</option>
-                        <option>Community Service</option>
-                        <option>Contest</option>
-                        <option>Course</option>
-                        <option>Educational Festival</option>
-                        <option>Exam Prep</option>
-                        <option>Expedition</option>
-                        <option>Fellowship</option>
-                        <option>Internship</option>
-                        <option>MUN</option>
-                        <option>Scholarship</option>
-                        <option>Sports</option>
-                        <option>Summer Camp</option>
-                        <option>Virtual Class</option>
-                        <option>Volunteering</option>
-                        <option>Workshop</option>
-                        <option>Other</option>
+                        <% types.forEach(function(type) { %>
+                            <option><%= type.en %></option>
+                        <% }) %>
                     </select>
                 </label>
                 <label>Description*<textarea name="description" id="description" placeholder="Description" required></textarea></label>
@@ -379,25 +349,9 @@
                 <label dir="rtl" style="text-align: right;">الاسم*<input dir="rtl" type="text" name="nameAr" id="nameAr" placeholder="الاسم" required></label>
                 <label for="type" dir="rtl" style="text-align: right;">النوع*
                     <select dir="ltr" name="typeAr" id="typeAr" required>
-                        <option>الكل</option>
-                        <option>تقديم الجامعات</option>
-                        <option>الإعداد الجامعي</option>
-                        <option>خدمة المجتمع</option>
-                        <option>مسابقة</option>
-                        <option>دورة</option>
-                        <option>مهرجان تعليمي</option>
-                        <option>تجهيز للإمتحانات</option>
-                        <option>رحلة</option>
-                        <option>زمالة</option>
-                        <option>تدريب</option>
-                        <option>محاكاة الأمم المتحدة</option>
-                        <option>منحة دراسية</option>
-                        <option>رياضة</option>
-                        <option>مخيم صيفي</option>
-                        <option>فصل افتراضي</option>
-                        <option>تطوع</option>
-                        <option>ورشة عمل</option>
-                        <option>أخرى</option>
+                        <% types.forEach(function(type) { %>
+                            <option><%= type.ar %></option>
+                        <% }) %>
                     </select>
                 </label>
                 <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="descriptionAr" id="descriptionAr" placeholder="الوصف" required></textarea></label>

@@ -36,25 +36,9 @@
                     <input dir="rtl" type="text" name="nameAr" placeholder="الاسم" <% if (typeof eduvent.name !== "undefined") { %> value="<%= eduvent.name %>" <% } %>>
                     <label for="type">النوع
                         <select name="typeAr" id="type">
-                            <option <% if (eduvent.type === "الكل") {%> selected <% } %>>الكل</option>
-                            <option <% if (eduvent.type === "تقديم الجامعات") {%> selected <% } %>>تقديم الجامعات</option>
-                            <option <% if (eduvent.type === "الإعداد الجامعي") {%> selected <% } %>>الإعداد الجامعي</option>
-                            <option <% if (eduvent.type === "خدمة المجتمع") {%> selected <% } %>>خدمة المجتمع</option>
-                            <option <% if (eduvent.type === "مسابقة") {%> selected <% } %>>مسابقة</option>
-                            <option <% if (eduvent.type === "دورة") {%> selected <% } %>>دورة</option>
-                            <option <% if (eduvent.type === "مهرجان تعليمي") {%> selected <% } %>>مهرجان تعليمي</option>
-                            <option <% if (eduvent.type === "تجهيز للإمتحانات") {%> selected <% } %>>تجهيز للإمتحانات</option>
-                            <option <% if (eduvent.type === "رحلة") {%> selected <% } %>>رحلة</option>
-                            <option <% if (eduvent.type === "زمالة") {%> selected <% } %>>زمالة</option>
-                            <option <% if (eduvent.type === "تدريب") {%> selected <% } %>>تدريب</option>
-                            <option <% if (eduvent.type === "محاكاة الأمم المتحدة") {%> selected <% } %>>محاكاة الأمم المتحدة</option>
-                            <option <% if (eduvent.type === "منحة دراسية") {%> selected <% } %>>منحة دراسية</option>
-                            <option <% if (eduvent.type === "رياضة") {%> selected <% } %>>رياضة</option>
-                            <option <% if (eduvent.type === "مخيم صيفي") {%> selected <% } %>>مخيم صيفي</option>
-                            <option <% if (eduvent.type === "فصل افتراضي") {%> selected <% } %>>فصل افتراضي</option>
-                            <option <% if (eduvent.type === "تطوع") {%> selected <% } %>>تطوع</option>
-                            <option <% if (eduvent.type === "ورشة عمل") {%> selected <% } %>>ورشة عمل</option>
-                            <option <% if (eduvent.type === "أخرى") {%> selected <% } %>>أخرى</option>
+                            <% types.forEach(function(type) { %>
+                                <option <% if (eduvent.type === type.ar) { %> selected <% } %>><%= type.ar %></option>
+                            <% }) %>
                         </select>
                     </label>
                     <textarea dir="rtl" name="descriptionAr" placeholder="الوصف"><% if (typeof eduvent.description !== "undefined") { %> <%= eduvent.description %> <% } %></textarea>

@@ -36,25 +36,9 @@
                     <input type="text" name="name" placeholder="Name" <% if (typeof eduvent.name !== "undefined") { %> value="<%= eduvent.name %>" <% } %>>
                     <label for="type">Type
                         <select name="type" id="type">
-                            <option <% if (eduvent.type === "Any") {%> selected <% } %>>Any</option>
-                            <option <% if (eduvent.type === "College Admissions") {%> selected <% } %>>College Admissions</option>
-                            <option <% if (eduvent.type === "College Prep") {%> selected <% } %>>College Prep</option>
-                            <option <% if (eduvent.type === "Community Service") {%> selected <% } %>>Community Service</option>
-                            <option <% if (eduvent.type === "Contest") {%> selected <% } %>>Contest</option>
-                            <option <% if (eduvent.type === "Course") {%> selected <% } %>>Course</option>
-                            <option <% if (eduvent.type === "Educational Festival") {%> selected <% } %>>Educational Festival</option>
-                            <option <% if (eduvent.type === "Exam Prep") {%> selected <% } %>>Exam Prep</option>
-                            <option <% if (eduvent.type === "Expedition") {%> selected <% } %>>Expedition</option>
-                            <option <% if (eduvent.type === "Fellowship") {%> selected <% } %>>Fellowship</option>
-                            <option <% if (eduvent.type === "Internship") {%> selected <% } %>>Internship</option>
-                            <option <% if (eduvent.type === "MUN") {%> selected <% } %>>MUN</option>
-                            <option <% if (eduvent.type === "Scholarship") {%> selected <% } %>>Scholarship</option>
-                            <option <% if (eduvent.type === "Sports") {%> selected <% } %>>Sports</option>
-                            <option <% if (eduvent.type === "Summer Camp") {%> selected <% } %>>Summer Camp</option>
-                            <option <% if (eduvent.type === "Virtual Class") {%> selected <% } %>>Virtual Class</option>
-                            <option <% if (eduvent.type === "Volunteering") {%> selected <% } %>>Volunteering</option>
-                            <option <% if (eduvent.type === "Workshop") {%> selected <% } %>>Workshop</option>
-                            <option <% if (eduvent.type === "Other") {%> selected <% } %>>Other</option>
+                            <% types.forEach(function(type) { %>
+                                <option <% if (eduvent.type === type.en) { %> selected <% } %>><%= type.en %></option>
+                            <% }) %>
                         </select>
                     </label>
                     <textarea name="description" placeholder="Description"><% if (typeof eduvent.description !== "undefined") { %> <%= eduvent.description %> <% } %></textarea>
