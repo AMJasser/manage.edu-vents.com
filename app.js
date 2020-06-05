@@ -486,14 +486,18 @@ app.patch("/edu-vents/ar/:id", isLoggedIn, upload, async function(req, res) {
 app.get("/edu-vents/en/:id/feature", isLoggedIn, async function(req, res) {
     try {
         var eduvent = await Eduvent.findOne({_id: req.params.id});
-        if (typeof eduvent.endDate !== "undefined") {
-            await Eduvent.findByIdAndUpdate(req.params.id, {featuredUntil: eduvent.endDate});
-        } else if (typeof eduvent.startDate !== "undefined") {
-            await Eduvent.findByIdAndUpdate(req.params.id, {featuredUntil: eduvent.startDate});
+        if (typeof req.body.featuredUntil === "string" && req.body.featuredUntil !== "") {
+            await Eduvent.findByIdAndUpdate(req.params.id, {featuredUntil: new Date(req.body.featuredUntil)});
         } else {
-            dt = new Date;
-            dt.setDate(dt.getDate() + 3);
-            await Eduvent.findByIdAndUpdate(req.params.id, {featuredUntil: dt});
+            if (typeof eduvent.endDate !== "undefined") {
+                await Eduvent.findByIdAndUpdate(req.params.id, {featuredUntil: eduvent.endDate});
+            } else if (typeof eduvent.startDate !== "undefined") {
+                await Eduvent.findByIdAndUpdate(req.params.id, {featuredUntil: eduvent.startDate});
+            } else {
+                dt = new Date;
+                dt.setDate(dt.getDate() + 3);
+                await Eduvent.findByIdAndUpdate(req.params.id, {featuredUntil: dt});
+            }
         }
 
         res.redirect("/");
@@ -506,14 +510,18 @@ app.get("/edu-vents/en/:id/feature", isLoggedIn, async function(req, res) {
 app.get("/edu-vents/ar/:id/feature", isLoggedIn, async function(req, res) {
     try {
         var eduvent = await EduventAr.findOne({_id: req.params.id});
-        if (typeof eduvent.endDate !== "undefined") {
-            await EduventAr.findByIdAndUpdate(req.params.id, {featuredUntil: eduvent.endDate});
-        } else if (typeof eduvent.startDate !== "undefined") {
-            await EduventAr.findByIdAndUpdate(req.params.id, {featuredUntil: eduvent.startDate});
+        if (typeof req.body.featuredUntil === "string" && req.body.featuredUntil !== "") {
+            await EduventAr.findByIdAndUpdate(req.params.id, {featuredUntil: new Date(req.body.featuredUntil)});
         } else {
-            dt = new Date;
-            dt.setDate(dt.getDate() + 3);
-            await EduventAr.findByIdAndUpdate(req.params.id, {featuredUntil: dt});
+            if (typeof eduvent.endDate !== "undefined") {
+                await EduventAr.findByIdAndUpdate(req.params.id, {featuredUntil: eduvent.endDate});
+            } else if (typeof eduvent.startDate !== "undefined") {
+                await EduventAr.findByIdAndUpdate(req.params.id, {featuredUntil: eduvent.startDate});
+            } else {
+                dt = new Date;
+                dt.setDate(dt.getDate() + 3);
+                await EduventAr.findByIdAndUpdate(req.params.id, {featuredUntil: dt});
+            }
         }
 
         res.redirect("/");

@@ -224,7 +224,8 @@
 
                         <% if (eduvent.featuredUntil === undefined || new Date < eduvent.featuredUntil) { %> 
                             <form action="/edu-vents/en/<%= eduvent._id %>/feature" method="GET">
-                                <button>Feature</button>
+                                <input type="date" name="featuredUntil" style="display: inline; width: initial;">
+                                <button style="display: inline;">Feature</button>
                             </form>
                         <% } %> 
 
@@ -255,7 +256,8 @@
 
                         <% if (eduvent.featuredUntil === undefined || new Date < eduvent.featuredUntil) { %>
                             <form action="/edu-vents/ar/<%= eduvent._id %>/feature" method="GET">
-                                <button>Feature</button>
+                                <input type="date" name="featuredUntil" style="display: inline; width: initial;">
+                                <button style="display: inline;">Feature</button>
                             </form>
                         <% } %> 
 
