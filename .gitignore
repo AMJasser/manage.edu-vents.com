@@ -105,3 +105,4 @@ dist
 
 # EDU-vents images
 public/uploads/*
+!public/uploads/.gitkeep
