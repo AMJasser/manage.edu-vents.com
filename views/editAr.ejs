@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>EDU-vents</title>
+        <meta name="description" content="EDU-vents - This website was created solely for the help of Philomaths. It would show the most important educational events happening around the world, providing an easy-to-use portal for them.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="/images/seco.ico">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/stylesheets/style.css">
+
+        <script>
+            window.onload = function() {
+                var select = document.getElementById("changePic");
+                var fileInput = document.getElementById("img");
+
+                select.onchange = function() {
+                    if (select.value === "yes") {
+                        fileInput.style.display = "unset";
+                    } else {
+                        fileInput.style.display = "none";
+                    }
+                }
+            }
+        </script>
+
+        <% if (typeof msg !== "undefined") { %>
+            <script>alert("<%= msg %>")</script>
+        <% } %>
+    </head>
+    <body>
+        <div class="sections">
+            <section>
+                <form action="/edu-vents/ar/<%= eduvent._id %>?_method=PATCH" method="POST" enctype="multipart/form-data">
+                    <h3>تعديل إديوفنت</h3>
+                    <input type="text" name="nameAr" placeholder="الاسم" <% if (typeof eduvent.name !== "undefined") { %> value="<%= eduvent.name %>" <% } %>>
+                    <label for="type">النوع
+                        <select name="typeAr" id="type">
+                            <option <% if (eduvent.type === "الكل") {%> selected <% } %>>الكل</option>
+                            <option <% if (eduvent.type === "تقديم الجامعات") {%> selected <% } %>>تقديم الجامعات</option>
+                            <option <% if (eduvent.type === "الإعداد الجامعي") {%> selected <% } %>>الإعداد الجامعي</option>
+                            <option <% if (eduvent.type === "خدمة المجتمع") {%> selected <% } %>>خدمة المجتمع</option>
+                            <option <% if (eduvent.type === "مسابقة") {%> selected <% } %>>مسابقة</option>
+                            <option <% if (eduvent.type === "دورة") {%> selected <% } %>>دورة</option>
+                            <option <% if (eduvent.type === "مهرجان تعليمي") {%> selected <% } %>>مهرجان تعليمي</option>
+                            <option <% if (eduvent.type === "تجهيز للإمتحانات") {%> selected <% } %>>تجهيز للإمتحانات</option>
+                            <option <% if (eduvent.type === "رحلة") {%> selected <% } %>>رحلة</option>
+                            <option <% if (eduvent.type === "زمالة") {%> selected <% } %>>زمالة</option>
+                            <option <% if (eduvent.type === "تدريب") {%> selected <% } %>>تدريب</option>
+                            <option <% if (eduvent.type === "محاكاة الأمم المتحدة") {%> selected <% } %>>محاكاة الأمم المتحدة</option>
+                            <option <% if (eduvent.type === "منحة دراسية") {%> selected <% } %>>منحة دراسية</option>
+                            <option <% if (eduvent.type === "رياضة") {%> selected <% } %>>رياضة</option>
+                            <option <% if (eduvent.type === "مخيم صيفي") {%> selected <% } %>>مخيم صيفي</option>
+                            <option <% if (eduvent.type === "فصل افتراضي") {%> selected <% } %>>فصل افتراضي</option>
+                            <option <% if (eduvent.type === "تطوع") {%> selected <% } %>>تطوع</option>
+                            <option <% if (eduvent.type === "ورشة عمل") {%> selected <% } %>>ورشة عمل</option>
+                            <option <% if (eduvent.type === "أخرى") {%> selected <% } %>>أخرى</option>
+                        </select>
+                    </label>
+                    <textarea name="descriptionAr" placeholder="الوصف"><% if (typeof eduvent.description !== "undefined") { %> <%= eduvent.description %> <% } %></textarea>
+                    <label for="location">إختر الموقع
+                        <select name="locationAr" id="location">
+                            <option <% if (eduvent.location === "الكل") {%> selected <% } %>>الكل</option>
+                            <option <% if (eduvent.location === "جدة") {%> selected <% } %>>جدة</option>
+                            <option <% if (eduvent.location === "الرياض") {%> selected <% } %>>الرياض</option>
+                            <option <% if (eduvent.location === "الشرقية") {%> selected <% } %>>الشرقية</option>
+                            <option <% if (eduvent.location === "أخرى") {%> selected <% } %>>أخرى</option>
+                        </select>
+                    </label>
+                    <input type="text" name="locationInfoAr" placeholder="معلومات الموقع" <% if (typeof eduvent.locationInfo !== "undefined") { %> value="<%= eduvent.locationInfo %>" <% } %>>
+                    <input type="url" name="googleMaps" placeholder="Google Maps" <% if (typeof eduvent.googleMaps !== "undefined") { %> value="<%= eduvent.googleMaps %>" <% } %>>
+                    <input type="url" name="urltoapp" placeholder="URL to Application" <% if (typeof eduvent.urltoapp !== "undefined") { %> value="<%= eduvent.urltoapp %>" <% } %>>
+
+                    <% 
+                    if (typeof eduvent.startDate !== "undefined") {
+                        var startY = eduvent.startDate.getFullYear();
+                        var startM = eduvent.startDate.getMonth() + 1;
+                        startM = "0" + startM;
+                        var startD = "0" + eduvent.startDate.getDate();
+                        startD = "0" + startD;
+
+                        var startDate = startY + "-" + startM.slice(-2) + "-" + startD.slice(-2);
+                    }
+                    %>
+
+                    <% 
+                    if (typeof eduvent.endDate !== "undefined") {
+                        var endY = eduvent.endDate.getFullYear();
+                        var endM = eduvent.endDate.getMonth() + 1;
+                        endM = "0" + startM;
+                        var endD = "0" + eduvent.endDate.getDate();
+                        endD = "0" + startD;
+
+                        var endDate = endY + "-" + endM.slice(-2) + "-" + endD.slice(-2);
+                    }
+                    %>
+
+                    <label>تاريخ البداية<input type="date" name="date" <% if (typeof eduvent.startDate !== "undefined") { %> value="<%= startDate %>" <% } %>></label>
+                    <label>تاريخ النهاية<input type="date" name="endDate" <% if (typeof eduvent.endDate !== "undefined") { %> value="<%= endDate %>" <% } %>></label>
+                    <label for="changePic">Do you want to change the picture?
+                        <select name="changePic" id="changePic">
+                            <option>no</option>
+                            <option>yes</option>
+                        </select>
+                    </label>
+                    <input style="display: none;" type="file" name="img" id="img">
+                    <input type="submit">
+                </form>
+                </section>
+        </div>
+    </body>
+</html>

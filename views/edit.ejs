@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>EDU-vents</title>
+        <meta name="description" content="EDU-vents - This website was created solely for the help of Philomaths. It would show the most important educational events happening around the world, providing an easy-to-use portal for them.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="/images/seco.ico">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/stylesheets/style.css">
+
+        <script>
+            window.onload = function() {
+                var select = document.getElementById("changePic");
+                var fileInput = document.getElementById("img");
+
+                select.onchange = function() {
+                    if (select.value === "yes") {
+                        fileInput.style.display = "unset";
+                    } else {
+                        fileInput.style.display = "none";
+                    }
+                }
+            }
+        </script>
+
+        <% if (typeof msg !== "undefined") { %>
+            <script>alert("<%= msg %>")</script>
+        <% } %>
+    </head>
+    <body>
+        <div class="sections">
+            <section>
+                <form action="/edu-vents/en/<%= eduvent._id %>?_method=PATCH" method="POST" enctype="multipart/form-data">
+                    <h3>Edit an EDU-vent</h3>
+                    <input type="text" name="name" placeholder="Name" <% if (typeof eduvent.name !== "undefined") { %> value="<%= eduvent.name %>" <% } %>>
+                    <label for="type">Type
+                        <select name="type" id="type">
+                            <option <% if (eduvent.type === "Any") {%> selected <% } %>>Any</option>
+                            <option <% if (eduvent.type === "College Admissions") {%> selected <% } %>>College Admissions</option>
+                            <option <% if (eduvent.type === "College Prep") {%> selected <% } %>>College Prep</option>
+                            <option <% if (eduvent.type === "Community Service") {%> selected <% } %>>Community Service</option>
+                            <option <% if (eduvent.type === "Contest") {%> selected <% } %>>Contest</option>
+                            <option <% if (eduvent.type === "Course") {%> selected <% } %>>Course</option>
+                            <option <% if (eduvent.type === "Educational Festival") {%> selected <% } %>>Educational Festival</option>
+                            <option <% if (eduvent.type === "Exam Prep") {%> selected <% } %>>Exam Prep</option>
+                            <option <% if (eduvent.type === "Expedition") {%> selected <% } %>>Expedition</option>
+                            <option <% if (eduvent.type === "Fellowship") {%> selected <% } %>>Fellowship</option>
+                            <option <% if (eduvent.type === "Internship") {%> selected <% } %>>Internship</option>
+                            <option <% if (eduvent.type === "MUN") {%> selected <% } %>>MUN</option>
+                            <option <% if (eduvent.type === "Scholarship") {%> selected <% } %>>Scholarship</option>
+                            <option <% if (eduvent.type === "Sports") {%> selected <% } %>>Sports</option>
+                            <option <% if (eduvent.type === "Summer Camp") {%> selected <% } %>>Summer Camp</option>
+                            <option <% if (eduvent.type === "Virtual Class") {%> selected <% } %>>Virtual Class</option>
+                            <option <% if (eduvent.type === "Volunteering") {%> selected <% } %>>Volunteering</option>
+                            <option <% if (eduvent.type === "Workshop") {%> selected <% } %>>Workshop</option>
+                            <option <% if (eduvent.type === "Other") {%> selected <% } %>>Other</option>
+                        </select>
+                    </label>
+                    <textarea name="description" placeholder="Description"><% if (typeof eduvent.description !== "undefined") { %> <%= eduvent.description %> <% } %></textarea>
+                    <label for="location">Select Location
+                        <select name="location" id="location">
+                            <option <% if (eduvent.location === "Any") {%> selected <% } %>>Any</option>
+                            <option <% if (eduvent.location === "Jeddah") {%> selected <% } %>>Jeddah</option>
+                            <option <% if (eduvent.location === "Riyadh") {%> selected <% } %>>Riyadh</option>
+                            <option <% if (eduvent.location === "Sharqiah") {%> selected <% } %>>Sharqiah</option>
+                            <option <% if (eduvent.location === "Other") {%> selected <% } %>>Other</option>
+                        </select>
+                    </label>
+                    <input type="text" name="locationInfo" placeholder="Location Information" <% if (typeof eduvent.locationInfo !== "undefined") { %> value="<%= eduvent.locationInfo %>" <% } %>>
+                    <input type="url" name="googleMaps" placeholder="Google Maps" <% if (typeof eduvent.googleMaps !== "undefined") { %> value="<%= eduvent.googleMaps %>" <% } %>>
+                    <input type="url" name="urltoapp" placeholder="URL to Application" <% if (typeof eduvent.urltoapp !== "undefined") { %> value="<%= eduvent.urltoapp %>" <% } %>>
+
+                    <% 
+                    if (typeof eduvent.startDate !== "undefined") {
+                        var startY = eduvent.startDate.getFullYear();
+                        var startM = eduvent.startDate.getMonth() + 1;
+                        startM = "0" + startM;
+                        var startD = "0" + eduvent.startDate.getDate();
+                        startD = "0" + startD;
+
+                        var startDate = startY + "-" + startM.slice(-2) + "-" + startD.slice(-2);
+                    }
+                    %>
+
+                    <% 
+                    if (typeof eduvent.endDate !== "undefined") {
+                        var endY = eduvent.endDate.getFullYear();
+                        var endM = eduvent.endDate.getMonth() + 1;
+                        endM = "0" + startM;
+                        var endD = "0" + eduvent.endDate.getDate();
+                        endD = "0" + startD;
+
+                        var endDate = endY + "-" + endM.slice(-2) + "-" + endD.slice(-2);
+                    }
+                    %>
+
+                    <label>Start Date <input type="date" name="date" <% if (typeof eduvent.startDate !== "undefined") { %> value="<%= startDate %>" <% } %>></label>
+                    <label>End Date <input type="date" name="endDate" <% if (typeof eduvent.endDate !== "undefined") { %> value="<%= endDate %>" <% } %>></label>
+                    <label for="changePic">Do you want to change the picture?
+                        <select name="changePic" id="changePic">
+                            <option>no</option>
+                            <option>yes</option>
+                        </select>
+                    </label>
+                    <input style="display: none;" type="file" name="img" id="img">
+                    <input type="submit">
+                </form>
+                </section>
+        </div>
+    </body>
+</html>

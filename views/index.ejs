@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>EDU-vents</title>
+    <meta name="description"
+        content="EDU-vents - This website was created solely for the help of Philomaths. It would show the most important educational events happening around the world, providing an easy-to-use portal for them.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/images/seco.ico">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+
+    <% if (typeof msg !== "undefined") { %>
+    <script>alert("<%= msg %>")</script>
+    <% } %>
+</head>
+
+<body>
+    <header>
+        <h1>
+            <img alt="logo" src="/images/logo.jpg">
+            <span>EDU-vents</span>
+        </h1>
+        <nav>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+    <h2>Welcome <%= username %>!</h2>
+    <div class="sections">
+        <% if (isAdmin === true) { %>
+        <section>
+            <h3>Create User</h3>
+            <form action="/user" method="POST">
+                <input type="text" name="username" placeholder="Username">
+                <input type="password" name="password" placeholder="Password">
+                <label for="isAdmin">isAdmin
+                    <select onchange="admincheck()" name="isAdmin" id="isAdmin">
+                        <option>true</option>
+                        <option>false</option>
+                    </select>
+                </label>
+                <input id="Rname" style="display: none;" type="text" name="Rname" placeholder="Researcher Name">
+                <input id="Wname" style="display: none;" type="text" name="Wname" placeholder="Writer Name">
+                <input type="submit">
+            </form>
+            <script>
+                var isAdmin = document.getElementById("isAdmin");
+
+                function admincheck() {
+                    if (isAdmin.value === "false") {
+                        document.getElementById("Rname").style.display = "unset";
+                        document.getElementById("Wname").style.display = "unset";
+                    } else {
+                        document.getElementById("Rname").style.display = "none";
+                        document.getElementById("Wname").style.display = "none";
+                    }
+                }
+            </script>
+        </section>
+        <section>
+            <h3>User Control</h3>
+            <table id="user-control">
+                <tr>
+                    <th>username</th>
+                    <th>is Admin</th>
+                    <th>Names</th>
+                    <th>Time</th>
+                    <th>Delete</th>
+                </tr>
+                <% users.forEach(function(user) { %>
+                <tr>
+                    <td><%= user.username %></td>
+                    <td><%= user.isAdmin %></td>
+                    <td>
+                        <% if (typeof user.researcher.name !== "undefined") { %> Researcher: <%= user.researcher.name %> <% } %> 
+                        <br>
+                        <% if (typeof user.writer.name !== "undefined") { %> Writer: <%= user.writer.name %> <% } %>
+                    </td>
+                    <td>
+                        <% if (typeof user.researcher.time !== "undefined") { %> Researcher: <%= user.researcher.time %> <% } %> 
+                        <br>
+                        <% if (typeof user.writer.time !== "undefined") { %> Writer: <%= user.writer.time %> <% } %>
+                    </td>
+                    <td>
+                        <form action="/user/<%= user._id %>/delete?_method=DELETE" method="POST"><input type="submit"></form>
+                    </td>
+                </tr>
+                <% }) %>
+            </table>
+        </section>
+        <section>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+            <canvas id="chart"></canvas>
+
+            <script>
+                var chartData = {
+                    names: [],
+                    scores: []
+                }
+            </script>
+
+            <% chartData.names.forEach(function(name) { %>
+            <script>
+                chartData.names.push("<%= name %>")
+            </script>
+            <% }) %>
+
+            <% chartData.scores.forEach(function(score) { %>
+            <script>
+                chartData.scores.push("<%= score %>")
+            </script>
+            <% }) %>
+
+            <script>
+                var ctx = document.getElementById("chart").getContext("2d");
+                var chart = new Chart(ctx, {
+                    type: "horizontalBar",
+                    data: {
+                        labels: chartData.names,
+                        datasets: [{
+                            label: "test chart",
+                            backgroundColor: "rgb(28,68,178)",
+                            data: chartData.scores
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            </script>
+        </section>
+        <section>
+            <form action="/edu-vents" method="POST" enctype="multipart/form-data" name="eduventsForm" onsubmit="return validateForm()">
+                <h3>Add an EDU-vent</h3>
+                <input type="text" name="name" placeholder="Name" required>*
+                <label for="type">Type
+                    <select name="type" id="type" required>
+                        <option>Any</option>
+                        <option>College Admissions</option>
+                        <option>College Prep</option>
+                        <option>Community Service</option>
+                        <option>Contest</option>
+                        <option>Course</option>
+                        <option>Educational Festival</option>
+                        <option>Exam Prep</option>
+                        <option>Expedition</option>
+                        <option>Fellowship</option>
+                        <option>Internship</option>
+                        <option>MUN</option>
+                        <option>Scholarship</option>
+                        <option>Sports</option>
+                        <option>Summer Camp</option>
+                        <option>Virtual Class</option>
+                        <option>Volunteering</option>
+                        <option>Workshop</option>
+                        <option>Other</option>
+                    </select>*
+                </label>
+                <textarea name="description" placeholder="Description" required></textarea>*
+                <label for="location">Select Location
+                    <select name="location" id="location">
+                        <option>Any</option>
+                        <option>Jeddah</option>
+                        <option>Riyadh</option>
+                        <option>Sharqiah</option>
+                        <option>Other</option>
+                    </select>
+                </label>
+                <input type="text" name="locationInfo" placeholder="Location Information">
+                <input type="url" name="googleMaps" placeholder="Google Maps">
+                <input type="url" name="urltoapp" placeholder="URL to Application">
+                <label>Start Date <input type="date" name="date"></label>
+                <label>End Date <input type="date" name="endDate"></label>
+                <input type="file" name="img" required>*
+                <input type="text" name="nameAr" placeholder="الاسم" required>*
+                <label for="type">النوع
+                    <select name="typeAr" id="type" required>
+                        <option>الكل</option>
+                        <option>تقديم الجامعات</option>
+                        <option>الإعداد الجامعي</option>
+                        <option>خدمة المجتمع</option>
+                        <option>مسابقة</option>
+                        <option>دورة</option>
+                        <option>مهرجان تعليمي</option>
+                        <option>تجهيز للإمتحانات</option>
+                        <option>رحلة</option>
+                        <option>زمالة</option>
+                        <option>تدريب</option>
+                        <option>محاكاة الأمم المتحدة</option>
+                        <option>منحة دراسية</option>
+                        <option>رياضة</option>
+                        <option>مخيم صيفي</option>
+                        <option>فصل افتراضي</option>
+                        <option>تطوع</option>
+                        <option>ورشة عمل</option>
+                        <option>أخرى</option>
+                    </select>*
+                </label>
+                <textarea name="descriptionAr" placeholder="الوصف" required></textarea>*
+                <label for="location">إختر الموقع
+                    <select name="locationAr" id="location">
+                        <option>الكل</option>
+                        <option>جدة</option>
+                        <option>الرياض</option>
+                        <option>الشرقية</option>
+                        <option>أخرى</option>
+                    </select>
+                </label>
+                <input type="text" name="locationInfoAr" placeholder="معلومات الموقع">
+                <input type="submit">
+            </form>
+        </section>
+        <section>
+            <% var counter = 1; %>
+
+            <% eduvents.en.forEach(function(eduvent) { %>
+            <% if (counter % 3 == 1) { %>
+            <div class="row" style="display: flex;">
+                <% } %>
+                <div class="edu-vent">
+                    <img alt="EDU-vent img" src="/uploads/<%= eduvent.imgPath %>">
+                    <div class="inner">
+                        <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
+                        <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
+                        <form action="/edu-vents/en/<%= eduvent._id %>?_method=DELETE" method="POST">
+                            <button>Delete</button>
+                        </form>
+                        <form action="/edu-vents/en/<%= eduvent._id %>/edit" method="GET">
+                            <button>Edit</button>
+                        </form>
+
+                        <% if (eduvent.featuredUntil === undefined || new Date < eduvent.featuredUntil) { %> 
+                            <form action="/edu-vents/en/<%= eduvent._id %>/feature" method="GET">
+                                <button>Feature</button>
+                            </form>
+                        <% } %> 
+
+                        <button onclick="window.open('/edu-vents/en/<%= eduvent._id %>', '_blank').focus">View</button>
+                    </div>
+                </div>
+                <% if (counter %3 == 0) { %>
+            </div>
+            <% } %>
+            <% counter++ %>
+            <% }) %>
+
+            <% eduvents.ar.forEach(function(eduvent) { %>
+            <% if (counter % 3 == 1) { %>
+            <div class="row" style="display: flex;">
+                <% } %>
+                <div class="edu-vent">
+                    <img alt="EDU-vent img" src="/uploads/<%= eduvent.imgPath %>">
+                    <div class="inner">
+                        <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
+                        <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
+                        <form action="/edu-vents/ar/<%= eduvent._id %>?_method=DELETE" method="POST">
+                            <button class="delete">Delete</button>
+                        </form>
+                        <form action="/edu-vents/ar/<%= eduvent._id %>/edit" method="GET">
+                            <button class="edit">Edit</button>
+                        </form>
+
+                        <% if (eduvent.featuredUntil === undefined || new Date < eduvent.featuredUntil) { %>
+                            <form action="/edu-vents/ar/<%= eduvent._id %>/feature" method="GET">
+                                <button>Feature</button>
+                            </form>
+                        <% } %> 
+
+                        <button onclick="window.open('/edu-vents/ar/<%= eduvent._id %>', '_blank').focus">View</button>
+                    </div>
+                </div>
+                <% if (counter %3 == 0) { %>
+            </div>
+            <% } %>
+            <% counter++ %>
+            <% }) %>
+        </section>
+        <% } else { %>
+        <section>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+            <canvas id="chart"></canvas>
+
+            <script>
+                var chartData = {
+                    names: [],
+                    scores: []
+                }
+            </script>
+
+            <% chartData.names.forEach(function(name) { %>
+            <script>
+                chartData.names.push("<%= name %>")
+            </script>
+            <% }) %>
+
+            <% chartData.scores.forEach(function(score) { %>
+            <script>
+                chartData.scores.push("<%= score %>")
+            </script>
+            <% }) %>
+
+            <script>
+                var ctx = document.getElementById("chart").getContext("2d");
+                var chart = new Chart(ctx, {
+                    type: "horizontalBar",
+                    data: {
+                        labels: chartData.names,
+                        datasets: [{
+                            label: "test chart",
+                            backgroundColor: "rgb(28,68,178)",
+                            data: chartData.scores
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            </script>
+        </section>
+        <section>
+            <a id="timerBut" href="/timer" target="_blank">Open Timer</a>
+        </section>
+        <section>
+            <form action="/edu-vents" method="POST" enctype="multipart/form-data" name="eduventsForm" onsubmit="return validateForm()">
+                <h3>Add an EDU-vent</h3>
+                <input type="text" name="name" placeholder="Name" required>*
+                <label for="type">Type
+                    <select name="type" id="type" required>
+                        <option>Any</option>
+                        <option>College Admissions</option>
+                        <option>College Prep</option>
+                        <option>Community Service</option>
+                        <option>Contest</option>
+                        <option>Course</option>
+                        <option>Educational Festival</option>
+                        <option>Exam Prep</option>
+                        <option>Expedition</option>
+                        <option>Fellowship</option>
+                        <option>Internship</option>
+                        <option>MUN</option>
+                        <option>Scholarship</option>
+                        <option>Sports</option>
+                        <option>Summer Camp</option>
+                        <option>Virtual Class</option>
+                        <option>Volunteering</option>
+                        <option>Workshop</option>
+                        <option>Other</option>
+                    </select>*
+                </label>
+                <textarea name="description" placeholder="Description" required></textarea>*
+                <label for="location">Select Location
+                    <select name="location" id="location">
+                        <option>Any</option>
+                        <option>Jeddah</option>
+                        <option>Riyadh</option>
+                        <option>Sharqiah</option>
+                        <option>Other</option>
+                    </select>
+                </label>
+                <input type="text" name="locationInfo" placeholder="Location Information">
+                <input type="url" name="googleMaps" placeholder="Google Maps">
+                <input type="url" name="urltoapp" placeholder="URL to Application">*      
+                <label>Start Date <input type="date" name="date"></label>
+                <label>End Date <input type="date" name="endDate"></label>
+                <input type="file" name="img" required>*
+                <input type="text" name="nameAr" placeholder="الاسم" required>*
+                <label for="type">النوع
+                    <select name="typeAr" id="type" required>
+                        <option>الكل</option>
+                        <option>تقديم الجامعات</option>
+                        <option>الإعداد الجامعي</option>
+                        <option>خدمة المجتمع</option>
+                        <option>مسابقة</option>
+                        <option>دورة</option>
+                        <option>مهرجان تعليمي</option>
+                        <option>تجهيز للإمتحانات</option>
+                        <option>رحلة</option>
+                        <option>زمالة</option>
+                        <option>تدريب</option>
+                        <option>محاكاة الأمم المتحدة</option>
+                        <option>منحة دراسية</option>
+                        <option>رياضة</option>
+                        <option>مخيم صيفي</option>
+                        <option>فصل افتراضي</option>
+                        <option>تطوع</option>
+                        <option>ورشة عمل</option>
+                        <option>أخرى</option>
+                    </select>*
+                </label>
+                <textarea name="descriptionAr" placeholder="الوصف" required></textarea>*
+                <label for="location">إختر الموقع
+                    <select name="locationAr" id="location">
+                        <option>الكل</option>
+                        <option>جدة</option>
+                        <option>الرياض</option>
+                        <option>الشرقية</option>
+                        <option>أخرى</option>
+                    </select>
+                </label>
+                <input type="text" name="locationInfoAr" placeholder="معلومات الموقع">
+                <input type="submit">
+            </form>
+        </section>
+        <section>
+            <% var counter = 1; %>
+
+            <% eduvents.en.forEach(function(eduvent) { %>
+            <% if (counter % 3 == 1) { %>
+            <div class="row" style="display: flex;">
+                <% } %>
+                <% if (eduvent.userId === userId) { %>
+                <div class="edu-vent">
+                    <img alt="EDU-vent img" src="/uploads/<%= eduvent.imgPath %>">
+                    <div class="inner">
+                        <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
+                        <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
+                        <form action="/edu-vents/en/<%= eduvent._id %>?_method=DELETE" method="POST">
+                            <button>Delete</button>
+                        </form>
+                        <form action="/edu-vents/en/<%= eduvent._id %>/edit" method="GET">
+                            <button>Edit</button>
+                        </form>
+                        <button onclick="window.open('/edu-vents/en/<%= eduvent._id %>', '_blank').focus">View</button>
+                    </div>
+                </div>
+                <% } else { %>
+                <div class="edu-vent">
+                    <img alt="EDU-vent img" src="/uploads/<%= eduvent.imgPath %>">
+                    <div class="inner">
+                        <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
+                        <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
+                        <button onclick="window.open('/edu-vents/en/<%= eduvent._id %>', '_blank').focus">View</button>
+                    </div>
+                </div>
+                <% } %>
+                <% if (counter %3 == 0) { %>
+            </div>
+            <% } %>
+            <% counter++ %>
+            <% }) %>
+
+            <% eduvents.ar.forEach(function(eduvent) { %>
+            <% if (counter % 3 == 1) { %>
+            <div class="row" style="display: flex;">
+                <% } %>
+                <% if (eduvent.userId === userId) { %>
+                    <div class="edu-vent">
+                        <img alt="EDU-vent img" src="/uploads/<%= eduvent.imgPath %>">
+                        <div class="inner">
+                            <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
+                            <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
+                            <form action="/edu-vents/ar/<%= eduvent._id %>?_method=DELETE" method="POST">
+                                <button class="delete">Delete</button>
+                            </form>
+                            <form action="/edu-vents/ar/<%= eduvent._id %>/edit" method="GET">
+                                <button class="edit">Edit</button>
+                            </form>
+                            <button onclick="window.open('/edu-vents/ar/<%= eduvent._id %>', '_blank').focus">View</button>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="edu-vent">
+                        <img alt="EDU-vent img" src="/uploads/<%= eduvent.imgPath %>">
+                        <div class="inner">
+                            <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
+                            <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
+                            <button onclick="window.open('/edu-vents/ar/<%= eduvent._id %>', '_blank').focus">View</button>
+                        </div>
+                    </div>
+                <% } %> 
+                <% if (counter %3 == 0) { %>
+            </div>
+            <% } %>
+            <% counter++ %>
+            <% }) %>
+        </section>
+        <% } %>
+    </div>
+</body>
+
+<script>
+    function  validateForm() {
+        if (document.forms["eduventsForm"]["date"].value === "" && document.forms["eduventsForm"]["endDate"].value === "") {
+            alert("Please submit at least one date.");
+            return false;
+        }
+    }
+</script>
+
+</html>
