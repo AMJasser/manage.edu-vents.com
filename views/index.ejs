@@ -31,7 +31,7 @@
         <% if (isAdmin === true) { %>
         <section>
             <h3>Create User</h3>
-            <form action="/user" method="POST">
+            <form action="/users" method="POST">
                 <input type="text" name="username" placeholder="Username">
                 <input type="password" name="password" placeholder="Password">
                 <label for="isAdmin">isAdmin
@@ -86,10 +86,10 @@
                     <% if (typeof user.score !== "undefind") { %> <%= user.score %> <% } %>  
                     </td>
                     <td>
-                        <form action="/user/<%= user._id %>/edit" method="GET"><input type="submit" value="Edit"></form>
+                        <form action="/users/<%= user._id %>/edit" method="GET"><input type="submit" value="Edit"></form>
                     </td>
                     <td>
-                        <form action="/user/<%= user._id %>/delete?_method=DELETE" method="POST"><input type="submit" value="Delete"></form>
+                        <form action="/users/<%= user._id %>/delete?_method=DELETE" method="POST"><input type="submit" value="Delete"></form>
                     </td>
                 </tr>
                 <% }) %>
@@ -98,14 +98,14 @@
         <section>
             <h3>Types</h3>
             <% types.forEach(function(type) { %>
-                <form style="display: block;" action="/type/<%= type._id %>?_method=DELETE" method="POST">
+                <form style="display: block;" action="/types/<%= type._id %>/delete?_method=DELETE" method="POST">
                     <h4 style="font-size: 20px;">
                         <%= type.en %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= type.ar %>&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="submit" value="✕" style="display: inline;">
                     </h4>
                 </form>
             <% }) %>
-            <form action="/type" method="POST">
+            <form action="/types" method="POST">
                 <label>English Type<input type="text" name="typeEn" required></label>
                 <label>Arabic Type<input dir="ltr" type="text" name="typeAr" required></label>
                 <input type="submit">
@@ -114,14 +114,14 @@
         <section>
             <h3>Locations</h3>
             <% locations.forEach(function(location) { %>
-                <form style="display: block;" action="/location/<%= location._id %>?_method=DELETE" method="POST">
+                <form style="display: block;" action="/locations/<%= location._id %>/delete?_method=DELETE" method="POST">
                     <h4 style="font: 20px;">
                         <%= location.en %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= location.ar %>&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="submit" value="✕" style="display: inline;">
                     </h4>
                 </form>
             <% }) %>
-            <form action="/location" method="POST">
+            <form action="/locations" method="POST">
                 <label>English Location<input type="text" name="locationEn" required></label>
                 <label>Arabic Location<input type="text" name="locationAr" required></label>
                 <input type="submit">
@@ -231,7 +231,7 @@
                     <div class="inner">
                         <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
                         <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
-                        <form action="/edu-vents/en/<%= eduvent._id %>?_method=DELETE" method="POST">
+                        <form action="/edu-vents/en/<%= eduvent._id %>/delete?_method=DELETE" method="POST">
                             <button>Delete</button>
                         </form>
                         <form action="/edu-vents/en/<%= eduvent._id %>/edit" method="GET">
@@ -263,7 +263,7 @@
                     <div class="inner">
                         <h2 dir="rtl"><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
                         <p dir="rtl"><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
-                        <form action="/edu-vents/ar/<%= eduvent._id %>?_method=DELETE" method="POST">
+                        <form action="/edu-vents/ar/<%= eduvent._id %>/delete?_method=DELETE" method="POST">
                             <button class="delete">Delete</button>
                         </form>
                         <form action="/edu-vents/ar/<%= eduvent._id %>/edit" method="GET">
@@ -395,7 +395,7 @@
                     <div class="inner">
                         <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
                         <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
-                        <form action="/edu-vents/en/<%= eduvent._id %>?_method=DELETE" method="POST">
+                        <form action="/edu-vents/en/<%= eduvent._id %>/delete?_method=DELETE" method="POST">
                             <button>Delete</button>
                         </form>
                         <form action="/edu-vents/en/<%= eduvent._id %>/edit" method="GET">
@@ -430,7 +430,7 @@
                         <div class="inner">
                             <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
                             <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
-                            <form action="/edu-vents/ar/<%= eduvent._id %>?_method=DELETE" method="POST">
+                            <form action="/edu-vents/ar/<%= eduvent._id %>/delete?_method=DELETE" method="POST">
                                 <button class="delete">Delete</button>
                             </form>
                             <form action="/edu-vents/ar/<%= eduvent._id %>/edit" method="GET">

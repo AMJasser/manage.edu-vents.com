@@ -238,7 +238,7 @@ app.get("/edu-vents/ar/:id", isLoggedIn, async function(req, res) {
     }
 });
 
-app.post("/user", isLoggedIn, async function(req, res) {
+app.post("/users", isLoggedIn, async function(req, res) {
     try {
         var user = {
             username: req.body.username.replace(/ /g, "").toLowerCase(),
@@ -260,7 +260,7 @@ app.post("/user", isLoggedIn, async function(req, res) {
     }
 });
 
-app.get("/user/:id/edit", isLoggedIn, async function(req, res) {
+app.get("/users/:id/edit", isLoggedIn, async function(req, res) {
     try {
         var user = await User.findById(req.params.id);
         res.render("editUser", { user: user }, function(err, html) {
@@ -277,7 +277,7 @@ app.get("/user/:id/edit", isLoggedIn, async function(req, res) {
     }
 });
 
-app.patch("/user/:id", isLoggedIn, async function(req, res) {
+app.patch("/users/:id", isLoggedIn, async function(req, res) {
     try {
         var user = await User.findById(req.params.id);
         
@@ -315,7 +315,7 @@ app.patch("/user/:id", isLoggedIn, async function(req, res) {
     }
 })
 
-app.delete("/user/:id/delete", isLoggedIn, async function(req, res) {
+app.delete("/users/:id/delete", isLoggedIn, async function(req, res) {
     try {
         await User.findByIdAndRemove(req.params.id);
         res.redirect("/");
@@ -389,7 +389,7 @@ app.post("/edu-vents", isLoggedIn, upload, async function(req, res) {
     }
 });
 
-app.delete("/edu-vents/en/:id", isLoggedIn, async function(req, res) {
+app.delete("/edu-vents/en/:id/delete", isLoggedIn, async function(req, res) {
     try {
         var eduvent = await Eduvent.findOne({_id: req.params.id});
         var count = await EduventAr.countDocuments({imgPath: eduvent.imgPath});
@@ -593,7 +593,7 @@ app.get("/edu-vents/ar/:id/feature", isLoggedIn, async function(req, res) {
     }
 });
 
-app.post("/type", isLoggedIn, async function(req, res) {
+app.post("/types", isLoggedIn, async function(req, res) {
     try {
         var newType = {
             en: req.body.typeEn.replace(/ /g, ""),
@@ -607,7 +607,7 @@ app.post("/type", isLoggedIn, async function(req, res) {
     }
 });
 
-app.delete("/type/:id", isLoggedIn, async function(req, res) {
+app.delete("/types/:id/delete", isLoggedIn, async function(req, res) {
     try {
         await Type.findByIdAndDelete(req.params.id);
         res.redirect("/");
@@ -617,7 +617,7 @@ app.delete("/type/:id", isLoggedIn, async function(req, res) {
     }
 });
 
-app.post("/location", isLoggedIn, async function(req, res) {
+app.post("/locations", isLoggedIn, async function(req, res) {
     try {
         var newLocation = {
             en: req.body.locationEn.replace(/ /g, ""),
@@ -631,7 +631,7 @@ app.post("/location", isLoggedIn, async function(req, res) {
     }
 });
 
-app.delete("/location/:id", isLoggedIn, async function(req, res) {
+app.delete("/locations/:id/delete", isLoggedIn, async function(req, res) {
     try {
         await Location.findByIdAndDelete(req.params.id);
         res.redirect("/");
