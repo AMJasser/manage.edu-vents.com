@@ -607,7 +607,7 @@ app.post("/type", isLoggedIn, async function(req, res) {
     }
 });
 
-app.post("/type/:id", isLoggedIn, async function(req, res) {
+app.delete("/type/:id", isLoggedIn, async function(req, res) {
     try {
         await Type.findByIdAndDelete(req.params.id);
         res.redirect("/");
@@ -631,7 +631,7 @@ app.post("/location", isLoggedIn, async function(req, res) {
     }
 });
 
-app.post("/location/:id", isLoggedIn, async function(req, res) {
+app.delete("/location/:id", isLoggedIn, async function(req, res) {
     try {
         await Location.findByIdAndDelete(req.params.id);
         res.redirect("/");

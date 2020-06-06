@@ -98,7 +98,7 @@
         <section>
             <h3>Types</h3>
             <% types.forEach(function(type) { %>
-                <form style="display: block;" action="/type/<%= type._id %>" method="POST">
+                <form style="display: block;" action="/type/<%= type._id %>?_method=DELETE" method="POST">
                     <h4 style="font-size: 20px;">
                         <%= type.en %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= type.ar %>&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="submit" value="✕" style="display: inline;">
@@ -114,7 +114,7 @@
         <section>
             <h3>Locations</h3>
             <% locations.forEach(function(location) { %>
-                <form style="display: block;" action="/location/<%= location._id %>" method="POST">
+                <form style="display: block;" action="/location/<%= location._id %>?_method=DELETE" method="POST">
                     <h4 style="font: 20px;">
                         <%= location.en %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= location.ar %>&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="submit" value="✕" style="display: inline;">
