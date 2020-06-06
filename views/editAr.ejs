@@ -44,11 +44,9 @@
                     <textarea dir="rtl" name="descriptionAr" placeholder="الوصف"><% if (typeof eduvent.description !== "undefined") { %> <%= eduvent.description %> <% } %></textarea>
                     <label for="location">إختر الموقع
                         <select name="locationAr" id="location">
-                            <option <% if (eduvent.location === "الكل") {%> selected <% } %>>الكل</option>
-                            <option <% if (eduvent.location === "جدة") {%> selected <% } %>>جدة</option>
-                            <option <% if (eduvent.location === "الرياض") {%> selected <% } %>>الرياض</option>
-                            <option <% if (eduvent.location === "الشرقية") {%> selected <% } %>>الشرقية</option>
-                            <option <% if (eduvent.location === "أخرى") {%> selected <% } %>>أخرى</option>
+                            <% locations.forEach(function(location) { %>
+                                <option <% if (eduvent.location === location.ar) { %> selected <% } %>><%= location.ar %></option>
+                            <% }) %>
                         </select>
                     </label>
                     <input dir="rtl" type="text" name="locationInfoAr" placeholder="معلومات الموقع" <% if (typeof eduvent.locationInfo !== "undefined") { %> value="<%= eduvent.locationInfo %>" <% } %>>

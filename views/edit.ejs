@@ -44,11 +44,9 @@
                     <textarea name="description" placeholder="Description"><% if (typeof eduvent.description !== "undefined") { %> <%= eduvent.description %> <% } %></textarea>
                     <label for="location">Select Location
                         <select name="location" id="location">
-                            <option <% if (eduvent.location === "Any") {%> selected <% } %>>Any</option>
-                            <option <% if (eduvent.location === "Jeddah") {%> selected <% } %>>Jeddah</option>
-                            <option <% if (eduvent.location === "Riyadh") {%> selected <% } %>>Riyadh</option>
-                            <option <% if (eduvent.location === "Sharqiah") {%> selected <% } %>>Sharqiah</option>
-                            <option <% if (eduvent.location === "Other") {%> selected <% } %>>Other</option>
+                            <% locations.forEach(function(location) { %>
+                                <option <% if (eduvent.location === location.en) { %> selected <% } %>><%= location.en %></option>
+                            <% }) %>
                         </select>
                     </label>
                     <input type="text" name="locationInfo" placeholder="Location Information" <% if (typeof eduvent.locationInfo !== "undefined") { %> value="<%= eduvent.locationInfo %>" <% } %>>

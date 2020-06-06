@@ -15,6 +15,7 @@ const User                  = require("./models/user");
 const Eduvent               = require("./models/eduvent");
 const EduventAr             = require("./models/eduventAr");
 const Type                  = require("./models/type");
+const Location              = require("./models/location");
 
 var app = express();
 
@@ -118,9 +119,10 @@ app.get("/", isLoggedIn, async function(req, res) {
 
             var users = await User.find();
             var types = await Type.find();
+            var locations = await Location.find();
 
             if (typeof req.query.msg !== "undefined") {
-                res.render("index", {types: types, users: users, username: req.user.username, isAdmin: true, eduvents: eduvents, chartData: chartData, msg: req.query.msg}, function(err, html) {
+                res.render("index", {locations: locations, types: types, users: users, username: req.user.username, isAdmin: true, eduvents: eduvents, chartData: chartData, msg: req.query.msg}, function(err, html) {
                     if (err) {
                         console.log(err);
                         res.render("error", {error: err});
@@ -129,7 +131,7 @@ app.get("/", isLoggedIn, async function(req, res) {
                     }
                 });
             } else {
-                res.render("index", {types: types, users: users, username: req.user.username, isAdmin: true, eduvents: eduvents, chartData: chartData}, function(err, html) {
+                res.render("index", {locations: locations, types: types, users: users, username: req.user.username, isAdmin: true, eduvents: eduvents, chartData: chartData}, function(err, html) {
                     if (err) {
                         console.log(err);
                         res.render("error", {error: err});
@@ -168,9 +170,10 @@ app.get("/", isLoggedIn, async function(req, res) {
             });
 
             var types = await Type.find();
+            var locations = await Location.find();
     
             if (typeof req.query.msg !== "undefined") {
-                res.render("index", {types: types, username: req.user.username, userId: req.user._id.toHexString(), isAdmin: false, eduvents: eduvents, chartData: chartData, msg: req.query.msg}, function(err, html) {
+                res.render("index", {locations: locations, types: types, username: req.user.username, userId: req.user._id.toHexString(), isAdmin: false, eduvents: eduvents, chartData: chartData, msg: req.query.msg}, function(err, html) {
                     if (err) {
                         console.log(err);
                         res.render("error", {error: err});
@@ -179,7 +182,7 @@ app.get("/", isLoggedIn, async function(req, res) {
                     }
                 });
             } else {
-                res.render("index", {types: types, username: req.user.username, userId: req.user._id.toHexString(), isAdmin: false, eduvents: eduvents, chartData: chartData}, function(err, html) {
+                res.render("index", {locations: locations, types: types, username: req.user.username, userId: req.user._id.toHexString(), isAdmin: false, eduvents: eduvents, chartData: chartData}, function(err, html) {
                     if (err) {
                         console.log(err);
                         res.render("error", {error: err});
@@ -201,7 +204,8 @@ app.get("/edu-vents/en/:id", isLoggedIn, async function(req, res) {
     try {
         var eduvent = await Eduvent.findOne({_id: req.params.id});
         var types = await Type.find();
-        res.render("view", {types: types, eduvent: eduvent, userId: req.user._id.toHexString(), isAdmin: req.user.isAdmin}, function(err, html) {
+        var locations = await Location.find();
+        res.render("view", {locations: locations, types: types, eduvent: eduvent, userId: req.user._id.toHexString(), isAdmin: req.user.isAdmin}, function(err, html) {
             if (err) {
                 console.log(err);
                 res.render("error", {error: err});
@@ -219,7 +223,8 @@ app.get("/edu-vents/ar/:id", isLoggedIn, async function(req, res) {
     try {
         var eduvent = await EduventAr.findOne({_id: req.params.id});
         var types = await Type.find();
-        res.render("viewAr", {types: types, eduvent: eduvent, userId: req.user._id.toHexString(), isAdmin: req.user.isAdmin}, function(err, html) {
+        var locations = await Location.find();
+        res.render("viewAr", {locations: locations, types: types, eduvent: eduvent, userId: req.user._id.toHexString(), isAdmin: req.user.isAdmin}, function(err, html) {
             if (err) {
                 console.log(err);
                 res.render("error", {error: err});
@@ -426,7 +431,8 @@ app.get("/edu-vents/en/:id/edit", isLoggedIn, async function(req, res) {
     try {
         var eduvent = await Eduvent.findOne({_id: req.params.id});
         var types = await Type.find();
-        res.render("edit", {types: types, eduvent: eduvent}, function(err, html) {
+        var locations = await Location.find();
+        res.render("edit", {locations: locations, types: types, eduvent: eduvent}, function(err, html) {
             if (err) {
                 console.log(err);
                 res.render("error", {error: err});
@@ -484,7 +490,8 @@ app.get("/edu-vents/ar/:id/edit", isLoggedIn, async function(req, res) {
     try {
         var eduvent = await EduventAr.findOne({_id: req.params.id});
         var types = await Type.find();
-        res.render("editAr", {types: types, eduvent: eduvent}, function(err, html) {
+        var locations = await Location.find();
+        res.render("editAr", {locations: locations, types: types, eduvent: eduvent}, function(err, html) {
             if (err) {
                 console.log(err);
                 res.render("error", {error: err});
@@ -602,7 +609,31 @@ app.post("/type", isLoggedIn, async function(req, res) {
 
 app.post("/type/:id", isLoggedIn, async function(req, res) {
     try {
-        await Type.findByIdAndRemove(req.params.id);
+        await Type.findByIdAndDelete(req.params.id);
+        res.redirect("/");
+    } catch(err) {
+        console.log(err);
+        res.render("error", {error: err});
+    }
+});
+
+app.post("/location", isLoggedIn, async function(req, res) {
+    try {
+        var newLocation = {
+            en: req.body.locationEn,
+            ar: req.body.locationAr
+        }
+        await Location.create(newLocation);
+        res.redirect("/");
+    } catch(err) {
+        console.log(err);
+        res.render("error", {error: err});
+    }
+});
+
+app.post("/location/:id", isLoggedIn, async function(req, res) {
+    try {
+        await Location.findByIdAndDelete(req.params.id);
         res.redirect("/");
     } catch(err) {
         console.log(err);

@@ -97,19 +97,33 @@
         </section>
         <section>
             <h3>Types</h3>
-            <table>
-                <% types.forEach(function(type) { %>
-                    <form style="display: block;" action="/type/<%= type._id %>" method="Post">
-                        <h4 style="font-size: 20px;">
-                            <%= type.en %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= type.ar %>&nbsp;&nbsp;&nbsp;&nbsp;
-                            <input type="submit" value="✕" style="display: inline;">
-                        </h4>
-                    </form>
-                <% }) %>
-            </table>
+            <% types.forEach(function(type) { %>
+                <form style="display: block;" action="/type/<%= type._id %>" method="POST">
+                    <h4 style="font-size: 20px;">
+                        <%= type.en %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= type.ar %>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="submit" value="✕" style="display: inline;">
+                    </h4>
+                </form>
+            <% }) %>
             <form action="/type" method="POST">
                 <label>English Type<input type="text" name="typeEn" required></label>
                 <label>Arabic Type<input dir="ltr" type="text" name="typeAr" required></label>
+                <input type="submit">
+            </form>
+        </section>
+        <section>
+            <h3>Locations</h3>
+            <% locations.forEach(function(location) { %>
+                <form style="display: block;" action="/location/<%= location._id %>" method="POST">
+                    <h4 style="font: 20px;">
+                        <%= location.en %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= location.ar %>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="submit" value="✕" style="display: inline;">
+                    </h4>
+                </form>
+            <% }) %>
+            <form action="/location" method="POST">
+                <label>English Location<input type="text" name="locationEn" required></label>
+                <label>Arabic Location<input type="text" name="locationAr" required></label>
                 <input type="submit">
             </form>
         </section>
@@ -174,11 +188,9 @@
                 <label>Description*<textarea name="description" id="description" placeholder="Description" required></textarea></label>
                 <label for="location">Select Location
                     <select name="location" id="location">
-                        <option>Any</option>
-                        <option>Jeddah</option>
-                        <option>Riyadh</option>
-                        <option>Sharqiah</option>
-                        <option>Other</option>
+                        <% locations.forEach(function(location) { %>
+                            <option><%= location.en %></option>
+                        <% }) %>
                     </select>
                 </label>
                 <label>Location Information<input type="text" name="locationInfo" placeholder="Location Information"></label>
@@ -198,11 +210,9 @@
                 <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="descriptionAr" id="descriptionAr" placeholder="الوصف" required></textarea></label>
                 <label for="location" dir="rtl" style="text-align: right;">إختر الموقع*
                     <select dir="ltr" name="locationAr" id="locationAr">
-                        <option>الكل</option>
-                        <option>جدة</option>
-                        <option>الرياض</option>
-                        <option>الشرقية</option>
-                        <option>أخرى</option>
+                        <% locations.forEach(function(location) { %>
+                            <option><%= location.ar %></option>
+                        <% }) %>
                     </select>
                 </label>
                 <label dir="rtl" style="text-align: right;">معلومات الموقع*<input dir="rtl" type="text" name="locationInfoAr" placeholder="معلومات الموقع"></label>
@@ -341,11 +351,9 @@
                 <label>Description*<textarea name="description" id="description" placeholder="Description" required></textarea></label>
                 <label for="location">Select Location
                     <select name="location" id="location">
-                        <option>Any</option>
-                        <option>Jeddah</option>
-                        <option>Riyadh</option>
-                        <option>Sharqiah</option>
-                        <option>Other</option>
+                        <% locations.forEach(function(location) { %>
+                            <option><%= location.en %></option>
+                        <% }) %>
                     </select>
                 </label>
                 <label>Location Information<input type="text" name="locationInfo" placeholder="Location Information"></label>
@@ -365,11 +373,9 @@
                 <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="descriptionAr" id="descriptionAr" placeholder="الوصف" required></textarea></label>
                 <label for="location" dir="rtl" style="text-align: right;">إختر الموقع
                     <select dir="ltr" name="locationAr" id="location">
-                        <option>الكل</option>
-                        <option>جدة</option>
-                        <option>الرياض</option>
-                        <option>الشرقية</option>
-                        <option>أخرى</option>
+                        <% locations.forEach(function(location) { %>
+                            <option><%= location.ar %></option>
+                        <% }) %>
                     </select>
                 </label>
                 <label dir="rtl" style="text-align: right;">معلومات الموقع<input dir="rtl" type="text" name="locationInfoAr" placeholder="معلومات الموقع"></label>
