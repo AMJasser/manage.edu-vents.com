@@ -20,7 +20,7 @@
 <body>
     <div class="sections">
         <section>
-            <form action="/user/<%= user._id %>?_method=PATCH" method="POST">
+            <form action="/users/<%= user._id %>?_method=PATCH" method="POST">
                 <h3>Edit an EDU-vent</h3>
             <label>Username<input type="text" name="username" placeholder="Username" <% if (typeof user.username !== "undefined") { %> value="<%= user.username %>" <% } %> ></label>
                 <label for="isAdmin">isAdmin

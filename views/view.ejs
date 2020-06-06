@@ -114,16 +114,16 @@
                 <% } %>
                 
                 <% if (eduvent.userId === userId || isAdmin === true) { %> 
-                    <form action="/edu-vents/ar/<%= eduvent._id %>?_method=DELETE" method="POST">
+                    <form action="/edu-vents/en/<%= eduvent._id %>/delete?_method=DELETE" method="POST">
                         <button class="delete">Delete</button>
                     </form>
 
-                    <form action="/edu-vents/ar/<%= eduvent._id %>/edit" method="GET">
+                    <form action="/edu-vents/en/<%= eduvent._id %>/edit" method="GET">
                         <button class="edit">Edit</button>
                     </form>
 
                     <% if (isAdmin === true && (eduvent.featuredUntil === undefined || new Date < eduvent.featuredUntil)) { %> 
-                        <form action="/edu-vents/ar/<%= eduvent._id %>/feature" method="GET">
+                        <form action="/edu-vents/en/<%= eduvent._id %>/feature" method="GET">
                             <input type="date" name="featuredUntil" style="display: inline; width: initial;">
                             <button style="display: inline;">Feature</button>
                         </form>

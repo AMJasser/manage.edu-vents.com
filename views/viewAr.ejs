@@ -114,7 +114,7 @@
                 <% } %>
                 
                 <% if (eduvent.userId === userId || isAdmin === true) { %> 
-                    <form action="/edu-vents/ar/<%= eduvent._id %>?_method=DELETE" method="POST">
+                    <form action="/edu-vents/ar/<%= eduvent._id %>/delete?_method=DELETE" method="POST">
                         <button class="delete">Delete</button>
                     </form>
 
