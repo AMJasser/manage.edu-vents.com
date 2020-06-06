@@ -236,7 +236,7 @@ app.get("/edu-vents/ar/:id", isLoggedIn, async function(req, res) {
 app.post("/user", isLoggedIn, async function(req, res) {
     try {
         var user = {
-            username: req.body.username,
+            username: req.body.username.split(' ').join('').toLowerCase(),
         }
         
         if (req.body.isAdmin === "true") {
