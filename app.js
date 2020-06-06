@@ -282,7 +282,7 @@ app.patch("/user/:id", isLoggedIn, async function(req, res) {
         var user = await User.findById(req.params.id);
         
         if (req.body.isAdmin === "true") {
-            user.username = req.body.username;
+            user.username = req.body.username.replace(/ /g, "").toLowerCase();
             user.isAdmin = true;
         } else {
             user.isAdmin = false;
@@ -342,9 +342,9 @@ app.post("/edu-vents", isLoggedIn, upload, async function(req, res) {
                 startDate: req.body.date,
                 endDate: req.body.endDate,
                 location: req.body.location,
-                googleMaps: req.body.googleMaps,
+                googleMaps: req.body.googleMaps.replace(/ /g, ""),
                 locationInfo: req.body.locationInfo,
-                urltoapp: req.body.urltoapp,
+                urltoapp: req.body.urltoapp.replace(/ /g, ""),
                 userId: req.user._id
             };
         
@@ -356,9 +356,9 @@ app.post("/edu-vents", isLoggedIn, upload, async function(req, res) {
                 startDate: req.body.date,
                 endDate: req.body.endDate,
                 location: req.body.locationAr,
-                googleMaps: req.body.googleMaps,
+                googleMaps: req.body.googleMaps.replace(/ /g, ""),
                 locationInfo: req.body.locationInfoAr,
-                urltoapp: req.body.urltoapp,
+                urltoapp: req.body.urltoapp.replace(/ /g, ""),
                 userId: req.user._id
             }
 
@@ -455,9 +455,9 @@ app.patch("/edu-vents/en/:id", isLoggedIn, upload, async function(req, res) {
             startDate: req.body.date,
             endDate: req.body.endDate,
             location: req.body.location,
-            googleMaps: req.body.googleMaps,
+            googleMaps: req.body.googleMaps.replace(/ /g, ""),
             locationInfo: req.body.locationInfo,
-            urltoapp: req.body.urltoapp
+            urltoapp: req.body.urltoapp.replace(/ /g, "")
         };
 
         for (var key of Object.keys(edits)) {
@@ -514,9 +514,9 @@ app.patch("/edu-vents/ar/:id", isLoggedIn, upload, async function(req, res) {
             startDate: req.body.date,
             endDate: req.body.endDate,
             location: req.body.locationAr,
-            googleMaps: req.body.googleMaps,
+            googleMaps: req.body.googleMaps.replace(/ /g, ""),
             locationInfo: req.body.locationInfoAr,
-            urltoapp: req.body.urltoapp
+            urltoapp: req.body.urltoapp.replace(/ /g, "")
         };
 
         for (var key of Object.keys(edits)) {
@@ -596,8 +596,8 @@ app.get("/edu-vents/ar/:id/feature", isLoggedIn, async function(req, res) {
 app.post("/type", isLoggedIn, async function(req, res) {
     try {
         var newType = {
-            en: req.body.typeEn,
-            ar: req.body.typeAr
+            en: req.body.typeEn.replace(/ /g, ""),
+            ar: req.body.typeAr.replace(/ /g, "")
         }
         await Type.create(newType);
         res.redirect("/");
@@ -620,8 +620,8 @@ app.post("/type/:id", isLoggedIn, async function(req, res) {
 app.post("/location", isLoggedIn, async function(req, res) {
     try {
         var newLocation = {
-            en: req.body.locationEn,
-            ar: req.body.locationAr
+            en: req.body.locationEn.replace(/ /g, ""),
+            ar: req.body.locationAr.replace(/ /g, "")
         }
         await Location.create(newLocation);
         res.redirect("/");
@@ -639,7 +639,7 @@ app.post("/location/:id", isLoggedIn, async function(req, res) {
         console.log(err);
         res.render("error", {error: err});
     }
-})
+});
 
 app.get("/timer", isLoggedIn, async function(req, res) {
     try {
