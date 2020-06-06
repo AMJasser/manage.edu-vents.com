@@ -45,10 +45,8 @@
                 <input type="submit">
             </form>
             <script>
-                var isAdmin = document.getElementById("isAdmin");
-
                 function admincheck() {
-                    if (isAdmin.value === "false") {
+                    if (document.getElementById("isAdmin").value === "false") {
                         document.getElementById("Rname").style.display = "unset";
                         document.getElementById("Wname").style.display = "unset";
                     } else {
@@ -66,6 +64,8 @@
                     <th>is Admin</th>
                     <th>Names</th>
                     <th>Time</th>
+                    <th>Score</th>
+                    <th>Edit</th>
                     <th>Delete</th>
                 </tr>
                 <% users.forEach(function(user) { %>
@@ -83,7 +83,13 @@
                         <% if (typeof user.writer.time !== "undefined") { %> Writer: <%= user.writer.time %> <% } %>
                     </td>
                     <td>
-                        <form action="/user/<%= user._id %>/delete?_method=DELETE" method="POST"><input type="submit"></form>
+                    <% if (typeof user.score !== "undefind") { %> <%= user.score %> <% } %>  
+                    </td>
+                    <td>
+                        <form action="/user/<%= user._id %>/edit" method="GET"><input type="submit" value="Edit"></form>
+                    </td>
+                    <td>
+                        <form action="/user/<%= user._id %>/delete?_method=DELETE" method="POST"><input type="submit" value="Delete"></form>
                     </td>
                 </tr>
                 <% }) %>

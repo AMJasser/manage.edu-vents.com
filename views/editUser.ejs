@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>EDU-vents</title>
+    <meta name="description"
+        content="EDU-vents - This website was created solely for the help of Philomaths. It would show the most important educational events happening around the world, providing an easy-to-use portal for them.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/images/seco.ico">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+
+    <% if (typeof msg !== "undefined") { %>
+    <script>alert("<%= msg %>")</script>
+    <% } %>
+</head>
+
+<body>
+    <div class="sections">
+        <section>
+            <form action="/user/<%= user._id %>?_method=PATCH" method="POST">
+                <h3>Edit an EDU-vent</h3>
+            <label>Username<input type="text" name="username" placeholder="Username" <% if (typeof user.username !== "undefined") { %> value="<%= user.username %>" <% } %> ></label>
+                <label for="isAdmin">isAdmin
+                    <select onchange="admincheck()" name="isAdmin" id="isAdmin">
+                        <option <% if (typeof user.isAdmin !== "undefined") { if (user.isAdmin === true) {%> selected <% } } %>>true</option>
+                        <option <% if (typeof user.isAdmin !== "undefined") { if (user.isAdmin === false) {%> selected <% } } %>>false</option>
+                    </select>
+                </label>
+            <label id="Rname" style="display: none;">Researcher Name<input type="text" name="Rname" placeholder="Researcher Name" <% if (typeof user.researcher.name !== "undefined") { %> value="<%= user.researcher.name %>" <% } %> ></label>
+            <label id="Rtime" style="display: none;">Researcher Time<input type="number" name="Rtime" placeholder="Researcher Timer" <% if (typeof user.researcher.time !== "undefined") { %> value="<%= user.researcher.time %>" <% } %> ></label>
+            <label id="Wname" style="display: none;">Writer Name<input type="text" name="Wname" placeholder="Writer Name" <% if (typeof user.writer.name !== "undefined") { %> value="<%= user.writer.name %>" <% } %> ></label>
+            <label id="Wtime" style="display: none;">Writer Time<input type="number" name="Wtime" placeholder="Writer Time" <% if (typeof user.writer.time !== "undefined") { %> value="<%= user.writer.time %>" <% } %> ></label>
+            <label>Score<input type="number" name="score" placeholder="Score" <% if (typeof user.score !== "undefined") { %> value="<%= user.score %>" <% } %> ></label>
+                <label for="cPassword">Do you want to change the password?
+                    <select onchange="passwordCheck()" name="cPassword" id="cPassword">
+                        <option>yes</option>
+                        <option selected>no</option>
+                    </select>
+                </label>
+                <label style="display: none;" id="password">Password<input type="password" name="password" placeholder="Password"></label>
+                <input type="submit">
+            </form>
+        </section>
+    </div>
+</body>
+
+<script>
+    function admincheck() {
+        if (document.getElementById("isAdmin").value === "false") {
+            document.getElementById("Rname").style.display = "block";
+            document.getElementById("Rtime").style.display = "block";
+            document.getElementById("Wname").style.display = "block";
+            document.getElementById("Wtime").style.display = "block";
+        } else {
+            document.getElementById("Rname").style.display = "none";
+            document.getElementById("Rtime").style.display = "none";
+            document.getElementById("Wname").style.display = "none";
+            document.getElementById("Wtime").style.display = "none";
+        }
+    }
+
+    function passwordCheck() {
+        if (document.getElementById("cPassword").value === "yes") {
+            document.getElementById("password").style.display = "block";
+        } else {
+            document.getElementById("password").style.display = "none";
+        }
+    }
+
+    window.onload = admincheck();
+</script>
+
+</html>

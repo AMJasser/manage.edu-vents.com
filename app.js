@@ -255,6 +255,61 @@ app.post("/user", isLoggedIn, async function(req, res) {
     }
 });
 
+app.get("/user/:id/edit", isLoggedIn, async function(req, res) {
+    try {
+        var user = await User.findById(req.params.id);
+        res.render("editUser", { user: user }, function(err, html) {
+            if (err) {
+                console.log(err);
+                res.render("error", {error: err});
+            } else {
+                res.send(html);
+            }
+        });
+    } catch(err) {
+        console.log(err);
+        res.render("error", {error: err});
+    }
+});
+
+app.patch("/user/:id", isLoggedIn, async function(req, res) {
+    try {
+        var user = await User.findById(req.params.id);
+        
+        if (req.body.isAdmin === "true") {
+            user.username = req.body.username;
+            user.isAdmin = true;
+        } else {
+            user.isAdmin = false;
+            user.researcher = { name: req.body.Rname };
+            user.writer = { name: req.body.Wname };
+            if (typeof req.body.Rtime === "string" && req.body.Rtime !== "") {
+                user.researcher.time = Number(req.body.Rtime);
+            }
+            if (typeof req.body.Wtime === "string" && req.body.Wtime !== "") {
+                user.writer.time = Number(req.body.Wtime);
+            }
+            if (typeof req.body.score === "string" && req.body.score !== "") {
+                user.score = Number(req.body.score);
+            }
+            user.save();
+
+            if (req.body.cPassword === "yes") {
+                user.setPassword(req.body.password).then(function(sanitizedUser) {
+                    sanitizedUser.setPassword(req.body.password, function() {
+                        sanitizedUser.save();
+                    });
+                });
+            }
+            
+            res.redirect("/");
+        }
+    } catch(err) {
+        console.log(err);
+        res.render("error", {error: err});
+    }
+})
+
 app.delete("/user/:id/delete", isLoggedIn, async function(req, res) {
     try {
         await User.findByIdAndRemove(req.params.id);
