@@ -18,7 +18,7 @@
 
 <body>
     <header>
-        <h1>
+        <h1 onclick="location.href='/'">
             <img alt="logo" src="/images/logo.jpg">
             <span>EDU-vents</span>
         </h1>
@@ -126,6 +126,59 @@
                 <label>Arabic Location<input type="text" name="locationAr" required></label>
                 <input type="submit">
             </form>
+        </section>
+        <section>
+            <h3>Forms</h3>
+            <% if (typeof forms === "object") { %>
+                <% forms.forEach(function(form, i) { %>
+                    <div>
+                        <span style="display: inline-block;"><%= i+1 %></span>
+                        <strong style="display: inline-block;"><%= form.name %></strong>
+                        <p style="display: inline-block;"><%= form.endDate %></p>
+                        <form action="/forms/<%= form.url %>/responses" method="GET">
+                            <input type="submit" value="Responses">
+                        </form>
+                        <form action="/forms/<%= form.url %>/edit" method="GET">
+                            <input type="submit" value="Edit">
+                        </form>
+                        <% if (form.isOpen === true) { %>
+                            <form action="/forms/<%= form.url %>/close" method="GET">
+                                <input type="submit" value="Close">
+                            </form>
+                        <% } else { %>
+                            <form action="/forms/<%= form.url %>/open" method="GET">
+                                <input type="submit" value="Open">
+                            </form>
+                        <% } %>
+                        <form action="/forms/<%= form.url %>/delete?_method=DELETE" method="POST">
+                            <input type="submit" value="Delete">
+                        </form>
+                    </div>
+                <% }) %>
+            <% } %>
+            <form action="/forms" method="POST" enctype="multipart/form-data" name="formForm" onsubmit="return validateFormForm()">
+                <label>Form Name<input type="text" name="name" required></label>
+                <label>End Date<input type="date" name="endDate" required></label>
+                <label>Form HTML<input type="file" name="formHTML" placeholder="Form HTML" required></label>
+                <input type="submit">
+            </form>
+            <script type="text/javascript">
+                function validateFormForm() {
+                    var newFormName = document.forms["formForm"]["name"].value.toLowerCase().replace(/ /g, "").replace(/[^a-zA-Z0-9-_\.]/g, '');
+                    var formNames = "<% if (typeof formNames !== 'undefined') { %><%= formNames %><% } %>";
+                    var result = true;
+                    if (formNames !== "") {
+                        formNames = formNames.split(",");
+                        formNames.forEach(function(formName) {
+                            if (newFormName === formName) {
+                                alert("There is another form with the same name.");
+                                result = false;
+                            }
+                        });
+                    }
+                    return result;
+                }
+            </script>
         </section>
         <section>
             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>

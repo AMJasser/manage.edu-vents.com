@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>EDU-vents</title>
+        <meta name="description" content="EDU-vents - This website was created solely for the help of Philomaths. It would show the most important educational events happening around the world, providing an easy-to-use portal for them.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="/images/seco.ico">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/stylesheets/style.css">
+
+        <% if (typeof msg !== "undefined") { %>
+            <script>alert("<%= msg %>")</script>
+        <% } %>
+    </head>
+    <body>
+        <header>
+            <h1 onclick="location.href='/'">
+                <img alt="logo" src="/images/logo.jpg">
+                <span>EDU-vents</span>
+            </h1>
+            <nav>
+                <a href="/logout">Logout</a>
+            </nav>
+        </header>
+        <div class="sections">
+            <section>
+                <h2 style="color: black;">Responses From <%= form.name %></h2>
+                <h3 style="text-align: left;"><%= form.responses.length %> Responses</h3>
+                <% if (form.responses.length > 0) { %>
+                    <% form.responses.forEach(function(response, i) { %>
+                        <div>
+                            <span style="display: inline-block;"><%= i+1 %></span>
+                            <% response.QandA.forEach(function(qanda) { %>
+                                <% if (qanda[0] === "name" || qanda[0] === "lName") { %>
+                                    <strong><%= qanda[1] %></strong>
+                                <% } %>
+                            <% }) %>
+                            <button onclick="getResponse(<%= i+1 %>)">View</button>
+                        </div>
+                    <% }) %> 
+                <% } %>
+            </section>
+            <% if (form.responses.length > 0) { %>
+                <% form.responses.forEach(function(response, i) { %>
+                    <section class="section" id="form<%= i+1 %>" style="display: none;">
+                        <input type="text" id="indexInput" style="position: absolute; width: 50px;">
+                        <h2 style="color: black;"><%= i+1 %> of <%= form.responses.length %></h2>
+                        <% response.QandA.forEach(function(qanda) { %>
+                            <h3><%= qanda[0] %></h3>
+                            <p><%= qanda[1] %></p>
+                        <% }) %>
+                        <% response.files.forEach(function(file) { %>
+                            <h3><%= file[0] %></h3>
+                            <embed src="/form%20uploads/<%= file[1] %>">
+                        <% }) %>
+                    </section> 
+                <% }) %> 
+            <% } %>
+        </div>
+        <script>
+            var displayed;
+            var indexInput = document.getElementById("indexInput");
+
+            function getResponse(index) {
+                displayed.style.display = "none";
+                displayed = document.getElementById("form" + index);
+                displayed.style.display = "unset";
+            }
+
+            window.onload = function() {
+                displayed = document.getElementById("form1");
+                displayed.style.display = "unset";
+            }
+
+            indexInput.addEventListener("keypress", function(e) {
+                if (e.keyCode === 13) {
+                    getResponse(Number(indexInput.value));
+                }
+            });
+        </script>
+    </body>
+</html>

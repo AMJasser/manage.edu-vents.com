@@ -29,6 +29,15 @@
         <% } %>
     </head>
     <body>
+        <header>
+            <h1 onclick="location.href='/'">
+                <img alt="logo" src="/images/logo.jpg">
+                <span>EDU-vents</span>
+            </h1>
+            <nav>
+                <a href="/logout">Logout</a>
+            </nav>
+        </header>
         <div class="sections">
             <section>
                 <% if (typeof eduvent.name !== "undefined") { %> <h1 dir="rtl">NAME: <%= eduvent.name %></h1> <% } %> 

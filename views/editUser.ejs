@@ -18,6 +18,15 @@
 </head>
 
 <body>
+    <header>
+        <h1 onclick="location.href='/'">
+            <img alt="logo" src="/images/logo.jpg">
+            <span>EDU-vents</span>
+        </h1>
+        <nav>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
     <div class="sections">
         <section>
             <form action="/users/<%= user._id %>?_method=PATCH" method="POST">

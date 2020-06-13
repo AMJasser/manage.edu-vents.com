@@ -9,7 +9,17 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/stylesheets/style.css">
     </head>
-    <body class="sections">
+    <body>
+        <header>
+            <h1 onclick="location.href='/'">
+                <img alt="logo" src="/images/logo.jpg">
+                <span>EDU-vents</span>
+            </h1>
+            <nav>
+                <a href="/logout">Logout</a>
+            </nav>
+        </header>
+        <div class="sections">
             <section>
                 <img width="100px" src="/images/logo.jpg">
     
@@ -19,5 +29,6 @@
                     <p><%= error %></p>
                 <% } %>
             </section>
+        </div>
     </body>
 </html>

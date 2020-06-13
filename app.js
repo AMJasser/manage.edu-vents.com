@@ -8,6 +8,7 @@ const path = require("path");
 const multer = require("multer");
 const schedule = require("node-schedule");
 const helmet = require("helmet");
+const cookieParser = require("cookie-parser");
 const LocalStrategy = require("passport-local");
 const passportLocalMongoose = require("passport-local-mongoose");
 const session = require("express-session");
@@ -16,6 +17,7 @@ const Eduvent = require("./models/eduvent");
 const EduventAr = require("./models/eduventAr");
 const Type = require("./models/type");
 const Location = require("./models/location");
+const Form = require("./models/form");
 
 var app = express();
 
@@ -24,6 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride('_method'));
 app.use(helmet());
+app.use(cookieParser());
 
 mongoose.connect("mongodb://localhost:27017/EDU-vents", { useNewUrlParser: true, useUnifiedTopology: true }).catch(error => { console.log(error) });
 mongoose.set("useFindAndModify", false);
@@ -34,7 +37,11 @@ const storage = multer.diskStorage({
         cb(null, file.fieldname + "-" + Math.floor(100000 + Math.random() * 900000) + "-" + Date.now() + path.extname(file.originalname));
     }
 });
+const formStorage = multer.diskStorage({
+    destination: "./uploads/"
+});
 const upload = multer({ storage: storage }).single("img");
+const formUpload = multer({ storage: formStorage }).single("formHTML");
 
 app.use(session({
     secret: "the author of this website is Abdullah AlJasser",
@@ -102,6 +109,7 @@ app.get("/", isLoggedIn, async function (req, res) {
                 names: [],
                 scores: []
             };
+            var formNames = [];
 
             eduvents.en = await Eduvent.find();
             eduvents.ar = await EduventAr.find();
@@ -120,9 +128,17 @@ app.get("/", isLoggedIn, async function (req, res) {
             var users = await User.find();
             var types = await Type.find();
             var locations = await Location.find();
+            var forms = await Form.find();
+
+            if (typeof forms === "object") {
+                forms.forEach(function(oneForm) {
+                    formNames.push(oneForm.url.substring(0, oneForm.url.length - 4));
+                });
+                formNames = formNames.join(",");
+            }
 
             if (typeof req.query.msg !== "undefined") {
-                res.render("index", { locations: locations, types: types, users: users, username: req.user.username, isAdmin: true, eduvents: eduvents, chartData: chartData, msg: req.query.msg }, function (err, html) {
+                res.render("index", { locations: locations, types: types, forms: forms, formNames: formNames, users: users, username: req.user.username, isAdmin: true, eduvents: eduvents, chartData: chartData, msg: req.query.msg }, function (err, html) {
                     if (err) {
                         console.log(err);
                         res.render("error", { error: err });
@@ -131,7 +147,7 @@ app.get("/", isLoggedIn, async function (req, res) {
                     }
                 });
             } else {
-                res.render("index", { locations: locations, types: types, users: users, username: req.user.username, isAdmin: true, eduvents: eduvents, chartData: chartData }, function (err, html) {
+                res.render("index", { locations: locations, types: types, forms: forms, formNames: formNames, users: users, username: req.user.username, isAdmin: true, eduvents: eduvents, chartData: chartData }, function (err, html) {
                     if (err) {
                         console.log(err);
                         res.render("error", { error: err });
@@ -590,6 +606,129 @@ app.get("/edu-vents/ar/:id/feature", isLoggedIn, async function (req, res) {
     } catch (err) {
         console.log(err);
         res.render("error", { error: err });
+    }
+});
+
+app.post("/forms", formUpload, async function(req, res) {
+    try {
+        var newForm = {
+            name: req.body.name,
+            endDate: new Date(req.body.endDate),
+            url: req.body.name.toLowerCase().replace(/ /g, "").replace(/[^a-zA-Z0-9-_\.]/g, ''),
+            responses: [],
+            isOpen: false
+        }
+        var data = fs.readFileSync("./uploads/" + req.file.filename, 'utf-8');
+        var html = data.replace(/<\s*form[^>]*>/g, `<form action="/forms/${newForm.url}" method="POST" enctype="multipart/form-data" id="mainForm" onsubmit="return submitForm()" data-expires="${newForm.endDate}">`);
+        newForm.html = html;
+        fs.unlinkSync("./uploads/" + req.file.filename);
+        await Form.create(newForm);
+        res.redirect("/");
+    } catch(err) {
+        console.log(err);
+        res.render("error", { error: err });
+        await Form.deleteOne(newEduvent);
+    }
+});
+
+app.get("/forms/:url/edit", async function(req, res) {
+    try {
+        var form = await Form.findOne({ url: req.params.url });
+        var forms = await Form.find();
+        var formNames = [];
+        if (typeof forms === "object") {
+            forms.forEach(function(oneForm) {
+                formNames.push(oneForm.url.substring(0, oneForm.url.length - 4));
+            });
+            formNames = formNames.join(",");
+            res.render("editForm", { form: form, formNames: formNames }, function (err, html) {
+                if (err) {
+                    console.log(err);
+                    res.render("error", { error: err });
+                } else {
+                    res.send(html);
+                }
+            });
+        } else {
+            res.render("editForm", {form: form}, function (err, html) {
+                if (err) {
+                    console.log(err);
+                    res.render("error", { error: err });
+                } else {
+                    res.send(html);
+                }
+            });
+        }
+    } catch(err) {
+        console.log(err);
+        res.render("error", { error: err });
+    }
+});
+
+app.patch("/forms/:url", async function(req, res) {
+    try {
+        var form = await Form.findOne({url: req.params.url});
+        form.name = req.body.name;
+        form.endDate = new Date(req.body.endDate);
+        form.url = req.body.name.toLowerCase().replace(/ /g, "").replace(/[^a-zA-Z0-9-_\.]/g, '');
+        form.html = req.body.code;
+        form.save();
+        res.redirect("/");
+    } catch(err) {
+        console.log(err);
+        res.render("error", { error: err });
+    }
+});
+
+app.get("/forms/:url/open", async function(req, res) {
+    try {
+        await Form.updateOne({url: req.params.url}, { "$set": { "isOpen": true } });
+        res.redirect("/");
+    } catch(err) {
+        console.log(err);
+        res.render("error", { error: err });
+    }
+});
+
+app.get("/forms/:url/close", async function(req, res) {
+    try {
+        await Form.updateOne({url: req.params.url}, { "$set": { "isOpen": false } });
+        res.redirect("/");
+    } catch(err) {
+        console.log(err);
+        res.render("error", { error: err });
+    }
+});
+
+app.get("/forms/:url/responses", async function(req, res) {
+    try {
+        var form = await Form.findOne({url: req.params.url});
+        res.render("viewForm", {form: form}, function (err, html) {
+            if (err) {
+                console.log(err);
+                res.render("error", { error: err });
+            } else {
+                res.send(html);
+            }
+        });
+    } catch(err) {
+        console.log(err);
+        res.render("error", { error: err });
+    }
+});
+
+app.delete("/forms/:url/delete", async function(req, res) {
+    try {
+        var form = await Form.findOne({url: req.params.url});
+        form.responses.forEach(function(response) {
+            response.files.forEach(function(file) {
+                fs.unlinkSync("./public/form uploads/" + file[1]);
+            });
+        });
+        form.remove();
+        res.redirect("/");
+    } catch(err) {
+        console.log(err);
     }
 });
 
