@@ -150,6 +150,9 @@
                                 <input type="submit" value="Open">
                             </form>
                         <% } %>
+                        <form action="/forms/<%= form.url %>/report">
+                            <input type="submit" value="Report">
+                        </form>
                         <form action="/forms/<%= form.url %>/delete?_method=DELETE" method="POST">
                             <input type="submit" value="Delete">
                         </form>

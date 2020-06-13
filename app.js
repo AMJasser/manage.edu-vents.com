@@ -18,6 +18,7 @@ const EduventAr = require("./models/eduventAr");
 const Type = require("./models/type");
 const Location = require("./models/location");
 const Form = require("./models/form");
+const json = require("body-parser/lib/types/json");
 
 var app = express();
 
@@ -341,6 +342,23 @@ app.delete("/users/:id/delete", isLoggedIn, async function (req, res) {
     }
 });
 
+app.get("/users/report", isLoggedIn, async function (req, res) {
+    try {
+        var users = await User.find();
+        var data = JSON.stringify(users);
+        fs.writeFileSync("./uploads/user-report.json", data, 'utf-8');
+        res.download("./uploads/user-report.json", function(err) {
+            if (err) {
+                console.log(err);
+            }
+            fs.unlinkSync("./uploads/user-report.json");
+        });
+    } catch(err) {
+        console.log(err);
+        res.render("error", { error: err });
+    }
+});
+
 app.post("/edu-vents", isLoggedIn, upload, async function (req, res) {
     try {
         if (req.body.name === "" || req.body.type === "Any" || req.body.description === "" || req.body.urltoapp === "" || req.body.nameAr === "" || req.body.typeAr === "الكل" || req.body.descriptionAr === "" || (req.body.date === "" && req.body.endDate === "")) {
@@ -609,7 +627,7 @@ app.get("/edu-vents/ar/:id/feature", isLoggedIn, async function (req, res) {
     }
 });
 
-app.post("/forms", formUpload, async function(req, res) {
+app.post("/forms", isLoggedIn, formUpload, async function(req, res) {
     try {
         var newForm = {
             name: req.body.name,
@@ -631,7 +649,7 @@ app.post("/forms", formUpload, async function(req, res) {
     }
 });
 
-app.get("/forms/:url/edit", async function(req, res) {
+app.get("/forms/:url/edit", isLoggedIn, async function(req, res) {
     try {
         var form = await Form.findOne({ url: req.params.url });
         var forms = await Form.find();
@@ -665,7 +683,7 @@ app.get("/forms/:url/edit", async function(req, res) {
     }
 });
 
-app.patch("/forms/:url", async function(req, res) {
+app.patch("/forms/:url", isLoggedIn, async function(req, res) {
     try {
         var form = await Form.findOne({url: req.params.url});
         form.name = req.body.name;
@@ -680,7 +698,7 @@ app.patch("/forms/:url", async function(req, res) {
     }
 });
 
-app.get("/forms/:url/open", async function(req, res) {
+app.get("/forms/:url/open", isLoggedIn, async function(req, res) {
     try {
         await Form.updateOne({url: req.params.url}, { "$set": { "isOpen": true } });
         res.redirect("/");
@@ -690,7 +708,7 @@ app.get("/forms/:url/open", async function(req, res) {
     }
 });
 
-app.get("/forms/:url/close", async function(req, res) {
+app.get("/forms/:url/close", isLoggedIn, async function(req, res) {
     try {
         await Form.updateOne({url: req.params.url}, { "$set": { "isOpen": false } });
         res.redirect("/");
@@ -700,7 +718,7 @@ app.get("/forms/:url/close", async function(req, res) {
     }
 });
 
-app.get("/forms/:url/responses", async function(req, res) {
+app.get("/forms/:url/responses", isLoggedIn, async function(req, res) {
     try {
         var form = await Form.findOne({url: req.params.url});
         res.render("viewForm", {form: form}, function (err, html) {
@@ -717,7 +735,7 @@ app.get("/forms/:url/responses", async function(req, res) {
     }
 });
 
-app.delete("/forms/:url/delete", async function(req, res) {
+app.delete("/forms/:url/delete", isLoggedIn, async function(req, res) {
     try {
         var form = await Form.findOne({url: req.params.url});
         form.responses.forEach(function(response) {
@@ -729,6 +747,23 @@ app.delete("/forms/:url/delete", async function(req, res) {
         res.redirect("/");
     } catch(err) {
         console.log(err);
+    }
+});
+
+app.get("/forms/:url/report", isLoggedIn, async function (req, res) {
+    try {
+        var form = await Form.findOne({ url: req.params.url });
+        var data = JSON.stringify(form);
+        fs.writeFileSync("./uploads/form-report.json", data, 'utf-8');
+        res.download("./uploads/form-report.json", function(err) {
+            if (err) {
+                console.log(err);
+            }
+            fs.unlinkSync("./uploads/form-report.json");
+        });
+    } catch(err) {
+        console.log(err);
+        res.render("error", { error: err });
     }
 });
 
