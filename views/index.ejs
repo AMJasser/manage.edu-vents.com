@@ -89,7 +89,7 @@
                         <form action="/users/<%= user._id %>/edit" method="GET"><input type="submit" value="Edit"></form>
                     </td>
                     <td>
-                        <form action="/users/<%= user._id %>/delete?_method=DELETE" method="POST"><input type="submit" value="Delete"></form>
+                        <form action="/users/<%= user._id %>/delete?_method=DELETE" method="POST" name="userDel" onsubmit="return validateDel('userDel', '<%= user.username %>')"><input type="submit" value="Delete"></form>
                     </td>
                 </tr>
                 <% }) %>
@@ -98,7 +98,7 @@
         <section>
             <h3>Types</h3>
             <% types.forEach(function(type) { %>
-                <form style="display: block;" action="/types/<%= type._id %>/delete?_method=DELETE" method="POST">
+                <form style="display: block;" action="/types/<%= type._id %>/delete?_method=DELETE" method="POST" name="typeDel" onsubmit="return validateDel('typeDel', '<%= type.en %>  |  <%= type.ar %>')">
                     <h4 style="font-size: 20px;">
                         <%= type.en %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= type.ar %>&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="submit" value="✕" style="display: inline;">
@@ -114,7 +114,7 @@
         <section>
             <h3>Locations</h3>
             <% locations.forEach(function(location) { %>
-                <form style="display: block;" action="/locations/<%= location._id %>/delete?_method=DELETE" method="POST">
+                <form style="display: block;" action="/locations/<%= location._id %>/delete?_method=DELETE" method="POST" name="locationDel" onsubmit="return validateDel('locationDel', '<%= location.en %>  |  <%= location.ar %>')">
                     <h4 style="font: 20px;">
                         <%= location.en %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= location.ar %>&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="submit" value="✕" style="display: inline;">
@@ -153,7 +153,7 @@
                         <form action="/forms/<%= form.url %>/report">
                             <input type="submit" value="Report">
                         </form>
-                        <form action="/forms/<%= form.url %>/delete?_method=DELETE" method="POST">
+                        <form action="/forms/<%= form.url %>/delete?_method=DELETE" method="POST" name="formDel" onsubmit="return validateDel('formDel', '<%= form.name %>')">
                             <input type="submit" value="Delete">
                         </form>
                     </div>
@@ -251,7 +251,7 @@
                 </label>
                 <label>Location Information<input type="text" name="locationInfo" placeholder="Location Information"></label>
                 <label>Google Maps Link<input type="url" name="googleMaps" placeholder="Google Maps"></label>
-                <label>URL to Application<input type="url" name="urltoapp" placeholder="URL to Application"></label>
+                <label>URL to Application*<input type="url" name="urltoapp" placeholder="URL to Application" required></label>
                 <label>Start Date <input type="date" name="date"></label>
                 <label>End Date <input type="date" name="endDate"></label>
                 <label>Image*<input type="file" name="img" required></label>
@@ -264,14 +264,14 @@
                     </select>
                 </label>
                 <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="descriptionAr" id="descriptionAr" placeholder="الوصف" required></textarea></label>
-                <label for="location" dir="rtl" style="text-align: right;">إختر الموقع*
+                <label for="location" dir="rtl" style="text-align: right;">إختر الموقع
                     <select dir="ltr" name="locationAr" id="locationAr">
                         <% locations.forEach(function(location) { %>
                             <option><%= location.ar %></option>
                         <% }) %>
                     </select>
                 </label>
-                <label dir="rtl" style="text-align: right;">معلومات الموقع*<input dir="rtl" type="text" name="locationInfoAr" placeholder="معلومات الموقع"></label>
+                <label dir="rtl" style="text-align: right;">معلومات الموقع<input dir="rtl" type="text" name="locationInfoAr" placeholder="معلومات الموقع"></label>
                 <input type="submit">
             </form>
         </section>
@@ -287,7 +287,7 @@
                     <div class="inner">
                         <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
                         <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
-                        <form action="/edu-vents/en/<%= eduvent._id %>/delete?_method=DELETE" method="POST">
+                        <form action="/edu-vents/en/<%= eduvent._id %>/delete?_method=DELETE" method="POST" name="eduventEnDel" onsubmit="return validateDel('eduventEnDel', '<%= eduvent.name %>')">
                             <button>Delete</button>
                         </form>
                         <form action="/edu-vents/en/<%= eduvent._id %>/edit" method="GET">
@@ -319,7 +319,7 @@
                     <div class="inner">
                         <h2 dir="rtl"><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
                         <p dir="rtl"><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
-                        <form action="/edu-vents/ar/<%= eduvent._id %>/delete?_method=DELETE" method="POST">
+                        <form action="/edu-vents/ar/<%= eduvent._id %>/delete?_method=DELETE" method="POST" name="eduventArDel" onsubmit="return validateDel('eduventArDel', '<%= eduvent.name %>')">
                             <button class="delete">Delete</button>
                         </form>
                         <form action="/edu-vents/ar/<%= eduvent._id %>/edit" method="GET">
@@ -414,7 +414,7 @@
                 </label>
                 <label>Location Information<input type="text" name="locationInfo" placeholder="Location Information"></label>
                 <label>Google Maps Link<input type="url" name="googleMaps" placeholder="Google Maps"></label>
-                <label>URL to Application<input type="url" name="urltoapp" placeholder="URL to Application"></label>   
+                <label>URL to Application*<input type="url" name="urltoapp" placeholder="URL to Application" required></label>
                 <label>Start Date <input type="date" name="date"></label>
                 <label>End Date <input type="date" name="endDate"></label>
                 <label>Image*<input type="file" name="img" required></label>
@@ -451,7 +451,7 @@
                     <div class="inner">
                         <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
                         <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
-                        <form action="/edu-vents/en/<%= eduvent._id %>/delete?_method=DELETE" method="POST">
+                        <form action="/edu-vents/en/<%= eduvent._id %>/delete?_method=DELETE" method="POST" name="eduventEnDel" onsubmit="return validateDel('eduventEnDel', '<%= eduvent.name %>')">
                             <button>Delete</button>
                         </form>
                         <form action="/edu-vents/en/<%= eduvent._id %>/edit" method="GET">
@@ -486,7 +486,7 @@
                         <div class="inner">
                             <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
                             <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
-                            <form action="/edu-vents/ar/<%= eduvent._id %>/delete?_method=DELETE" method="POST">
+                            <form action="/edu-vents/ar/<%= eduvent._id %>/delete?_method=DELETE" method="POST" name="eduventArDel" onsubmit="return validateDel('eduventArDel', '<%= eduvent.name %>')">
                                 <button class="delete">Delete</button>
                             </form>
                             <form action="/edu-vents/ar/<%= eduvent._id %>/edit" method="GET">
@@ -545,6 +545,15 @@
         }
         if (eduventForm["descriptionAr"].value === "") {
             alert("Please submit an arabic description.");
+            return false;
+        }
+    }
+
+    function validateDel(form, name) {
+        var form = document.forms[form];
+        if (confirm("Are you sure you want to delete " + name)) {
+            return true;
+        } else {
             return false;
         }
     }
