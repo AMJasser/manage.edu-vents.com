@@ -442,6 +442,25 @@ app.delete("/edu-vents/en/:id/delete", isLoggedIn, async function (req, res) {
     }
 });
 
+app.delete("/edu-vents/ar/:id/delete", isLoggedIn, async function (req, res) {
+    try {
+        var eduvent = await EduventAr.findOne({ _id: req.params.id });
+        var count = await Eduvent.countDocuments({ imgPath: eduvent.imgPath });
+        await EduventAr.deleteOne({ _id: req.params.id });
+
+        if (count < 1) {
+            if (fs.existsSync("./public/uploads/" + eduvent.imgPath)) {
+                fs.unlinkSync("./public/uploads/" + eduvent.imgPath);
+            };
+        };
+
+        res.redirect("/");
+    } catch (err) {
+        console.log(err);
+        res.render("error", { error: err });
+    }
+});
+
 app.delete("/edu-vents/ar/:id", isLoggedIn, async function (req, res) {
     try {
         var eduvent = await EduventAr.findOne({ _id: req.params.id });
