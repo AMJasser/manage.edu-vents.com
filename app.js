@@ -789,8 +789,8 @@ app.get("/forms/:url/report", isLoggedIn, async function (req, res) {
 app.post("/types", isLoggedIn, async function (req, res) {
     try {
         var newType = {
-            en: req.body.typeEn.replace(/ /g, ""),
-            ar: req.body.typeAr.replace(/ /g, "")
+            en: req.body.typeEn.replace(/\s*$/,''),
+            ar: req.body.typeAr.replace(/\s*$/,'')
         }
         await Type.create(newType);
         res.redirect("/");
@@ -813,8 +813,8 @@ app.delete("/types/:id/delete", isLoggedIn, async function (req, res) {
 app.post("/locations", isLoggedIn, async function (req, res) {
     try {
         var newLocation = {
-            en: req.body.locationEn.replace(/ /g, ""),
-            ar: req.body.locationAr.replace(/ /g, "")
+            en: req.body.locationEn.replace(/\s*$/,''),
+            ar: req.body.locationAr.replace(/\s*$/,'')
         }
         await Location.create(newLocation);
         res.redirect("/");
