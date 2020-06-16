@@ -866,16 +866,6 @@ app.post("/timer", isLoggedIn, async function (req, res) {
     }
 });
 
-app.get("/timer/error", isLoggedIn, async function (req, res) {
-    try {
-        res.render("error", { error: req.query.error + "\ntime: " + req.query.time });
-    } catch (err) {
-        console.log(err);
-        console.log();
-        res.render("error", { error: err })
-    }
-});
-
 app.get("*", function (req, res) {
     res.redirect("/?msg=404");
 });
