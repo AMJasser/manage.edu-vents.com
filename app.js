@@ -24,6 +24,7 @@ var app = express();
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride('_method'));
 app.use(helmet());
@@ -858,10 +859,10 @@ app.post("/timer", isLoggedIn, async function (req, res) {
         } else if (req.body.role === "writer") {
             await User.findOneAndUpdate({ _id: req.user._id }, { $inc: { "writer.time": EstTime } });
         }
-        res.send("/?msg=your estimated time: " + EstTime);
+        res.status(200).send("/?msg=your estimated time: " + EstTime);
     } catch (err) {
         console.log(err);
-        res.send("/timer/error?error=" + err + "&time=" + EstTime);
+        res.status(500).send();
     }
 });
 

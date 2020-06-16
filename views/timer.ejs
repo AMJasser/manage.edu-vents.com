@@ -300,15 +300,35 @@
         bodyData = bodyData + timeMin;
         document.cookie = "time=; expires= Thu, 01 Jan 1970 00:00:00 GMT; path=/timer;";
         document.cookie = "role=; expires= Thu, 01 Jan 1970 00:00:00 GMT; path=/timer;";
-        var xhttp = new XMLHttpRequest;
-        xhttp.open("POST", "/timer", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send(bodyData);
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                location.href = xhttp.responseText;
+        const promise = new Promise((resolve, reject) => {
+            var xhr = new XMLHttpRequest;
+            xhr.open("POST", "/timer", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onload = function() {
+                if (xhr.status >= 400) {
+                    reject("An error occurred");
+                } else {
+                    resolve(xhr.response);
+                }
             }
-        }
+            xhr.onerror = function() {
+                reject("An error occurred");
+            }
+            xhr.send(bodyData);
+            /*xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    location.href = xhr.responseText;
+                } else {
+                    alert("There was an error submitting your time. Please take a picture of your time and send it to Abdullah AlJasser.");
+                }
+            }*/
+        })
+        .then(responseData => {
+            location.href = responseData;
+        })
+        .catch(err => {
+            alert("There was an error submitting your time. Please take a picture of your time and send it to Abdullah AlJasser.");
+        })
     }
  
     window.onload = function() {
