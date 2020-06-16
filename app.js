@@ -191,7 +191,7 @@ app.get("/", isLoggedIn, async function (req, res) {
             var locations = await Location.find();
 
             if (typeof req.query.msg !== "undefined") {
-                res.render("index", { locations: locations, types: types, username: req.user.username, userId: req.user._id.toHexString(), isAdmin: false, eduvents: eduvents, chartData: chartData, msg: req.query.msg }, function (err, html) {
+                res.render("index", { locations: locations, types: types, username: req.user.username, Rtime: req.user.researcher.time, Wtime: req.user.writer.time, userId: req.user._id.toHexString(), isAdmin: false, eduvents: eduvents, chartData: chartData, msg: req.query.msg }, function (err, html) {
                     if (err) {
                         console.log(err);
                         res.render("error", { error: err });
@@ -200,7 +200,7 @@ app.get("/", isLoggedIn, async function (req, res) {
                     }
                 });
             } else {
-                res.render("index", { locations: locations, types: types, username: req.user.username, userId: req.user._id.toHexString(), isAdmin: false, eduvents: eduvents, chartData: chartData }, function (err, html) {
+                res.render("index", { locations: locations, types: types, username: req.user.username, Rtime: req.user.researcher.time, Wtime: req.user.writer.time, userId: req.user._id.toHexString(), isAdmin: false, eduvents: eduvents, chartData: chartData }, function (err, html) {
                     if (err) {
                         console.log(err);
                         res.render("error", { error: err });
