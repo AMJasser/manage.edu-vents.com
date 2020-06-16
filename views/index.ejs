@@ -28,8 +28,8 @@
     </header>
     <h2>Welcome <%= username %>!</h2>
     <% if (isAdmin === false) { %>
-        <% if (typeof Rtime !== "undefined") %><p style="color: white; margin-left: 50px;">Researcher time: <%= Rtime %></p><% } %>
-        <% if (typeof Wtime !== "undefined") %><p style="color: white; margin-left: 50px;">Writer time: <%= Wtime %></p><% } %>
+        <% if (typeof Rtime !== "undefined") { %><p style="color: white; margin-left: 50px;">Researcher time: <%= Rtime %></p><% } %>
+        <% if (typeof Wtime !== "undefined") { %><p style="color: white; margin-left: 50px;">Writer time: <%= Wtime %></p><% } %>
     <% } %> 
     <div class="sections">
         <% if (isAdmin === true) { %>
