@@ -27,8 +27,10 @@
         </nav>
     </header>
     <h2>Welcome <%= username %>!</h2>
-    <p style="color: white; margin-left: 50px;">Researcher time: <%= Rtime %></p>
-    <p style="color: white; margin-left: 50px;">Writer time: <%= Wtime %></p>
+    <% if (isAdmin === false) { %>
+        <p style="color: white; margin-left: 50px;">Researcher time: <%= Rtime %></p>
+        <p style="color: white; margin-left: 50px;">Writer time: <%= Wtime %></p>
+    <% } %> 
     <div class="sections">
         <% if (isAdmin === true) { %>
         <section>
