@@ -95,8 +95,8 @@ app.get("/resetstuff", isLoggedIn, async function (req, res) {
             res.send("FUCK OFF");
         }
     } catch (err) {
-        console.log(err);
-        res.send("ERROR");
+        console.error(err);
+        res.status(500).render("error");
     }
 });
 
@@ -159,8 +159,8 @@ app.get("/", isLoggedIn, async function (req, res) {
                 });
             }
         } catch (err) {
-            console.log(err);
-            res.render("error", { error: err });
+            console.error(err);
+            res.status(500).render("error", { error: err });
         }
     } else if (req.user.isAdmin === false) {
         try {
@@ -210,8 +210,8 @@ app.get("/", isLoggedIn, async function (req, res) {
                 });
             }
         } catch (err) {
-            console.log(err);
-            res.render("error", { error: err });
+            console.error(err);
+            res.status(500).render("error", { error: err });
         };
     } else {
         res.redirect("/login");
@@ -232,8 +232,8 @@ app.get("/edu-vents/en/:id", isLoggedIn, async function (req, res) {
             }
         });
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -251,8 +251,8 @@ app.get("/edu-vents/ar/:id", isLoggedIn, async function (req, res) {
             }
         });
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -273,8 +273,8 @@ app.post("/users", isLoggedIn, async function (req, res) {
         await User.register(new User(user), req.body.password);
         res.redirect("/");
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -290,8 +290,8 @@ app.get("/users/:id/edit", isLoggedIn, async function (req, res) {
             }
         });
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -328,18 +328,18 @@ app.patch("/users/:id", isLoggedIn, async function (req, res) {
 
         res.redirect("/");
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
-})
+});
 
 app.delete("/users/:id/delete", isLoggedIn, async function (req, res) {
     try {
         await User.findByIdAndRemove(req.params.id);
         res.redirect("/");
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -355,8 +355,8 @@ app.get("/users/report", isLoggedIn, async function (req, res) {
             fs.unlinkSync("./uploads/user-report.json");
         });
     } catch(err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -416,8 +416,8 @@ app.post("/edu-vents", isLoggedIn, upload, async function (req, res) {
             res.redirect("/");
         };
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
         await Eduvent.deleteOne(newEduvent);
         await EduventAr.deleteOne(newEduventAr);
         fs.unlinkSync("./public/uploads/" + newEduvent.imgPath);
@@ -438,8 +438,8 @@ app.delete("/edu-vents/en/:id/delete", isLoggedIn, async function (req, res) {
 
         res.redirect("/");
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -457,8 +457,8 @@ app.delete("/edu-vents/ar/:id/delete", isLoggedIn, async function (req, res) {
 
         res.redirect("/");
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -476,8 +476,8 @@ app.delete("/edu-vents/ar/:id", isLoggedIn, async function (req, res) {
 
         res.redirect("/");
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -495,8 +495,8 @@ app.get("/edu-vents/en/:id/edit", isLoggedIn, async function (req, res) {
             }
         });
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -535,8 +535,8 @@ app.patch("/edu-vents/en/:id", isLoggedIn, upload, async function (req, res) {
 
         res.redirect("/");
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -554,8 +554,8 @@ app.get("/edu-vents/ar/:id/edit", isLoggedIn, async function (req, res) {
             }
         });
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -594,8 +594,8 @@ app.patch("/edu-vents/ar/:id", isLoggedIn, upload, async function (req, res) {
 
         res.redirect("/");
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -618,8 +618,8 @@ app.get("/edu-vents/en/:id/feature", isLoggedIn, async function (req, res) {
 
         res.redirect("/");
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -642,8 +642,8 @@ app.get("/edu-vents/ar/:id/feature", isLoggedIn, async function (req, res) {
 
         res.redirect("/");
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -663,8 +663,8 @@ app.post("/forms", isLoggedIn, formUpload, async function(req, res) {
         await Form.create(newForm);
         res.redirect("/");
     } catch(err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
         await Form.deleteOne(newEduvent);
     }
 });
@@ -698,8 +698,8 @@ app.get("/forms/:url/edit", isLoggedIn, async function(req, res) {
             });
         }
     } catch(err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -713,8 +713,8 @@ app.patch("/forms/:url", isLoggedIn, async function(req, res) {
         form.save();
         res.redirect("/");
     } catch(err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -723,8 +723,8 @@ app.get("/forms/:url/open", isLoggedIn, async function(req, res) {
         await Form.updateOne({url: req.params.url}, { "$set": { "isOpen": true } });
         res.redirect("/");
     } catch(err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -733,8 +733,8 @@ app.get("/forms/:url/close", isLoggedIn, async function(req, res) {
         await Form.updateOne({url: req.params.url}, { "$set": { "isOpen": false } });
         res.redirect("/");
     } catch(err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -750,8 +750,8 @@ app.get("/forms/:url/responses", isLoggedIn, async function(req, res) {
             }
         });
     } catch(err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -766,7 +766,8 @@ app.delete("/forms/:url/delete", isLoggedIn, async function(req, res) {
         form.remove();
         res.redirect("/");
     } catch(err) {
-        console.log(err);
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -782,8 +783,8 @@ app.get("/forms/:url/report", isLoggedIn, async function (req, res) {
             fs.unlinkSync("./uploads/form-report.json");
         });
     } catch(err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -796,8 +797,8 @@ app.post("/types", isLoggedIn, async function (req, res) {
         await Type.create(newType);
         res.redirect("/");
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -806,8 +807,8 @@ app.delete("/types/:id/delete", isLoggedIn, async function (req, res) {
         await Type.findByIdAndDelete(req.params.id);
         res.redirect("/");
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -820,8 +821,8 @@ app.post("/locations", isLoggedIn, async function (req, res) {
         await Location.create(newLocation);
         res.redirect("/");
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -830,8 +831,8 @@ app.delete("/locations/:id/delete", isLoggedIn, async function (req, res) {
         await Location.findByIdAndDelete(req.params.id);
         res.redirect("/");
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -846,8 +847,8 @@ app.get("/timer", isLoggedIn, async function (req, res) {
             }
         });
     } catch (err) {
-        console.log(err);
-        res.render("error", { error: err });
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -861,8 +862,8 @@ app.post("/timer", isLoggedIn, async function (req, res) {
         }
         res.status(200).send("/?msg=your estimated time: " + EstTime);
     } catch (err) {
-        console.log(err);
-        res.status(500).send();
+        console.error(err);
+        res.status(500).render("error", { error: err });
     }
 });
 
@@ -879,7 +880,7 @@ var j = schedule.scheduleJob("0 0 * * *", () => {
 
     Eduvent.find({}, function (err, allEduvents) {
         if (err) {
-            console.log(err);
+            console.error(err);
         };
 
         var target;
@@ -905,7 +906,7 @@ var j = schedule.scheduleJob("0 0 * * *", () => {
 
                 Eduvent.deleteOne({ _id: eduvent._id }, function (err) {
                     if (err) {
-                        console.log(err);
+                        console.error(err);
                     };
                 });
             };
@@ -914,7 +915,7 @@ var j = schedule.scheduleJob("0 0 * * *", () => {
 
     EduventAr.find({}, function (err, allEduvents) {
         if (err) {
-            console.log(err);
+            console.error(err);
         };
 
         var target;
@@ -940,7 +941,7 @@ var j = schedule.scheduleJob("0 0 * * *", () => {
 
                 EduventAr.deleteOne({ _id: eduvent._id }, function (err) {
                     if (err) {
-                        console.log(err);
+                        console.error(err);
                     };
                 });
             };
