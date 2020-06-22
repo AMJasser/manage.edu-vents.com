@@ -64,19 +64,30 @@ function isLoggedIn(req, res, next) {
 };
 
 app.get("/login", function (req, res) {
-    res.render("login", function (err, html) {
-        if (err) {
-            console.log(err);
-            res.render("error", { error: err });
-        } else {
-            res.send(html);
-        }
-    });
+    if (typeof req.query.msg !== "undefined") {
+        res.render("login", { msg: req.query.msg } , function (err, html) {
+            if (err) {
+                console.log(err);
+                res.render("error", { error: err });
+            } else {
+                res.send(html);
+            }
+        });
+    } else {
+        res.render("login", function (err, html) {
+            if (err) {
+                console.log(err);
+                res.render("error", { error: err });
+            } else {
+                res.send(html);
+            }
+        });
+    }
 });
 
 app.post("/login", passport.authenticate("local", {
     successRedirect: "/",
-    failureRedirect: "/login"
+    failureRedirect: "/login?msg=incorrect username or password"
 }));
 
 app.get("/logout", function (req, res) {
