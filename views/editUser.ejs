@@ -29,7 +29,7 @@
     </header>
     <div class="sections">
         <section>
-            <form action="/users/<%= user._id %>?_method=PATCH" method="POST">
+            <form action="/users/<%= user._id %>?_method=PATCH" method="POST" id="mainForm" onsubmit="return structureVolunteers()">
                 <h3>Edit an EDU-vent</h3>
             <label>Username<input type="text" name="username" placeholder="Username" <% if (typeof user.username !== "undefined") { %> value="<%= user.username %>" <% } %> ></label>
                 <label for="isAdmin">isAdmin
@@ -38,10 +38,18 @@
                         <option <% if (typeof user.isAdmin !== "undefined") { if (user.isAdmin === false) {%> selected <% } } %>>false</option>
                     </select>
                 </label>
-            <label id="Rname" style="display: none;">Researcher Name<input type="text" name="Rname" placeholder="Researcher Name" <% if (typeof user.researcher.name !== "undefined") { %> value="<%= user.researcher.name %>" <% } %> ></label>
-            <label id="Rtime" style="display: none;">Researcher Time<input type="number" name="Rtime" placeholder="Researcher Timer" <% if (typeof user.researcher.time !== "undefined") { %> value="<%= user.researcher.time %>" <% } %> ></label>
-            <label id="Wname" style="display: none;">Writer Name<input type="text" name="Wname" placeholder="Writer Name" <% if (typeof user.writer.name !== "undefined") { %> value="<%= user.writer.name %>" <% } %> ></label>
-            <label id="Wtime" style="display: none;">Writer Time<input type="number" name="Wtime" placeholder="Writer Time" <% if (typeof user.writer.time !== "undefined") { %> value="<%= user.writer.time %>" <% } %> ></label>
+            <div style="display: none;" id="volunteers">
+                <% user.volunteers.forEach(function(volunteer, i) { %>
+                    <label>
+                        <input type="text" placeholder="Name" id="name<%= i+1 %>" <% if (typeof volunteer.name !== "undefined") { %> value="<%= volunteer.name %>" <% } %>>
+                        <input type="text" placeholder="Time" id="time<%= i+1 %>" <% if (typeof volunteer.time !== "undefined") { %> value="<%= volunteer.time %>" <% } %>>
+                        <select id="type<%= i+1 %>">
+                            <option <% if (typeof volunteer.Vtype !== "undefined") { if (volunteer.Vtype === "researcher") {%> selected <% } } %>>researcher</option>
+                            <option <% if (typeof volunteer.Vtype !== "undefined") { if (volunteer.Vtype === "writer") {%> selected <% } } %>>writer</option>
+                        </select>
+                    </label>
+                <% }) %>
+            </div>
             <label>Score<input type="number" name="score" placeholder="Score" <% if (typeof user.score !== "undefined") { %> value="<%= user.score %>" <% } %> ></label>
                 <label for="cPassword">Do you want to change the password?
                     <select onchange="passwordCheck()" name="cPassword" id="cPassword">
@@ -59,15 +67,9 @@
 <script>
     function admincheck() {
         if (document.getElementById("isAdmin").value === "false") {
-            document.getElementById("Rname").style.display = "block";
-            document.getElementById("Rtime").style.display = "block";
-            document.getElementById("Wname").style.display = "block";
-            document.getElementById("Wtime").style.display = "block";
+            document.getElementById("volunteers").style.display = "block";
         } else {
-            document.getElementById("Rname").style.display = "none";
-            document.getElementById("Rtime").style.display = "none";
-            document.getElementById("Wname").style.display = "none";
-            document.getElementById("Wtime").style.display = "none";
+            document.getElementById("volunteers").style.display = "none";
         }
     }
 
@@ -77,6 +79,30 @@
         } else {
             document.getElementById("password").style.display = "none";
         }
+    }
+
+    function structureVolunteers() {
+        var count = document.getElementById("volunteers").childElementCount;
+        var mainForm = document.getElementById("mainForm");
+        var volunteers = [];
+
+        for (var i = 0; i < count; i++) {
+            var volunteer = {
+                name: document.getElementById("name" + (i+1)).value,
+                time: Number(document.getElementById("time" + (i+1)).value),
+                Vtype: document.getElementById("type" + (i+1)).options[document.getElementById("type" + (i+1)).selectedIndex].value
+            }
+            volunteers.push(volunteer);
+        }
+
+        document.getElementById("volunteers").parentNode.removeChild(document.getElementById("volunteers"));
+
+        var volunsInput = document.createElement("input");
+        volunsInput.name = "volunteers";
+        volunsInput.value = JSON.stringify(volunteers);
+        volunsInput.hidden = true;
+        mainForm.append(volunsInput);
+        return true;
     }
 
     window.onload = admincheck();

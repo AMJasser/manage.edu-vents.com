@@ -98,9 +98,13 @@ app.get("/logout", function (req, res) {
 app.get("/resetstuff", isLoggedIn, async function (req, res) {
     try {
         if (req.user.isAdmin === true) {
-            await User.updateMany({}, { "$set": { "score": 0 } });
-            await User.updateMany({}, { "$set": { "researcher.time": 0 } });
-            await User.updateMany({}, { "$set": { "writer.time": 0 } });
+            var users = await User.find({});
+            users.forEach(function(user) {
+                user.volunteers.forEach(function(volunteer) {
+                    volunteer.time = 0;
+                });
+            });
+            users.save();
             res.send("success");
         } else {
             res.send("FUCK OFF");
@@ -202,7 +206,7 @@ app.get("/", isLoggedIn, async function (req, res) {
             var locations = await Location.find();
 
             if (typeof req.query.msg !== "undefined") {
-                res.render("index", { locations: locations, types: types, username: req.user.username, Rtime: req.user.researcher.time, Wtime: req.user.writer.time, userId: req.user._id.toHexString(), isAdmin: false, eduvents: eduvents, chartData: chartData, msg: req.query.msg }, function (err, html) {
+                res.render("index", { locations: locations, types: types, username: req.user.username, volunteers: req.user.volunteers, userId: req.user._id.toHexString(), isAdmin: false, eduvents: eduvents, chartData: chartData, msg: req.query.msg }, function (err, html) {
                     if (err) {
                         console.log(err);
                         res.render("error", { error: err });
@@ -211,7 +215,7 @@ app.get("/", isLoggedIn, async function (req, res) {
                     }
                 });
             } else {
-                res.render("index", { locations: locations, types: types, username: req.user.username, Rtime: req.user.researcher.time, Wtime: req.user.writer.time, userId: req.user._id.toHexString(), isAdmin: false, eduvents: eduvents, chartData: chartData }, function (err, html) {
+                res.render("index", { locations: locations, types: types, username: req.user.username, volunteers: req.user.volunteers, userId: req.user._id.toHexString(), isAdmin: false, eduvents: eduvents, chartData: chartData }, function (err, html) {
                     if (err) {
                         console.log(err);
                         res.render("error", { error: err });
@@ -277,8 +281,23 @@ app.post("/users", isLoggedIn, async function (req, res) {
             user.isAdmin = true;
         } else {
             user.isAdmin = false;
-            user.researcher = { name: req.body.Rname };
-            user.writer = { name: req.body.Wname }
+            user.volunteers = [];
+            var researchers = req.body.Rnames.split(",");
+            var writers = req.body.Wnames.split(",");
+            researchers.forEach(function(researcher) {
+                user.volunteers.push({
+                    name: researcher.trim(),
+                    time: 0,
+                    Vtype: "researcher"
+                });
+            });
+            writers.forEach(function(writer) {
+                user.volunteers.push({
+                    name: writer.trim(),
+                    time: 0,
+                    Vtype: "writer"
+                });
+            });
         };
 
         await User.register(new User(user), req.body.password);
@@ -315,14 +334,7 @@ app.patch("/users/:id", isLoggedIn, async function (req, res) {
             user.isAdmin = true;
         } else {
             user.isAdmin = false;
-            user.researcher = { name: req.body.Rname };
-            user.writer = { name: req.body.Wname };
-            if (typeof req.body.Rtime === "string" && req.body.Rtime !== "") {
-                user.researcher.time = Number(req.body.Rtime);
-            }
-            if (typeof req.body.Wtime === "string" && req.body.Wtime !== "") {
-                user.writer.time = Number(req.body.Wtime);
-            }
+            user.volunteers = eval(req.body.volunteers);
             if (typeof req.body.score === "string" && req.body.score !== "") {
                 user.score = Number(req.body.score);
             }
@@ -866,11 +878,13 @@ app.get("/timer", isLoggedIn, async function (req, res) {
 app.post("/timer", isLoggedIn, async function (req, res) {
     try {
         var EstTime = parseInt(req.body.time);
-        if (req.body.role === "researcher") {
-            await User.findOneAndUpdate({ _id: req.user._id }, { $inc: { "researcher.time": EstTime } });
-        } else if (req.body.role === "writer") {
-            await User.findOneAndUpdate({ _id: req.user._id }, { $inc: { "writer.time": EstTime } });
-        }
+        var user = await User.findOne({_id: req.user._id});
+        user.volunteers.forEach(function(volunteer) {
+            if (req.body.id === volunteer._id.toString()) {
+                volunteer.time += EstTime;
+            }
+        });
+        user.save();
         res.status(200).send("/?msg=your estimated time: " + EstTime);
     } catch (err) {
         console.error(err);

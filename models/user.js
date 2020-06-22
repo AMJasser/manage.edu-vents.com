@@ -6,14 +6,11 @@ var userSchema = new mongoose.Schema({
     password: String,
     isAdmin: Boolean,
     score: Number,
-    researcher: {
-        name: String,
-        time: Number
-    },
-    writer: {
+    volunteers: [{
         name: String,
         time: Number,
-    }
+        Vtype: String,
+    }]
 });
 
 userSchema.plugin(passportLocalMongoose);

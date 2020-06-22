@@ -46,8 +46,9 @@
             <h3>Role</h3>
             <select name="role" id="role" onchange="roleChange()">
                 <option>role</option>
-                <option>researcher</option>
-                <option>writer</option>
+                <% user.volunteers.forEach(function(volunteer) { %>
+                    <option data-id="<%= volunteer._id %>"><%= volunteer.name %></option>
+                <% }) %>
             </select>
         </section>
 
@@ -111,31 +112,24 @@
 
     function loadCookie() {
         if (typeof timeCookie !== "undefined" && typeof roleCookie !== "undefined") {
-            if (roleCookie === "researcher") {
-                role.getElementsByTagName("option")[1].selected = "selected";
-                roleChange();
-                timeMin = timeCookie;
-                startTimer();
-            } else if (roleCookie === "writer") {
-                role.getElementsByTagName("option")[2].selected = "selected";
-                roleChange();
-                timeMin = timeCookie;
-                startTimer();
-            }
-        } else if (timeCookie !== undefined || timeCookie !== undefined) {
-            alert("Your time is still saved. Please select your role and the timer.");
+            document.querySelectorAll("#role > option").forEach(function(role) {
+                if (roleCookie === role.value) {
+                    role.selected = "selected";
+                    roleChange();
+                    timeMin = timeCookie;
+                    startTimer();
+                }
+            });
+        } else if (typeof timeCookie !== "undefined") {
+            alert("Your time is still saved. Please select your role and start the timer.");
             timeMin = timeCookie;
             timerDisplay.innerHTML = timeMin + "m " + timeSec + "s";
         }
     }
 
     function roleChange() {
-        if (role.value === "researcher") {
-            roleDisplay.innerHTML = "<%= user.researcher.name %> (Researcher)";
-            timerSection.style.display = "unset";
-            roleSection.style.display = "none";
-        } else if (role.value === "writer") {
-            roleDisplay.innerHTML = "<%= user.writer.name %> (Writer)";
+        if (typeof role.value !== "undefined") {
+            roleDisplay.innerHTML = role.value;
             timerSection.style.display = "unset";
             roleSection.style.display = "none";
         } else {
@@ -293,7 +287,7 @@
     }
 
     function submitTime() {
-        var bodyData = "role=" + role.value + "&time=";
+        var bodyData = "id=" + role.options[role.selectedIndex].dataset.id + "&time=";
         if (timeSec >= 30) {
             timeMin++;
         }
@@ -315,13 +309,6 @@
                 reject("An error occurred");
             }
             xhr.send(bodyData);
-            /*xhr.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    location.href = xhr.responseText;
-                } else {
-                    alert("There was an error submitting your time. Please take a picture of your time and send it to Abdullah AlJasser.");
-                }
-            }*/
         })
         .then(responseData => {
             location.href = responseData;

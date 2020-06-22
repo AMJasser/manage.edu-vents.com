@@ -28,8 +28,9 @@
     </header>
     <h2>Welcome <%= username %>!</h2>
     <% if (isAdmin === false) { %>
-        <% if (typeof Rtime !== "undefined") { %><p style="color: white; margin-left: 50px;">Researcher time: <%= Rtime %></p><% } %>
-        <% if (typeof Wtime !== "undefined") { %><p style="color: white; margin-left: 50px;">Writer time: <%= Wtime %></p><% } %>
+        <% volunteers.forEach(function(volunteer) { %>
+            <p style="color: white; margin-left: 50px;"><%= volunteer.name %>: <%= volunteer.time %></p>
+        <% }) %>
     <% } %> 
     <div class="sections">
         <% if (isAdmin === true) { %>
@@ -44,18 +45,18 @@
                         <option>false</option>
                     </select>
                 </label>
-                <input id="Rname" style="display: none;" type="text" name="Rname" placeholder="Researcher Name">
-                <input id="Wname" style="display: none;" type="text" name="Wname" placeholder="Writer Name">
+                <input id="Rnames" style="display: none;" type="text" name="Rnames" placeholder="Researcher Names Separated by Commas">
+                <input id="Wnames" style="display: none;" type="text" name="Wnames" placeholder="Writer Names Separated by Commas">
                 <input type="submit">
             </form>
             <script>
                 function admincheck() {
                     if (document.getElementById("isAdmin").value === "false") {
-                        document.getElementById("Rname").style.display = "unset";
-                        document.getElementById("Wname").style.display = "unset";
+                        document.getElementById("Rnames").style.display = "unset";
+                        document.getElementById("Wnames").style.display = "unset";
                     } else {
-                        document.getElementById("Rname").style.display = "none";
-                        document.getElementById("Wname").style.display = "none";
+                        document.getElementById("Rnames").style.display = "none";
+                        document.getElementById("Wnames").style.display = "none";
                     }
                 }
             </script>
@@ -66,8 +67,7 @@
                 <tr>
                     <th>username</th>
                     <th>is Admin</th>
-                    <th>Names</th>
-                    <th>Time</th>
+                    <th>volunteers</th>
                     <th>Score</th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -77,14 +77,9 @@
                     <td><%= user.username %></td>
                     <td><%= user.isAdmin %></td>
                     <td>
-                        <% if (typeof user.researcher.name !== "undefined") { %> Researcher: <%= user.researcher.name %> <% } %> 
-                        <br>
-                        <% if (typeof user.writer.name !== "undefined") { %> Writer: <%= user.writer.name %> <% } %>
-                    </td>
-                    <td>
-                        <% if (typeof user.researcher.time !== "undefined") { %> Researcher: <%= user.researcher.time %> <% } %> 
-                        <br>
-                        <% if (typeof user.writer.time !== "undefined") { %> Writer: <%= user.writer.time %> <% } %>
+                        <% if (typeof user.volunteers !== "undefined") { user.volunteers.forEach(function(volunteer) { %>
+                            <% if (typeof volunteer.name !== "undefined") { %><%= volunteer.name %><% } %>: <% if (typeof volunteer.time !== "undefined") { %><%= volunteer.time %><% } %>
+                        <% })} %>
                     </td>
                     <td>
                     <% if (typeof user.score !== "undefind") { %> <%= user.score %> <% } %>  
