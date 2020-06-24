@@ -356,7 +356,7 @@ app.patch("/users/:id", isLoggedIn, async function (req, res) {
     }
 });
 
-app.delete("/users/:id/delete", isLoggedIn, async function (req, res) {
+/*app.delete("/users/:id/delete", isLoggedIn, async function (req, res) {
     try {
         await User.findByIdAndRemove(req.params.id);
         res.redirect("/");
@@ -364,7 +364,7 @@ app.delete("/users/:id/delete", isLoggedIn, async function (req, res) {
         console.error(err);
         res.status(500).render("error", { error: err });
     }
-});
+});*/
 
 app.get("/users/report", isLoggedIn, async function (req, res) {
     try {
