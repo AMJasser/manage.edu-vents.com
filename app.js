@@ -432,13 +432,13 @@ app.post("/edu-vents", isLoggedIn, upload, async function (req, res) {
             }
 
             for (var key of Object.keys(newEduvent)) {
-                if (newEduvent[key] === "" || newEduvent[key] === "Any") {
+                if (newEduvent[key] === "" || newEduvent[key] === "Any" || typeof newEduvent[key] === "undefined") {
                     delete newEduvent[key];
                 }
             }
 
             for (var key of Object.keys(newEduventAr)) {
-                if (newEduventAr[key] === "" || newEduventAr[key] === "الكل") {
+                if (newEduventAr[key] === "" || newEduventAr[key] === "الكل" || typeof newEduventAr[key] === "undefined") {
                     delete newEduventAr[key];
                 }
             }
@@ -501,8 +501,9 @@ app.get("/edu-vents/en/:id/edit", isLoggedIn, async function (req, res) {
         var eduvent = await Eduvent.findOne({ _id: req.params.id });
         var types = await Type.find();
         var locations = await Location.find();
+        var initiatives = await Initiative.find();
         var initiative = await Initiative.findById(eduvent.initiative);
-        res.render("edit", { locations: locations, types: types, initiative: initiative, eduvent: eduvent }, function (err, html) {
+        res.render("edit", { locations: locations, types: types, initiative: initiative, initiatives: initiatives, eduvent: eduvent }, function (err, html) {
             if (err) {
                 console.log(err);
                 res.render("error", { error: err });
@@ -531,12 +532,12 @@ app.patch("/edu-vents/en/:id", isLoggedIn, upload, async function (req, res) {
         };
 
         if (req.body.initiative !== "none") {
-            var initiative = Initiative.findOne({name: req.body.initiative});
+            var initiative = await Initiative.findOne({name: req.body.initiative});
             edits.initiative = initiative._id
         }
 
         for (var key of Object.keys(edits)) {
-            if (edits[key] === "" || edits[key] === "Any") {
+            if (edits[key] === "" || edits[key] === "Any" || typeof edits[key] === "undefined") {
                 delete edits[key];
             }
         }
@@ -566,8 +567,9 @@ app.get("/edu-vents/ar/:id/edit", isLoggedIn, async function (req, res) {
         var eduvent = await EduventAr.findOne({ _id: req.params.id });
         var types = await Type.find();
         var locations = await Location.find();
+        var initiatives = await Initiative.find();
         var initiative = await Initiative.findById(eduvent.initiative);
-        res.render("editAr", { locations: locations, types: types, initiative: initiative, eduvent: eduvent }, function (err, html) {
+        res.render("editAr", { locations: locations, types: types, initiative: initiative, initiatives: initiatives, eduvent: eduvent }, function (err, html) {
             if (err) {
                 console.log(err);
                 res.render("error", { error: err });
@@ -593,7 +595,6 @@ app.patch("/edu-vents/ar/:id", isLoggedIn, upload, async function (req, res) {
             googleMaps: req.body.googleMaps.replace(/ /g, ""),
             locationInfo: req.body.locationInfoAr,
             urltoapp: req.body.urltoapp.replace(/ /g, ""),
-            initiative: initiative._id
         };
 
         if (req.body.initiative !== "لا شيء") {
@@ -602,7 +603,7 @@ app.patch("/edu-vents/ar/:id", isLoggedIn, upload, async function (req, res) {
         }
 
         for (var key of Object.keys(edits)) {
-            if (edits[key] === "" || edits[key] === "Any") {
+            if (edits[key] === "" || edits[key] === "Any" || typeof edits[key] === "undefined") {
                 delete edits[key];
             }
         }

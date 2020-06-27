@@ -88,7 +88,7 @@
 
                     <label>Start Date <input type="date" name="date" <% if (typeof eduvent.startDate !== "undefined") { %> value="<%= startDate %>" <% } %>></label>
                     <label>End Date <input type="date" name="endDate" <% if (typeof eduvent.endDate !== "undefined") { %> value="<%= endDate %>" <% } %>></label>
-                    <label for="type">Initiative
+                    <label for="initiative">Initiative
                         <select name="initiative" id="initiative">
                             <option>none</option>
                             <% initiatives.forEach(function(initiative) { %>
