@@ -397,8 +397,6 @@ app.post("/edu-vents", isLoggedIn, upload, async function (req, res) {
                 res.redirect("/?msg=please fill all required fields");
             }
         } else {
-            var initiative = Initiative.findOne({name: req.body.initiative});
-
             var newEduvent = {
                 name: req.body.name,
                 type: req.body.type,
@@ -411,7 +409,6 @@ app.post("/edu-vents", isLoggedIn, upload, async function (req, res) {
                 locationInfo: req.body.locationInfo,
                 urltoapp: req.body.urltoapp.replace(/ /g, ""),
                 userId: req.user._id,
-                initiative: initiative._id
             };
 
             var newEduventAr = {
@@ -426,7 +423,12 @@ app.post("/edu-vents", isLoggedIn, upload, async function (req, res) {
                 locationInfo: req.body.locationInfoAr,
                 urltoapp: req.body.urltoapp.replace(/ /g, ""),
                 userId: req.user._id,
-                initiative: initiative._id
+            }
+
+            if (req.body.initiative !== "none") {
+                var initiative = Initiative.findOne({name: req.body.initiative});
+                newEduvent.initiative = initiative._id;
+                newEduventAr.initiative = initiative._id
             }
 
             for (var key of Object.keys(newEduvent)) {
@@ -516,8 +518,6 @@ app.get("/edu-vents/en/:id/edit", isLoggedIn, async function (req, res) {
 
 app.patch("/edu-vents/en/:id", isLoggedIn, upload, async function (req, res) {
     try {
-        var initiative = Initiative.findOne({name: req.body.initiative});
-
         var edits = {
             name: req.body.name,
             type: req.body.type,
@@ -528,8 +528,12 @@ app.patch("/edu-vents/en/:id", isLoggedIn, upload, async function (req, res) {
             googleMaps: req.body.googleMaps.replace(/ /g, ""),
             locationInfo: req.body.locationInfo,
             urltoapp: req.body.urltoapp.replace(/ /g, ""),
-            initiative: initiative._id
         };
+
+        if (req.body.initiative !== "none") {
+            var initiative = Initiative.findOne({name: req.body.initiative});
+            edits.initiative = initiative._id
+        }
 
         for (var key of Object.keys(edits)) {
             if (edits[key] === "" || edits[key] === "Any") {
@@ -579,8 +583,6 @@ app.get("/edu-vents/ar/:id/edit", isLoggedIn, async function (req, res) {
 
 app.patch("/edu-vents/ar/:id", isLoggedIn, upload, async function (req, res) {
     try {
-        var initiative = await Initiative.findOne({nameAr: req.body.initiative});
-
         var edits = {
             name: req.body.nameAr,
             type: req.body.typeAr,
@@ -593,6 +595,11 @@ app.patch("/edu-vents/ar/:id", isLoggedIn, upload, async function (req, res) {
             urltoapp: req.body.urltoapp.replace(/ /g, ""),
             initiative: initiative._id
         };
+
+        if (req.body.initiative !== "لا شيء") {
+            var initiative = await Initiative.findOne({nameAr: req.body.initiative});
+            edits.initiative = initiative._id
+        }
 
         for (var key of Object.keys(edits)) {
             if (edits[key] === "" || edits[key] === "Any") {

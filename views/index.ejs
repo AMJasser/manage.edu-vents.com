@@ -185,7 +185,7 @@
         <section>
             <% if (typeof initiatives === "object") { %>
                 <% initiatives.forEach(function(initiative) { %>
-                    <form style="display: block;" action="/initiatives/<%= initiative._id %>/delete?_method=DELETE" method="POST" onsubmit="return validateDel('<%= initiative.name %>  |  <%= initiative.nameAr %>')"></form>
+                    <form style="display: block;" action="/initiatives/<%= initiative._id %>/delete?_method=DELETE" method="POST" onsubmit="return validateDel('<%= initiative.name %>  |  <%= initiative.nameAr %>')">
                         <h4>
                             <img src="/uploads/<%= initiative.imgPath %>" alt="initiative img" style="width: 50px;">
                             <%= initiative.name %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= initiative.nameAr %>
@@ -280,7 +280,8 @@
                 <label>Image*<input type="file" name="img" required></label>
                 <label>Initiative
                     <select name="initiative" id="initiative">
-                        <% initiatives.forEach(function(initiative) {) %>
+                        <option>none</option>
+                        <% initiatives.forEach(function(initiative) { %>
                             <option><%= initiative.name %></option>
                         <% }) %>
                     </select>
@@ -450,7 +451,8 @@
                 <label>Image*<input type="file" name="img" required></label>
                 <label>Initiative
                     <select name="initiative" id="initiative">
-                        <% initiatives.forEach(function(initiative) {) %>
+                        <option>none</option>
+                        <% initiatives.forEach(function(initiative) { %>
                             <option><%= initiative.name %></option>
                         <% }) %>
                     </select>

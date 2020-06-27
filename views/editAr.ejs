@@ -90,6 +90,7 @@
                     <label>تاريخ النهاية<input type="date" name="endDate" <% if (typeof eduvent.endDate !== "undefined") { %> value="<%= endDate %>" <% } %>></label>
                     <label for="type">مبادرة
                         <select name="initiative" id="initiative">
+                            <option>لا شيء</option>
                             <% initiatives.forEach(function(initiative) { %>
                                 <option <% if (eduvent.initiative === initiative._id.toString()) { %> selected <% } %>><%= initiative.nameAr %></option>
                             <% }) %>
