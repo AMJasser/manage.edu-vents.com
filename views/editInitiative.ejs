@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>EDU-vents</title>
+        <meta name="description" content="EDU-vents - This website was created solely for the help of Philomaths. It would show the most important educational events happening around the world, providing an easy-to-use portal for them.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="/images/seco.ico">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/stylesheets/style.css">
+
+        <script>
+            window.onload = function() {
+                var select = document.getElementById("changePic");
+                var fileInput = document.getElementById("img");
+
+                select.onchange = function() {
+                    if (select.value === "yes") {
+                        fileInput.style.display = "unset";
+                    } else {
+                        fileInput.style.display = "none";
+                    }
+                }
+            }
+        </script>
+
+        <% if (typeof msg !== "undefined") { %>
+            <script>alert("<%= msg %>")</script>
+        <% } %>
+    </head>
+    <body>
+        <header>
+            <h1 onclick="location.href='/'">
+                <img alt="logo" src="/images/logo.jpg">
+                <span>EDU-vents</span>
+            </h1>
+            <nav>
+                <a href="/logout">Logout</a>
+            </nav>
+        </header>
+        <div class="sections">
+            <section>
+                <form action="/initiatives/<%= initiative._id %>?_method=PATCH" method="POST" enctype="multipart/form-data">
+                    <h3>Edit an Initiative</h3>
+                    <input type="text" name="name" placeholder="Name" <% if (typeof initiative.name !== "undefined") { %> value="<%= initiative.name %>" <% } %>>
+                    <textarea name="description" placeholder="Description"><% if (typeof initiative.description !== "undefined") { %> <%= initiative.description %> <% } %></textarea>
+                    <input type="text" name="nameAr" placeholder="Arabic Name" <% if (typeof initiative.nameAr !== "undefined") { %> value="<%= initiative.nameAr %>" <% } %>>
+                    <textarea name="descriptionAr" placeholder="Arabic Description"><% if (typeof initiative.descriptionAr !== "undefined") { %> <%= initiative.descriptionAr %> <% } %></textarea>
+                    <input type="text" name="url" placeholder="URL" <% if (typeof initiative.url !== "undefined") { %> value="<%= initiative.url %>" <% } %>>
+                    <label for="changePic">Do you want to change the picture?
+                        <select name="changePic" id="changePic">
+                            <option>no</option>
+                            <option>yes</option>
+                        </select>
+                    </label>
+                    <input style="display: none;" type="file" name="img" id="img">
+                    <input type="submit">
+                </form>
+                </section>
+        </div>
+    </body>
+</html>

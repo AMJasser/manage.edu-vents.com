@@ -88,7 +88,7 @@
                         <form action="/users/<%= user._id %>/edit" method="GET"><input type="submit" value="Edit"></form>
                     </td>
                     <td>
-                        <form action="/users/<%= user._id %>/delete?_method=DELETE" method="POST" name="userDel" onsubmit="return validateDel('userDel', '<%= user.username %>')"><input type="submit" value="Delete"></form>
+                        <form action="/users/<%= user._id %>/delete?_method=DELETE" method="POST" name="userDel" onsubmit="return validateDel('<%= user.username %>')"><input type="submit" value="Delete"></form>
                     </td>
                 </tr>
                 <% }) %>
@@ -97,7 +97,7 @@
         <section>
             <h3>Types</h3>
             <% types.forEach(function(type) { %>
-                <form style="display: block;" action="/types/<%= type._id %>/delete?_method=DELETE" method="POST" name="typeDel" onsubmit="return validateDel('typeDel', '<%= type.en %>  |  <%= type.ar %>')">
+                <form style="display: block;" action="/types/<%= type._id %>/delete?_method=DELETE" method="POST" onsubmit="return validateDel('<%= type.en %>  |  <%= type.ar %>')">
                     <h4 style="font-size: 20px;">
                         <%= type.en %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= type.ar %>&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="submit" value="✕" style="display: inline;">
@@ -113,7 +113,7 @@
         <section>
             <h3>Locations</h3>
             <% locations.forEach(function(location) { %>
-                <form style="display: block;" action="/locations/<%= location._id %>/delete?_method=DELETE" method="POST" name="locationDel" onsubmit="return validateDel('locationDel', '<%= location.en %>  |  <%= location.ar %>')">
+                <form style="display: block;" action="/locations/<%= location._id %>/delete?_method=DELETE" method="POST" onsubmit="return validateDel('<%= location.en %>  |  <%= location.ar %>')">
                     <h4 style="font: 20px;">
                         <%= location.en %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= location.ar %>&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="submit" value="✕" style="display: inline;">
@@ -152,7 +152,7 @@
                         <form action="/forms/<%= form.url %>/report">
                             <input type="submit" value="Report">
                         </form>
-                        <form action="/forms/<%= form.url %>/delete?_method=DELETE" method="POST" name="formDel" onsubmit="return validateDel('formDel', '<%= form.name %>')">
+                        <form action="/forms/<%= form.url %>/delete?_method=DELETE" method="POST" name="formDel" onsubmit="return validateDel('<%= form.name %>')">
                             <input type="submit" value="Delete">
                         </form>
                     </div>
@@ -181,6 +181,30 @@
                     return result;
                 }
             </script>
+        </section>
+        <section>
+            <% if (typeof initiatives === "object") { %>
+                <% initiatives.forEach(function(initiative) { %>
+                    <form style="display: block;" action="/initiatives/<%= initiative._id %>/delete?_method=DELETE" method="POST" onsubmit="return validateDel('<%= initiative.name %>  |  <%= initiative.nameAr %>')"></form>
+                        <h4>
+                            <img src="/uploads/<%= initiative.imgPath %>" alt="initiative img" style="width: 50px;">
+                            <%= initiative.name %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= initiative.nameAr %>
+                            <a href="/initiatives/<%= initiative._id %>/edit">Edit</a>
+                            <input type="submit" value="✕" style="display: inline;">
+                        </h4>
+                    </form>
+                <% }) %>
+            <% } %>
+            <form action="/initiatives" method="POST" enctype="multipart/form-data">
+                <h3>Add an Initiative</h3>
+                <label>Name*<input type="text" name="name" placeholder="Name" required></label>
+                <label>Description*<textarea name="description" placeholder="Description" required></textarea></label>
+                <label>Image*<input type="file" name="img" required></label>
+                <label>URL*<input type="url" name="urltoapp" placeholder="URL" required></label>
+                <label dir="rtl" style="text-align: right;">الاسم*<input dir="rtl" type="text" name="nameAr" placeholder="الاسم" required></label>
+                <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="descriptionAr" placeholder="الوصف" required></textarea></label>
+                <input type="submit">
+            </form>
         </section>
         <section>
             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
@@ -286,7 +310,7 @@
                     <div class="inner">
                         <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
                         <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
-                        <form action="/edu-vents/en/<%= eduvent._id %>/delete?_method=DELETE" method="POST" name="eduventEnDel" onsubmit="return validateDel('eduventEnDel', '<%= eduvent.name %>')">
+                        <form action="/edu-vents/en/<%= eduvent._id %>/delete?_method=DELETE" method="POST" name="eduventEnDel" onsubmit="return validateDel('<%= eduvent.name %>')">
                             <button>Delete</button>
                         </form>
                         <form action="/edu-vents/en/<%= eduvent._id %>/edit" method="GET">
@@ -318,7 +342,7 @@
                     <div class="inner">
                         <h2 dir="rtl"><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
                         <p dir="rtl"><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
-                        <form action="/edu-vents/ar/<%= eduvent._id %>/delete?_method=DELETE" method="POST" name="eduventArDel" onsubmit="return validateDel('eduventArDel', '<%= eduvent.name %>')">
+                        <form action="/edu-vents/ar/<%= eduvent._id %>/delete?_method=DELETE" method="POST" name="eduventArDel" onsubmit="return validateDel('<%= eduvent.name %>')">
                             <button class="delete">Delete</button>
                         </form>
                         <form action="/edu-vents/ar/<%= eduvent._id %>/edit" method="GET">
@@ -450,7 +474,7 @@
                     <div class="inner">
                         <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
                         <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
-                        <form action="/edu-vents/en/<%= eduvent._id %>/delete?_method=DELETE" method="POST" name="eduventEnDel" onsubmit="return validateDel('eduventEnDel', '<%= eduvent.name %>')">
+                        <form action="/edu-vents/en/<%= eduvent._id %>/delete?_method=DELETE" method="POST" name="eduventEnDel" onsubmit="return validateDel('<%= eduvent.name %>')">
                             <button>Delete</button>
                         </form>
                         <form action="/edu-vents/en/<%= eduvent._id %>/edit" method="GET">
@@ -485,7 +509,7 @@
                         <div class="inner">
                             <h2><% if (typeof eduvent.name !== "undefined") { %> <%= eduvent.name %> <% } %> </h2>
                             <p><% if (typeof eduvent.description !== "undefined") { %> <%- eduvent.description.substring(0, 45) %>... <% } %></p>
-                            <form action="/edu-vents/ar/<%= eduvent._id %>/delete?_method=DELETE" method="POST" name="eduventArDel" onsubmit="return validateDel('eduventArDel', '<%= eduvent.name %>')">
+                            <form action="/edu-vents/ar/<%= eduvent._id %>/delete?_method=DELETE" method="POST" name="eduventArDel" onsubmit="return validateDel('<%= eduvent.name %>')">
                                 <button class="delete">Delete</button>
                             </form>
                             <form action="/edu-vents/ar/<%= eduvent._id %>/edit" method="GET">
@@ -548,8 +572,7 @@
         }
     }
 
-    function validateDel(form, name) {
-        var form = document.forms[form];
+    function validateDel(name) {
         if (confirm("Are you sure you want to delete " + name)) {
             return true;
         } else {
