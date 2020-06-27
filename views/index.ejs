@@ -278,6 +278,13 @@
                 <label>Start Date <input type="date" name="date"></label>
                 <label>End Date <input type="date" name="endDate"></label>
                 <label>Image*<input type="file" name="img" required></label>
+                <label>Initiative
+                    <select name="initiative" id="initiative">
+                        <% initiatives.forEach(function(initiative) {) %>
+                            <option><%= initiative.name %></option>
+                        <% }) %>
+                    </select>
+                </label>
                 <label dir="rtl" style="text-align: right;">الاسم*<input dir="rtl" type="text" name="nameAr" id="nameAr" placeholder="الاسم" required></label>
                 <label for="type" dir="rtl" style="text-align: right;">النوع*
                     <select dir="ltr" name="typeAr" id="typeAr" id="type" required>
@@ -441,6 +448,13 @@
                 <label>Start Date <input type="date" name="date"></label>
                 <label>End Date <input type="date" name="endDate"></label>
                 <label>Image*<input type="file" name="img" required></label>
+                <label>Initiative
+                    <select name="initiative" id="initiative">
+                        <% initiatives.forEach(function(initiative) {) %>
+                            <option><%= initiative.name %></option>
+                        <% }) %>
+                    </select>
+                </label>
                 <label dir="rtl" style="text-align: right;">الاسم*<input dir="rtl" type="text" name="nameAr" id="nameAr" placeholder="الاسم" required></label>
                 <label for="type" dir="rtl" style="text-align: right;">النوع*
                     <select dir="ltr" name="typeAr" id="typeAr" required>

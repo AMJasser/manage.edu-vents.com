@@ -241,7 +241,8 @@ app.get("/edu-vents/en/:id", isLoggedIn, async function (req, res) {
         var eduvent = await Eduvent.findOne({ _id: req.params.id });
         var types = await Type.find();
         var locations = await Location.find();
-        res.render("view", { locations: locations, types: types, eduvent: eduvent, userId: req.user._id.toHexString(), isAdmin: req.user.isAdmin }, function (err, html) {
+        var initiative = await Initiative.findById(eduvent.initiative);
+        res.render("view", { locations: locations, types: types, eduvent: eduvent, initiative: initiative, userId: req.user._id.toHexString(), isAdmin: req.user.isAdmin }, function (err, html) {
             if (err) {
                 console.log(err);
                 res.render("error", { error: err });
@@ -260,7 +261,8 @@ app.get("/edu-vents/ar/:id", isLoggedIn, async function (req, res) {
         var eduvent = await EduventAr.findOne({ _id: req.params.id });
         var types = await Type.find();
         var locations = await Location.find();
-        res.render("viewAr", { locations: locations, types: types, eduvent: eduvent, userId: req.user._id.toHexString(), isAdmin: req.user.isAdmin }, function (err, html) {
+        var initiative = await Initiative.findById(eduvent.initiative);
+        res.render("viewAr", { locations: locations, types: types, eduvent: eduvent, initiative: initiative, userId: req.user._id.toHexString(), isAdmin: req.user.isAdmin }, function (err, html) {
             if (err) {
                 console.log(err);
                 res.render("error", { error: err });
@@ -395,6 +397,8 @@ app.post("/edu-vents", isLoggedIn, upload, async function (req, res) {
                 res.redirect("/?msg=please fill all required fields");
             }
         } else {
+            var initiative = Initiative.findOne({name: req.body.initiative});
+
             var newEduvent = {
                 name: req.body.name,
                 type: req.body.type,
@@ -406,7 +410,8 @@ app.post("/edu-vents", isLoggedIn, upload, async function (req, res) {
                 googleMaps: req.body.googleMaps.replace(/ /g, ""),
                 locationInfo: req.body.locationInfo,
                 urltoapp: req.body.urltoapp.replace(/ /g, ""),
-                userId: req.user._id
+                userId: req.user._id,
+                initiative: initiative._id
             };
 
             var newEduventAr = {
@@ -420,7 +425,8 @@ app.post("/edu-vents", isLoggedIn, upload, async function (req, res) {
                 googleMaps: req.body.googleMaps.replace(/ /g, ""),
                 locationInfo: req.body.locationInfoAr,
                 urltoapp: req.body.urltoapp.replace(/ /g, ""),
-                userId: req.user._id
+                userId: req.user._id,
+                initiative: initiative._id
             }
 
             for (var key of Object.keys(newEduvent)) {
@@ -488,31 +494,13 @@ app.delete("/edu-vents/ar/:id/delete", isLoggedIn, async function (req, res) {
     }
 });
 
-app.delete("/edu-vents/ar/:id", isLoggedIn, async function (req, res) {
-    try {
-        var eduvent = await EduventAr.findOne({ _id: req.params.id });
-        var count = await Eduvent.countDocuments({ imgPath: eduvent.imgPath });
-        await EduventAr.deleteOne({ _id: req.params.id });
-
-        if (count < 1) {
-            if (fs.existsSync("./public/uploads/" + eduvent.imgPath)) {
-                fs.unlinkSync("./public/uploads/" + eduvent.imgPath);
-            };
-        };
-
-        res.redirect("/");
-    } catch (err) {
-        console.error(err);
-        res.status(500).render("error", { error: err });
-    }
-});
-
 app.get("/edu-vents/en/:id/edit", isLoggedIn, async function (req, res) {
     try {
         var eduvent = await Eduvent.findOne({ _id: req.params.id });
         var types = await Type.find();
         var locations = await Location.find();
-        res.render("edit", { locations: locations, types: types, eduvent: eduvent }, function (err, html) {
+        var initiative = await Initiative.findById(eduvent.initiative);
+        res.render("edit", { locations: locations, types: types, initiative: initiative, eduvent: eduvent }, function (err, html) {
             if (err) {
                 console.log(err);
                 res.render("error", { error: err });
@@ -528,6 +516,8 @@ app.get("/edu-vents/en/:id/edit", isLoggedIn, async function (req, res) {
 
 app.patch("/edu-vents/en/:id", isLoggedIn, upload, async function (req, res) {
     try {
+        var initiative = Initiative.findOne({name: req.body.initiative});
+
         var edits = {
             name: req.body.name,
             type: req.body.type,
@@ -537,7 +527,8 @@ app.patch("/edu-vents/en/:id", isLoggedIn, upload, async function (req, res) {
             location: req.body.location,
             googleMaps: req.body.googleMaps.replace(/ /g, ""),
             locationInfo: req.body.locationInfo,
-            urltoapp: req.body.urltoapp.replace(/ /g, "")
+            urltoapp: req.body.urltoapp.replace(/ /g, ""),
+            initiative: initiative._id
         };
 
         for (var key of Object.keys(edits)) {
@@ -571,7 +562,8 @@ app.get("/edu-vents/ar/:id/edit", isLoggedIn, async function (req, res) {
         var eduvent = await EduventAr.findOne({ _id: req.params.id });
         var types = await Type.find();
         var locations = await Location.find();
-        res.render("editAr", { locations: locations, types: types, eduvent: eduvent }, function (err, html) {
+        var initiative = await Initiative.findById(eduvent.initiative);
+        res.render("editAr", { locations: locations, types: types, initiative: initiative, eduvent: eduvent }, function (err, html) {
             if (err) {
                 console.log(err);
                 res.render("error", { error: err });
@@ -587,6 +579,8 @@ app.get("/edu-vents/ar/:id/edit", isLoggedIn, async function (req, res) {
 
 app.patch("/edu-vents/ar/:id", isLoggedIn, upload, async function (req, res) {
     try {
+        var initiative = await Initiative.findOne({nameAr: req.body.initiative});
+
         var edits = {
             name: req.body.nameAr,
             type: req.body.typeAr,
@@ -596,7 +590,8 @@ app.patch("/edu-vents/ar/:id", isLoggedIn, upload, async function (req, res) {
             location: req.body.locationAr,
             googleMaps: req.body.googleMaps.replace(/ /g, ""),
             locationInfo: req.body.locationInfoAr,
-            urltoapp: req.body.urltoapp.replace(/ /g, "")
+            urltoapp: req.body.urltoapp.replace(/ /g, ""),
+            initiative: initiative._id
         };
 
         for (var key of Object.keys(edits)) {

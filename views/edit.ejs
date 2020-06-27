@@ -88,6 +88,13 @@
 
                     <label>Start Date <input type="date" name="date" <% if (typeof eduvent.startDate !== "undefined") { %> value="<%= startDate %>" <% } %>></label>
                     <label>End Date <input type="date" name="endDate" <% if (typeof eduvent.endDate !== "undefined") { %> value="<%= endDate %>" <% } %>></label>
+                    <label for="type">Initiative
+                        <select name="initiative" id="initiative">
+                            <% initiatives.forEach(function(initiative) { %>
+                                <option <% if (eduvent.initiative === initiative._id.toString()) { %> selected <% } %>><%= initiative.name %></option>
+                            <% }) %>
+                        </select>
+                    </label>
                     <label for="changePic">Do you want to change the picture?
                         <select name="changePic" id="changePic">
                             <option>no</option>

@@ -13,7 +13,8 @@ var eduventSchema = new mongoose.Schema({
     urltoapp: String,
     featuredUntil: Date,
     userId: String,
-    clickCount: Number
+    clickCount: Number,
+    initiative: String
 });
 
 module.exports = mongoose.model("Eduvent", eduventSchema);

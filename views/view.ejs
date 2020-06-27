@@ -99,7 +99,12 @@
                 <% if (typeof eduvent.locationInfo !== "undefined") { %> 
                     <h3>Location Information: <%= eduvent.locationInfo %></h3>
                     <br> 
-                <% } %> 
+                <% } %>
+
+                <% if (typeof initiative.name !== "undefined") { %>
+                    <h3>Initiative: <%= initiative.name %></h3>
+                    <br>
+                <% } %>
 
                 <% if (typeof eduvent.googleMaps !== "undefined") { %> 
                     <h3>Google Maps Link: <a href="<%= eduvent.googleMaps %>"><%= eduvent.googleMaps %></a></h3> 
@@ -115,7 +120,7 @@
 
                 <% if (typeof eduvent.urltoapp !== "undefined") { %> 
                     <h3>URL to Application: <a href="<%= eduvent.urltoapp %>"><%= eduvent.urltoapp %></a></h3>
-                <% } %> 
+                <% } %>
 
                 <% if (typeof eduvent.featuredUntil !== "undefined" && new Date < eduvent.featuredUntil) { %>
                     <br>

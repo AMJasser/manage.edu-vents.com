@@ -99,7 +99,12 @@
                 <% if (typeof eduvent.locationInfo !== "undefined") { %> 
                     <h3 dir="rtl">Location Information: <%= eduvent.locationInfo %></h3>
                     <br> 
-                <% } %> 
+                <% } %>
+
+                <% if (typeof initiative.nameAr !== "undefined") { %>
+                    <h3>Initiative: <%= initiative.nameAr %></h3>
+                    <br>
+                <% } %>
 
                 <% if (typeof eduvent.googleMaps !== "undefined") { %> 
                     <h3>Google Maps Link: <a href="<%= eduvent.googleMaps %>"><%= eduvent.googleMaps %></a></h3> 
