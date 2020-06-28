@@ -9,21 +9,6 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/stylesheets/style.css">
 
-        <script>
-            window.onload = function() {
-                var select = document.getElementById("changePic");
-                var fileInput = document.getElementById("img");
-
-                select.onchange = function() {
-                    if (select.value === "yes") {
-                        fileInput.style.display = "unset";
-                    } else {
-                        fileInput.style.display = "none";
-                    }
-                }
-            }
-        </script>
-
         <% if (typeof msg !== "undefined") { %>
             <script>alert("<%= msg %>")</script>
         <% } %>
@@ -101,11 +86,13 @@
                     <br> 
                 <% } %>
 
-                <% if (typeof initiative !== "object") { %>
-                    <h3>Initiative: <%= initiative.nameAr %></h3>
-                    <br>
+                <% if (typeof initiative === "object" && initiative !== null) { %>
+                    <% if (typeof initiative.nameAr === "string") { %>
+                        <h3>Initiative: <%= initiative.nameAr %></h3>
+                        <br>
+                    <% } %>
                 <% } %>
-
+                
                 <% if (typeof eduvent.googleMaps !== "undefined") { %> 
                     <h3>Google Maps Link: <a href="<%= eduvent.googleMaps %>"><%= eduvent.googleMaps %></a></h3> 
                     <br>
