@@ -558,10 +558,6 @@
     function  validateForm() {
         var eduventForm = document.forms["eduventsForm"];
 
-        if (eduventForm["date"].value === "" && eduventForm["endDate"].value === "") {
-            alert("Please submit at least one date.");
-            return false;
-        }
         if (eduventForm["name"].value === "") {
             alert("Please submit a name.");
             return false;

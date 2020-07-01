@@ -390,12 +390,8 @@ app.get("/users/report", isLoggedIn, async function (req, res) {
 
 app.post("/edu-vents", isLoggedIn, upload, async function (req, res) {
     try {
-        if (req.body.name === "" || req.body.type === "Any" || req.body.description === "" || req.body.urltoapp === "" || req.body.nameAr === "" || req.body.typeAr === "الكل" || req.body.descriptionAr === "" || (req.body.date === "" && req.body.endDate === "")) {
-            if (req.body.date === "" && req.body.endDate === "") {
-                res.redirect("/?msg=please fill at least one date field and all required fields.");
-            } else {
-                res.redirect("/?msg=please fill all required fields");
-            }
+        if (req.body.name === "" || req.body.type === "Any" || req.body.description === "" || req.body.urltoapp === "" || req.body.nameAr === "" || req.body.typeAr === "الكل" || req.body.descriptionAr === "") {
+            res.redirect("/?msg=please fill all required fields");
         } else {
             var newEduvent = {
                 name: req.body.name,
