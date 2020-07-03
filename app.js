@@ -532,12 +532,6 @@ app.patch("/edu-vents/en/:id", isLoggedIn, upload, async function (req, res) {
             edits.initiative = initiative._id
         }
 
-        for (var key of Object.keys(edits)) {
-            if (edits[key] === "" || edits[key] === "Any" || typeof edits[key] === "undefined") {
-                delete edits[key];
-            }
-        }
-
         if (req.body.changePic === "yes") {
             edits.imgPath = req.file.filename;
 
@@ -596,12 +590,6 @@ app.patch("/edu-vents/ar/:id", isLoggedIn, upload, async function (req, res) {
         if (req.body.initiative !== "لا شيء") {
             var initiative = await Initiative.findOne({nameAr: req.body.initiative});
             edits.initiative = initiative._id
-        }
-
-        for (var key of Object.keys(edits)) {
-            if (edits[key] === "" || edits[key] === "Any" || typeof edits[key] === "undefined") {
-                delete edits[key];
-            }
         }
 
         if (req.body.changePic === "yes") {
