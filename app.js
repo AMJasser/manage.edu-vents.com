@@ -515,40 +515,35 @@ app.get("/edu-vents/en/:id/edit", isLoggedIn, async function (req, res) {
 
 app.patch("/edu-vents/en/:id", isLoggedIn, upload, async function (req, res) {
     try {
-        var eduvent = await Eduvent.findById(req.params.id);
-        eduvent.name = req.body.name;
-        eduvent.type = req.body.type;
-        eduvent.description = req.body.description;
-        eduvent.startDate = req.body.date;
-        eduvent.endDate = req.body.endDate;
-        eduvent.location = req.body.location;
-        eduvent.googleMaps = req.body.googleMaps.replace(/ /g, "");
-        eduvent.locationInfo = req.body.locationInfo;
-        eduvent.urltoapp = req.body.urltoapp.replace(/ /g, "");
+        var edits = {
+            name: req.body.name,
+            type: req.body.type,
+            description: req.body.description,
+            startDate: req.body.date,
+            endDate: req.body.endDate,
+            location: req.body.location,
+            googleMaps: req.body.googleMaps.replace(/ /g, ""),
+            locationInfo: req.body.locationInfo,
+            urltoapp: req.body.urltoapp.replace(/ /g, ""),
+        };
 
         if (req.body.initiative !== "none") {
             var initiative = await Initiative.findOne({name: req.body.initiative});
-            eduvent.initiative = initiative._id
-        }
-
-        for (var key of Object.keys(eduvent)) {	
-            if (eduvent[key] === "" || eduvent[key] === "Any" || typeof eduvent[key] === "undefined") {	
-                delete eduvent[key];	
-            }	
+            edits.initiative = initiative._id
         }
 
         if (req.body.changePic === "yes") {
-            eduvent.imgPath = req.file.filename;
+            edits.imgPath = req.file.filename;
 
-            var eduventT = await Eduvent.findOne({ _id: req.params.id });
-            var count = await EduventAr.countDocuments({ imgPath: eduventT.imgPath });
+            var eduvent = await Eduvent.findOne({ _id: req.params.id });
+            var count = await EduventAr.countDocuments({ imgPath: eduvent.imgPath });
             if (count < 1) {
-                if (fs.existsSync("./public/uploads/" + eduventT.imgPath)) {
-                    fs.unlinkSync("./public/uploads/" + eduventT.imgPath);
+                if (fs.existsSync("./public/uploads/" + eduvent.imgPath)) {
+                    fs.unlinkSync("./public/uploads/" + eduvent.imgPath);
                 };
             };
         };
-        eduvent.save();
+        await Eduvent.findByIdAndUpdate(req.params.id, edits);
 
         res.redirect("/");
     } catch (err) {
@@ -580,40 +575,35 @@ app.get("/edu-vents/ar/:id/edit", isLoggedIn, async function (req, res) {
 
 app.patch("/edu-vents/ar/:id", isLoggedIn, upload, async function (req, res) {
     try {
-        var eduvent = await EduventAr.findById(req.params.id);
-        eduvent.name = req.body.name;
-        eduvent.type = req.body.type;
-        eduvent.description = req.body.description;
-        eduvent.startDate = req.body.date;
-        eduvent.endDate = req.body.endDate;
-        eduvent.location = req.body.location;
-        eduvent.googleMaps = req.body.googleMaps.replace(/ /g, "");
-        eduvent.locationInfo = req.body.locationInfo;
-        eduvent.urltoapp = req.body.urltoapp.replace(/ /g, "");
+        var edits = {
+            name: req.body.nameAr,
+            type: req.body.typeAr,
+            description: req.body.descriptionAr,
+            startDate: req.body.date,
+            endDate: req.body.endDate,
+            location: req.body.locationAr,
+            googleMaps: req.body.googleMaps.replace(/ /g, ""),
+            locationInfo: req.body.locationInfoAr,
+            urltoapp: req.body.urltoapp.replace(/ /g, ""),
+        };
 
         if (req.body.initiative !== "لا شيء") {
             var initiative = await Initiative.findOne({nameAr: req.body.initiative});
-            eduvent.initiative = initiative._id
-        }
-
-        for (var key of Object.keys(eduvent)) {	
-            if (eduvent[key] === "" || eduvent[key] === "الكل" || typeof eduvent[key] === "undefined") {	
-                delete eduvent[key];
-            }	
+            edits.initiative = initiative._id
         }
 
         if (req.body.changePic === "yes") {
-            eduvent.imgPath = req.file.filename;
+            edits.imgPath = req.file.filename;
 
-            var eduventT = await EduventAr.findOne({ _id: req.params.id });
-            var count = await Eduvent.countDocuments({ imgPath: eduventT.imgPath });
+            var eduvent = await EduventAr.findOne({ _id: req.params.id });
+            var count = await Eduvent.countDocuments({ imgPath: eduvent.imgPath });
             if (count < 1) {
-                if (fs.existsSync("./public/uploads/" + eduventT.imgPath)) {
-                    fs.unlinkSync("./public/uploads/" + eduventT.imgPath);
+                if (fs.existsSync("./public/uploads/" + eduvent.imgPath)) {
+                    fs.unlinkSync("./public/uploads/" + eduvent.imgPath);
                 };
             };
         };
-        eduvent.save();
+        await EduventAr.findByIdAndUpdate(req.params.id, edits);
 
         res.redirect("/");
     } catch (err) {
