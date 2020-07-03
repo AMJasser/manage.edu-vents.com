@@ -25,18 +25,18 @@
         </header>
         <div class="sections">
             <section>
-                <% if (typeof eduvent.name !== "undefined") { %> <h1>NAME: <%= eduvent.name %></h1> <% } %> 
+                <% if (typeof eduvent.name !== "undefined" && eduvent.name !== "") { %> <h1>NAME: <%= eduvent.name %></h1> <% } %> 
 
                 <img width="750px" src="/uploads/<%= eduvent.imgPath %>">
 
                 <br>
 
-                <% if (typeof eduvent.type !== "undefined") { %> 
+                <% if (typeof eduvent.type !== "undefined" && eduvent.type !== "") { %> 
                     <h3>TYPE: <%= eduvent.type %></h3>
                     <br>
                 <% } %> 
 
-                <% if (typeof eduvent.description !== "undefined") { %> 
+                <% if (typeof eduvent.description !== "undefined" && eduvent.description !== "") { %> 
                     <p>DESC: <%= eduvent.description %></p>
                     <br>
                 <% } %> 
@@ -76,24 +76,24 @@
                     <br>
                 <% } %> 
 
-                <% if (typeof eduvent.location !== "undefined") { %> 
+                <% if (typeof eduvent.location !== "undefined" && eduvent.location !== "") { %> 
                     <h3>Location: <%= eduvent.location %></h3> 
                     <br>
                 <% } %> 
 
-                <% if (typeof eduvent.locationInfo !== "undefined") { %> 
+                <% if (typeof eduvent.locationInfo !== "undefined" && eduvent.locationInfo !== "") { %> 
                     <h3>Location Information: <%= eduvent.locationInfo %></h3>
                     <br> 
                 <% } %>
 
                 <% if (typeof initiative === "object" && initiative !== null) { %>
-                    <% if (typeof initiative.name === "string") { %>
+                    <% if (typeof initiative.name === "string" && initiative.name !== "") { %>
                         <h3>Initiative: <%= initiative.name %></h3>
                         <br>
                     <% } %>
                 <% } %>
 
-                <% if (typeof eduvent.googleMaps !== "undefined") { %> 
+                <% if (typeof eduvent.googleMaps !== "undefined" && eduvent.googleMaps !== "") { %> 
                     <h3>Google Maps Link: <a href="<%= eduvent.googleMaps %>"><%= eduvent.googleMaps %></a></h3> 
                     <br>
                 <% } %> 
@@ -105,7 +105,7 @@
                     <% } %> 
                 <% } %> 
 
-                <% if (typeof eduvent.urltoapp !== "undefined") { %> 
+                <% if (typeof eduvent.urltoapp !== "undefined" && eduvent.urltoapp !== "") { %> 
                     <h3>URL to Application: <a href="<%= eduvent.urltoapp %>"><%= eduvent.urltoapp %></a></h3>
                 <% } %>
 
