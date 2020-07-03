@@ -991,7 +991,7 @@ var j = schedule.scheduleJob("0 0 * * *", () => {
             if (typeof eduvent.endDate !== "undefined") {
                 target = new Date(eduvent.endDate);
             } else if (typeof eduvent.startDate !== "undefined") {
-                target = new Date(eduvent.endDate);
+                target = new Date(eduvent.startDate);
             } else {
                 target = now;
             }
@@ -1026,7 +1026,7 @@ var j = schedule.scheduleJob("0 0 * * *", () => {
             if (typeof eduvent.endDate !== "undefined") {
                 target = new Date(eduvent.endDate);
             } else if (typeof eduvent.startDate !== "undefined") {
-                target = new Date(eduvent.endDate);
+                target = new Date(eduvent.startDate);
             } else {
                 target = now;
             }
