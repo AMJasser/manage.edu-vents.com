@@ -534,7 +534,7 @@ app.patch("/edu-vents/en/:id", isLoggedIn, upload, async function (req, res) {
 
         for (var key of Object.keys(edits)) {	
             if (edits[key] === "" || edits[key] === "Any" || typeof edits[key] === "undefined") {	
-                edits[key] = undefined;
+                delete edits[key];
             }	
         }
 
@@ -549,8 +549,9 @@ app.patch("/edu-vents/en/:id", isLoggedIn, upload, async function (req, res) {
                 };
             };
         };
-        await Eduvent.findByIdAndUpdate(req.params.id, edits);
-
+        var eduvent = await Eduvent.findById(req.params.id);
+        eduvent = edits;
+        eduvent.save();
         res.redirect("/");
     } catch (err) {
         console.error(err);
@@ -600,7 +601,7 @@ app.patch("/edu-vents/ar/:id", isLoggedIn, upload, async function (req, res) {
 
         for (var key of Object.keys(edits)) {	
             if (edits[key] === "" || edits[key] === "الكل" || typeof edits[key] === "undefined") {	
-                edits[key] = undefined;	
+                delete edits[key];	
             }	
         }
 
@@ -615,8 +616,9 @@ app.patch("/edu-vents/ar/:id", isLoggedIn, upload, async function (req, res) {
                 };
             };
         };
-        await EduventAr.findByIdAndUpdate(req.params.id, edits);
-
+        var eduvent = await Eduvent.findById(req.params.id);
+        eduvent = edits;
+        eduvent.save();
         res.redirect("/");
     } catch (err) {
         console.error(err);
