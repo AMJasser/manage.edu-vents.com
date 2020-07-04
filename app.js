@@ -515,36 +515,34 @@ app.get("/edu-vents/en/:id/edit", isLoggedIn, async function (req, res) {
 
 app.patch("/edu-vents/en/:id", isLoggedIn, upload, async function (req, res) {
     try {
-        var edits = {
-            name: req.body.name,
-            type: req.body.type,
-            description: req.body.description,
-            startDate: req.body.date,
-            endDate: req.body.endDate,
-            location: req.body.location,
-            googleMaps: req.body.googleMaps.replace(/ /g, ""),
-            locationInfo: req.body.locationInfo,
-            urltoapp: req.body.urltoapp.replace(/ /g, ""),
-        };
+        var eduvent = await Eduvent.findById(req.params.id);
+        eduvent.name = (req.body.name === "" || req.body.name === "Any" || req.body.name === null || typeof req.body.name === "undefined") ? undefined:req.body.name;
+        eduvent.type = (req.body.type === "" || req.body.type === "Any" || req.body.type === null || typeof req.body.type === "undefined") ? undefined:req.body.type;
+        eduvent.description = (req.body.description === "" || req.body.description === "Any" || req.body.description === null || typeof req.body.description === "undefined") ? undefined:req.body.description;
+        eduvent.startDate = (req.body.date === "" || req.body.date === "Any" || req.body.date === null || typeof req.body.date === "undefined") ? undefined:req.body.date;
+        eduvent.endDate = (req.body.endDate === "" || req.body.endDate === "Any" || req.body.endDate === null || typeof req.body.endDate === "undefined") ? undefined:req.body.endDate;
+        eduvent.location = (req.body.location === "" || req.body.location === "Any" || req.body.location === null || typeof req.body.location === "undefined") ? undefined:req.body.location;
+        eduvent.googleMaps = (req.body.googleMaps === "" || req.body.googleMaps === "Any" || req.body.googleMaps === null || typeof req.body.googleMaps === "undefined") ? undefined:req.body.googleMaps.replace(/ /g, "");
+        eduvent.locationInfo = (req.body.locationInfo === "" || req.body.locationInfo === "Any" || req.body.locationInfo === null || typeof req.body.locationInfo === "undefined") ? undefined:req.body.locationInfo;
+        eduvent.urltoapp = (req.body.urltoapp === "" || req.body.urltoapp === "Any" || req.body.urltoapp === null || typeof req.body.urltoapp === "undefined") ? undefined:req.body.urltoapp.replace(/ /g, "");
 
         if (req.body.initiative !== "none") {
             var initiative = await Initiative.findOne({name: req.body.initiative});
-            edits.initiative = initiative._id
+            eduvent.initiative = initiative._id;
         }
 
         if (req.body.changePic === "yes") {
-            edits.imgPath = req.file.filename;
+            eduvent.imgPath = req.file.filename;
 
-            var eduvent = await Eduvent.findOne({ _id: req.params.id });
-            var count = await EduventAr.countDocuments({ imgPath: eduvent.imgPath });
+            var eduventT = await Eduvent.findById(req.params.id);
+            var count = await EduventAr.countDocuments({ imgPath: eduventT.imgPath });
             if (count < 1) {
-                if (fs.existsSync("./public/uploads/" + eduvent.imgPath)) {
-                    fs.unlinkSync("./public/uploads/" + eduvent.imgPath);
+                if (fs.existsSync("./public/uploads/" + eduventT.imgPath)) {
+                    fs.unlinkSync("./public/uploads/" + eduventT.imgPath);
                 };
             };
         };
-        await Eduvent.findByIdAndUpdate(req.params.id, edits);
-
+        eduvent.save();
         res.redirect("/");
     } catch (err) {
         console.error(err);
@@ -575,36 +573,34 @@ app.get("/edu-vents/ar/:id/edit", isLoggedIn, async function (req, res) {
 
 app.patch("/edu-vents/ar/:id", isLoggedIn, upload, async function (req, res) {
     try {
-        var edits = {
-            name: req.body.nameAr,
-            type: req.body.typeAr,
-            description: req.body.descriptionAr,
-            startDate: req.body.date,
-            endDate: req.body.endDate,
-            location: req.body.locationAr,
-            googleMaps: req.body.googleMaps.replace(/ /g, ""),
-            locationInfo: req.body.locationInfoAr,
-            urltoapp: req.body.urltoapp.replace(/ /g, ""),
-        };
+        var eduvent = await EduventAr.findById(req.params.id);
+        eduvent.name = (req.body.name === "" || req.body.name === "Any" || req.body.name === null || typeof req.body.name === "undefined") ? undefined:req.body.name;
+        eduvent.type = (req.body.type === "" || req.body.type === "Any" || req.body.type === null || typeof req.body.type === "undefined") ? undefined:req.body.type;
+        eduvent.description = (req.body.description === "" || req.body.description === "Any" || req.body.description === null || typeof req.body.description === "undefined") ? undefined:req.body.description;
+        eduvent.startDate = (req.body.date === "" || req.body.date === "Any" || req.body.date === null || typeof req.body.date === "undefined") ? undefined:req.body.date;
+        eduvent.endDate = (req.body.endDate === "" || req.body.endDate === "Any" || req.body.endDate === null || typeof req.body.endDate === "undefined") ? undefined:req.body.endDate;
+        eduvent.location = (req.body.location === "" || req.body.location === "Any" || req.body.location === null || typeof req.body.location === "undefined") ? undefined:req.body.location;
+        eduvent.googleMaps = (req.body.googleMaps === "" || req.body.googleMaps === "Any" || req.body.googleMaps === null || typeof req.body.googleMaps === "undefined") ? undefined:req.body.googleMaps.replace(/ /g, "");
+        eduvent.locationInfo = (req.body.locationInfo === "" || req.body.locationInfo === "Any" || req.body.locationInfo === null || typeof req.body.locationInfo === "undefined") ? undefined:req.body.locationInfo;
+        eduvent.urltoapp = (req.body.urltoapp === "" || req.body.urltoapp === "Any" || req.body.urltoapp === null || typeof req.body.urltoapp === "undefined") ? undefined:req.body.urltoapp.replace(/ /g, "");
 
         if (req.body.initiative !== "لا شيء") {
             var initiative = await Initiative.findOne({nameAr: req.body.initiative});
-            edits.initiative = initiative._id
+            eduvent.initiative = initiative._id
         }
 
         if (req.body.changePic === "yes") {
-            edits.imgPath = req.file.filename;
+            eduvent.imgPath = req.file.filename;
 
-            var eduvent = await EduventAr.findOne({ _id: req.params.id });
-            var count = await Eduvent.countDocuments({ imgPath: eduvent.imgPath });
+            var eduventT = await EduventAr.findOne({ _id: req.params.id });
+            var count = await Eduvent.countDocuments({ imgPath: eduventT.imgPath });
             if (count < 1) {
-                if (fs.existsSync("./public/uploads/" + eduvent.imgPath)) {
-                    fs.unlinkSync("./public/uploads/" + eduvent.imgPath);
+                if (fs.existsSync("./public/uploads/" + eduventT.imgPath)) {
+                    fs.unlinkSync("./public/uploads/" + eduventT.imgPath);
                 };
             };
         };
-        await EduventAr.findByIdAndUpdate(req.params.id, edits);
-
+        eduvent.save();
         res.redirect("/");
     } catch (err) {
         console.error(err);
