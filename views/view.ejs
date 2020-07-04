@@ -42,7 +42,7 @@
                 <% } %> 
 
                 <% 
-                if (typeof eduvent.startDate !== "undefined") {
+                if (typeof eduvent.startDate !== "undefined" && eduvent.startDate !== "") {
                     var startY = eduvent.startDate.getFullYear();
                     var startM = eduvent.startDate.getMonth() + 1;
                     startM = "0" + startM;
@@ -54,7 +54,7 @@
                 %>
 
                 <% 
-                if (typeof eduvent.endDate !== "undefined") {
+                if (typeof eduvent.endDate !== "undefined" && eduvent.endDate !== "") {
                     var endY = eduvent.endDate.getFullYear();
                     var endM = eduvent.endDate.getMonth() + 1;
                     endM = "0" + startM;
@@ -65,13 +65,13 @@
                 }
                 %>
 
-                <% if (typeof eduvent.startDate !== "undefined" && typeof eduvent.endDate !== "undefined") { %> 
+                <% if ((typeof eduvent.startDate !== "undefined" && eduvent.startDate !== "") && (typeof eduvent.endDate !== "undefined" && eduvent.endDate !== "")) { %> 
                     <h3>DATE: <%= startDate %> - <%= endDate %></h3>
                     <br>
-                <% } else if (typeof eduvent.endDate !== "undefined") { %> 
+                <% } else if (typeof eduvent.endDate !== "undefined" && eduvent.endDate !== "") { %> 
                     <h3>END DATE: <%= endDate %></h3>
                     <br>
-                <% } else if (typeof eduvent.startDate !== "undefined") { %>
+                <% } else if (typeof eduvent.startDate !== "undefined" && eduvent.startDate !== "") { %>
                     <h3>START DATE: <%= startDate %></h3>
                     <br>
                 <% } %> 
