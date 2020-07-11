@@ -45,17 +45,21 @@
                     <input type="text" name="name" placeholder="Name" <% if (typeof eduvent.name !== "undefined") { %> value="<%= eduvent.name %>" <% } %>>
                     <label for="type">Type
                         <select name="type" id="type">
+                            <option <% if (eduvent.type === "Any") { %> selected <% } %>>Any</option>
                             <% types.forEach(function(type) { %>
                                 <option <% if (eduvent.type === type.en) { %> selected <% } %>><%= type.en %></option>
                             <% }) %>
+                            <option <% if (eduvent.type === "Other") { %> selected <% } %>>Other</option>
                         </select>
                     </label>
                     <textarea name="description" placeholder="Description"><% if (typeof eduvent.description !== "undefined") { %> <%= eduvent.description %> <% } %></textarea>
                     <label for="location">Select Location
                         <select name="location" id="location">
+                            <option <% if (eduvent.location === "Any") { %> selected <% } %>>Any</option>
                             <% locations.forEach(function(location) { %>
                                 <option <% if (eduvent.location === location.en) { %> selected <% } %>><%= location.en %></option>
                             <% }) %>
+                            <option <% if (eduvent.location === "Other") { %> selected <% } %>>Other</option>
                         </select>
                     </label>
                     <input type="text" name="locationInfo" placeholder="Location Information" <% if (typeof eduvent.locationInfo !== "undefined") { %> value="<%= eduvent.locationInfo %>" <% } %>>

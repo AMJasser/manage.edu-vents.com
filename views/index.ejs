@@ -259,17 +259,21 @@
                 <label>Name*<input type="text" name="name" id="name" placeholder="Name" required></label>
                 <label for="type">Type*
                     <select name="type" id="type" required>
+                        <option>Any</option>
                         <% types.forEach(function(type) { %>
                             <option><%= type.en %></option>
                         <% }) %>
+                        <option>Other</option>
                     </select>
                 </label>
                 <label>Description*<textarea name="description" id="description" placeholder="Description" required></textarea></label>
                 <label for="location">Select Location
                     <select name="location" id="location">
+                        <option>Any</option>
                         <% locations.forEach(function(location) { %>
                             <option><%= location.en %></option>
                         <% }) %>
+                        <option>Other</option>
                     </select>
                 </label>
                 <label>Location Information<input type="text" name="locationInfo" placeholder="Location Information"></label>
@@ -289,17 +293,21 @@
                 <label dir="rtl" style="text-align: right;">الاسم*<input dir="rtl" type="text" name="nameAr" id="nameAr" placeholder="الاسم" required></label>
                 <label for="type" dir="rtl" style="text-align: right;">النوع*
                     <select dir="ltr" name="typeAr" id="typeAr" id="type" required>
+                        <option>الكل</option>
                         <% types.forEach(function(type) { %>
                             <option><%= type.ar %></option>
                         <% }) %>
+                        <option>أخرى</option>
                     </select>
                 </label>
                 <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="descriptionAr" id="descriptionAr" placeholder="الوصف" required></textarea></label>
                 <label for="location" dir="rtl" style="text-align: right;">إختر الموقع
                     <select dir="ltr" name="locationAr" id="locationAr">
+                        <option>الكل</option>
                         <% locations.forEach(function(location) { %>
                             <option><%= location.ar %></option>
                         <% }) %>
+                        <option>أخرى</option>
                     </select>
                 </label>
                 <label dir="rtl" style="text-align: right;">معلومات الموقع<input dir="rtl" type="text" name="locationInfoAr" placeholder="معلومات الموقع"></label>
@@ -430,17 +438,21 @@
                 <label>Name*<input type="text" name="name" id="name" placeholder="Name" required></label>
                 <label for="type">Type*
                     <select name="type" id="type" required>
+                        <option>Any</option>
                         <% types.forEach(function(type) { %>
                             <option><%= type.en %></option>
                         <% }) %>
+                        <option>Other</option>
                     </select>
                 </label>
                 <label>Description*<textarea name="description" id="description" placeholder="Description" required></textarea></label>
                 <label for="location">Select Location
                     <select name="location" id="location">
+                        <option>Any</option>
                         <% locations.forEach(function(location) { %>
                             <option><%= location.en %></option>
                         <% }) %>
+                        <option>Other</option>
                     </select>
                 </label>
                 <label>Location Information<input type="text" name="locationInfo" placeholder="Location Information"></label>
@@ -460,17 +472,21 @@
                 <label dir="rtl" style="text-align: right;">الاسم*<input dir="rtl" type="text" name="nameAr" id="nameAr" placeholder="الاسم" required></label>
                 <label for="type" dir="rtl" style="text-align: right;">النوع*
                     <select dir="ltr" name="typeAr" id="typeAr" required>
+                        <option>الكل</option>
                         <% types.forEach(function(type) { %>
                             <option><%= type.ar %></option>
                         <% }) %>
+                        <option>أخرى</option>
                     </select>
                 </label>
                 <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="descriptionAr" id="descriptionAr" placeholder="الوصف" required></textarea></label>
                 <label for="location" dir="rtl" style="text-align: right;">إختر الموقع
                     <select dir="ltr" name="locationAr" id="location">
+                        <option>الكل</option>
                         <% locations.forEach(function(location) { %>
                             <option><%= location.ar %></option>
                         <% }) %>
+                        <option>أخرى</option>
                     </select>
                 </label>
                 <label dir="rtl" style="text-align: right;">معلومات الموقع<input dir="rtl" type="text" name="locationInfoAr" placeholder="معلومات الموقع"></label>

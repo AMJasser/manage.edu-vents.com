@@ -45,17 +45,21 @@
                     <input dir="rtl" type="text" name="nameAr" placeholder="الاسم" <% if (typeof eduvent.name !== "undefined") { %> value="<%= eduvent.name %>" <% } %>>
                     <label for="type">النوع
                         <select name="typeAr" id="type">
+                            <option <% if (eduvent.type === "الكل") { %> selected <% } %>>الكل</option>
                             <% types.forEach(function(type) { %>
                                 <option <% if (eduvent.type === type.ar) { %> selected <% } %>><%= type.ar %></option>
                             <% }) %>
+                            <option <% if (eduvent.type === "أخرى") { %> selected <% } %>>أخرى</option>
                         </select>
                     </label>
                     <textarea dir="rtl" name="descriptionAr" placeholder="الوصف"><% if (typeof eduvent.description !== "undefined") { %> <%= eduvent.description %> <% } %></textarea>
                     <label for="location">إختر الموقع
                         <select name="locationAr" id="location">
+                            <option <% if (eduvent.location === "الكل") { %> selected <% } %>>الكل</option>
                             <% locations.forEach(function(location) { %>
                                 <option <% if (eduvent.location === location.ar) { %> selected <% } %>><%= location.ar %></option>
                             <% }) %>
+                            <option <% if (eduvent.location === "أخرى") { %> selected <% } %>>أخرى</option>
                         </select>
                     </label>
                     <input dir="rtl" type="text" name="locationInfoAr" placeholder="معلومات الموقع" <% if (typeof eduvent.locationInfo !== "undefined") { %> value="<%= eduvent.locationInfo %>" <% } %>>

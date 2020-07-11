@@ -62,7 +62,7 @@ function isLoggedIn(req, res, next) {
         return next();
     };
     res.redirect("/login");
-};
+}
 
 app.get("/login", function (req, res) {
     if (typeof req.query.msg !== "undefined") {
