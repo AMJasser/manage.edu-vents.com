@@ -144,8 +144,8 @@ app.get("/", isLoggedIn, async function (req, res) {
             });
 
             var users = await User.find();
-            var types = await Type.find();
-            var locations = await Location.find();
+            var types = await Type.find().sort({ en: 1 });
+            var locations = await Location.find().sort({ en: 1 });
             var forms = await Form.find();
             var initiatives = await Initiative.find();
 
@@ -204,8 +204,8 @@ app.get("/", isLoggedIn, async function (req, res) {
                 };
             });
 
-            var types = await Type.find();
-            var locations = await Location.find();
+            var types = await Type.find().sort({ en: 1 });
+            var locations = await Location.find().sort({ en: 1 });
             var initiatives = await Initiative.find();
 
             if (typeof req.query.msg !== "undefined") {
@@ -239,8 +239,8 @@ app.get("/", isLoggedIn, async function (req, res) {
 app.get("/edu-vents/en/:id", isLoggedIn, async function (req, res) {
     try {
         var eduvent = await Eduvent.findOne({ _id: req.params.id });
-        var types = await Type.find();
-        var locations = await Location.find();
+        var types = await Type.find().sort({ en: 1 });
+        var locations = await Location.find().sort({ en: 1 });
         var initiative = await Initiative.findById(eduvent.initiative);
         res.render("view", { locations: locations, types: types, eduvent: eduvent, initiative: initiative, userId: req.user._id.toHexString(), isAdmin: req.user.isAdmin }, function (err, html) {
             if (err) {
@@ -259,8 +259,8 @@ app.get("/edu-vents/en/:id", isLoggedIn, async function (req, res) {
 app.get("/edu-vents/ar/:id", isLoggedIn, async function (req, res) {
     try {
         var eduvent = await EduventAr.findOne({ _id: req.params.id });
-        var types = await Type.find();
-        var locations = await Location.find();
+        var types = await Type.find().sort({ en: 1 });
+        var locations = await Location.find().sort({ en: 1 });
         var initiative = await Initiative.findById(eduvent.initiative);
         res.render("viewAr", { locations: locations, types: types, eduvent: eduvent, initiative: initiative, userId: req.user._id.toHexString(), isAdmin: req.user.isAdmin }, function (err, html) {
             if (err) {
@@ -495,8 +495,8 @@ app.delete("/edu-vents/ar/:id/delete", isLoggedIn, async function (req, res) {
 app.get("/edu-vents/en/:id/edit", isLoggedIn, async function (req, res) {
     try {
         var eduvent = await Eduvent.findOne({ _id: req.params.id });
-        var types = await Type.find();
-        var locations = await Location.find();
+        var types = await Type.find().sort({ en: 1 });
+        var locations = await Location.find().sort({ en: 1 });
         var initiatives = await Initiative.find();
         var initiative = await Initiative.findById(eduvent.initiative);
         res.render("edit", { locations: locations, types: types, initiative: initiative, initiatives: initiatives, eduvent: eduvent }, function (err, html) {
@@ -553,8 +553,8 @@ app.patch("/edu-vents/en/:id", isLoggedIn, upload, async function (req, res) {
 app.get("/edu-vents/ar/:id/edit", isLoggedIn, async function (req, res) {
     try {
         var eduvent = await EduventAr.findOne({ _id: req.params.id });
-        var types = await Type.find();
-        var locations = await Location.find();
+        var types = await Type.find().sort({ en: 1 });
+        var locations = await Location.find().sort({ en: 1 });
         var initiatives = await Initiative.find();
         var initiative = await Initiative.findById(eduvent.initiative);
         res.render("editAr", { locations: locations, types: types, initiative: initiative, initiatives: initiatives, eduvent: eduvent }, function (err, html) {
