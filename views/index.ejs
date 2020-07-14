@@ -195,7 +195,7 @@
                     </form>
                 <% }) %>
             <% } %>
-            <form action="/initiatives" method="POST" enctype="multipart/form-data">
+            <form action="/initiatives" method="POST" enctype="multipart/form-data" name="initiativeForm" onsubmit="return validateInitiativeForm()">
                 <h3>Add an Initiative</h3>
                 <label>Name*<input type="text" name="name" placeholder="Name" required></label>
                 <label>Description*<textarea name="description" placeholder="Description" required></textarea></label>
@@ -205,6 +205,23 @@
                 <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="descriptionAr" placeholder="الوصف" required></textarea></label>
                 <input type="submit">
             </form>
+            <script type="text/javascript">
+                function validateInitiativeForm() {
+                    var newInitiativeName = document.forms["initiativeForm"]["name"].value.toLowerCase().replace(/ /g, "").replace(/[^a-zA-Z0-9-_\.]/g, '');
+                    var InitiativeNames = "<% if (typeof initiatives === 'object') { %><% initiatives.forEach(function(initiative) { %><%= initiative.name %>,<% }) %><% } %>";
+                    var result = true;
+                    if (InitiativeNames !== "") {
+                        InitiativeNames = InitiativeNames.split(",");
+                        InitiativeNames.forEach(function(InitiativeName) {
+                            if (newInitiativeName === InitiativeName) {
+                                alert("There is another initiative with the same name: " + InitiativeName);
+                                result = false;
+                            }
+                        });
+                    }
+                    return result;
+                }
+            </script>
         </section>
         <section>
             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
