@@ -574,14 +574,14 @@ app.get("/edu-vents/ar/:id/edit", isLoggedIn, async function (req, res) {
 app.patch("/edu-vents/ar/:id", isLoggedIn, upload, async function (req, res) {
     try {
         var eduvent = await EduventAr.findById(req.params.id);
-        eduvent.name = (req.body.name === "" || req.body.name === "Any" || req.body.name === null || typeof req.body.name === "undefined") ? undefined:req.body.name;
-        eduvent.type = (req.body.type === "" || req.body.type === "Any" || req.body.type === null || typeof req.body.type === "undefined") ? undefined:req.body.type;
-        eduvent.description = (req.body.description === "" || req.body.description === "Any" || req.body.description === null || typeof req.body.description === "undefined") ? undefined:req.body.description;
+        eduvent.name = (req.body.name === "" || req.body.name === "Any" || req.body.name === null || typeof req.body.name === "undefined") ? undefined:req.body.nameAr;
+        eduvent.type = (req.body.type === "" || req.body.type === "Any" || req.body.type === null || typeof req.body.type === "undefined") ? undefined:req.body.typeAr;
+        eduvent.description = (req.body.description === "" || req.body.description === "Any" || req.body.description === null || typeof req.body.description === "undefined") ? undefined:req.body.descriptionAr;
         eduvent.startDate = (req.body.date === "" || req.body.date === "Any" || req.body.date === null || typeof req.body.date === "undefined") ? undefined:req.body.date;
         eduvent.endDate = (req.body.endDate === "" || req.body.endDate === "Any" || req.body.endDate === null || typeof req.body.endDate === "undefined") ? undefined:req.body.endDate;
-        eduvent.location = (req.body.location === "" || req.body.location === "Any" || req.body.location === null || typeof req.body.location === "undefined") ? undefined:req.body.location;
+        eduvent.location = (req.body.location === "" || req.body.location === "Any" || req.body.location === null || typeof req.body.location === "undefined") ? undefined:req.body.locationAr;
         eduvent.googleMaps = (req.body.googleMaps === "" || req.body.googleMaps === "Any" || req.body.googleMaps === null || typeof req.body.googleMaps === "undefined") ? undefined:req.body.googleMaps.replace(/ /g, "");
-        eduvent.locationInfo = (req.body.locationInfo === "" || req.body.locationInfo === "Any" || req.body.locationInfo === null || typeof req.body.locationInfo === "undefined") ? undefined:req.body.locationInfo;
+        eduvent.locationInfo = (req.body.locationInfo === "" || req.body.locationInfo === "Any" || req.body.locationInfo === null || typeof req.body.locationInfo === "undefined") ? undefined:req.body.locationInfoAr;
         eduvent.urltoapp = (req.body.urltoapp === "" || req.body.urltoapp === "Any" || req.body.urltoapp === null || typeof req.body.urltoapp === "undefined") ? undefined:req.body.urltoapp.replace(/ /g, "");
 
         if (req.body.initiative !== "لا شيء") {
