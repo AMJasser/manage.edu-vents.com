@@ -422,9 +422,9 @@ app.post("/edu-vents", isLoggedIn, upload, async function (req, res) {
             }
 
             if (req.body.initiative !== "none") {
-                var initiative = Initiative.findOne({name: req.body.initiative});
+                var initiative = await Initiative.findOne({name: req.body.initiative});
                 newEduvent.initiative = initiative._id;
-                newEduventAr.initiative = initiative._id
+                newEduventAr.initiative = initiative._id;
             }
 
             for (var key of Object.keys(newEduvent)) {
@@ -961,7 +961,7 @@ app.listen(8081, () => {
 });
 
 var j = schedule.scheduleJob("0 0 * * *", () => {
-    var now = new Date();
+    var now = new Date(new Date().getFullYear(),new Date().getMonth() , new Date().getDate());
 
     Eduvent.find({}, function (err, allEduvents) {
         if (err) {
