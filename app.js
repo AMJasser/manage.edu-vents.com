@@ -104,8 +104,9 @@ app.get("/resetstuff", isLoggedIn, async function (req, res) {
                 user.volunteers.forEach(function (volunteer) {
                     volunteer.time = 0;
                 });
+                user.score = 0;
             });
-            users.save();
+            await users.save();
             res.send("success");
         } else {
             res.send("FUCK OFF");
