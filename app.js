@@ -99,14 +99,14 @@ app.get("/logout", function (req, res) {
 app.get("/resetstuff", isLoggedIn, async function (req, res) {
     try {
         if (req.user.isAdmin === true) {
-            var users = await User.find({});
-            users.forEach(function (user) {
-                user.volunteers.forEach(function (volunteer) {
-                    volunteer.time = 0;
-                });
-                user.score = 0;
+            await User.updateMany({}, {
+                "$set": {
+                    "volunteers.0.time": 0,
+                    "volunteers.1.time": 0,
+                    "volunteers.2.time": 0,
+                    "score": 0
+                }
             });
-            await users.save();
             res.send("success");
         } else {
             res.send("FUCK OFF");
