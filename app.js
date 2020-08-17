@@ -13,8 +13,9 @@ dotenv.config({ path: "./config/config.env" });
 connectDB();
 
 // Route files
-const eduvents = require("./routes/eduvents");
+const index = require("./routes/index");
 const auth = require("./routes/auth");
+const eduvents = require("./routes/eduvents");
 
 const app = express();
 
@@ -33,6 +34,7 @@ if (process.env.NODE_ENV === "development") {
 app.use(express.static(path.join(__dirname, "public")));
 
 // Mount routers
+app.use("/", index);
 app.use("/", auth);
 app.use("/edu-vents", eduvents);
 

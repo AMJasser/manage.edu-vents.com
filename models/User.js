@@ -6,7 +6,9 @@ const { model } = require("./Eduvent");
 const UserSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: [true, "Please add a username"]
+        required: [true, "Please add a username"],
+        unique: true,
+        trim: true
     },
     password: {
         type: String,
@@ -24,7 +26,7 @@ const UserSchema = new mongoose.Schema({
         default: 0
     },
     team: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "Team",
     }
 });

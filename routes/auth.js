@@ -16,3 +16,5 @@ router
     .post(login);
 router.get("/logout", logout);
 router.put("/updatepassword", protect, updatePassword);
+
+module.exports = router;

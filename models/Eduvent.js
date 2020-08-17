@@ -74,21 +74,18 @@ const EduventSchema = new mongoose.Schema({
     startDate: Date,
     endDate: Date,
     user: {
-        type: mongoose.Schema.ObjectId,
-        //ref: "User",
-        //required: true
+        type: mongoose.Types.ObjectId,
+        ref: "User",
+        required: true
     },
     initiative: {
-        type: mongoose.Schema.ObjectId,
-        //ref: "Initiative",
-        //required: true
+        type: mongoose.Types.ObjectId,
+        //ref: "Initiative"
     },
     clickCount: {
         type: Number,
         default: 0
     }
 });
-
-// Geocode & create location field
 
 module.exports = mongoose.model("Eduvent", EduventSchema);
