@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
+const cookieParser = require("cookie-parser");
 const errorHandler = require("./middleware/error");
 const connectDB = require("./config/db");
 
@@ -13,15 +14,26 @@ connectDB();
 
 // Route files
 const eduvents = require("./routes/eduvents");
+const auth = require("./routes/auth");
 
 const app = express();
+
+// Body parser
+app.use(express.urlencoded());
+
+// Cookie parser
+app.use(cookieParser());
 
 // Dev logging middleware
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
 }
 
+// Set static folder
+app.use(express.static(path.join(__dirname, "public")));
+
 // Mount routers
+app.use("/", auth);
 app.use("/edu-vents", eduvents);
 
 app.use(errorHandler);

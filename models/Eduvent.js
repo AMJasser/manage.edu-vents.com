@@ -89,4 +89,6 @@ const EduventSchema = new mongoose.Schema({
     }
 });
 
+// Geocode & create location field
+
 module.exports = mongoose.model("Eduvent", EduventSchema);
