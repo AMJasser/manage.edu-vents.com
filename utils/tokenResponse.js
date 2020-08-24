@@ -1,4 +1,4 @@
-const sendTokenResponse = (user, statusCode, res) => {
+const tokenResponse = (user, statusCode, res) => {
     // Create token
     const token = user.getSignedJwtToken();
 
@@ -13,5 +13,8 @@ const sendTokenResponse = (user, statusCode, res) => {
 
     res
         .status(statusCode)
-        .cookie("token", token, options);
+        .cookie("token", token, options)
+        .redirect("/");
 }
+
+module.exports = tokenResponse;

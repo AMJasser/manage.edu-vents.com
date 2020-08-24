@@ -1,10 +1,5 @@
 const mongoose = require("mongoose");
 
-const types = [
-    {en: "MUN", ar: "محاكاة الأمم المتحدة"},
-    {en: "Course", ar: "دورة"}
-];
-
 const EduventSchema = new mongoose.Schema({
     name: {
         en: {
@@ -23,15 +18,15 @@ const EduventSchema = new mongoose.Schema({
         }
     },
     type: {
-        type: Number,
-        required: [true, "Please add a type"],
         en: {
             type: String,
-            enum: types.map(type => type.en)
+            enum: types.map(type => type.en),
+            required: [true, "Please add a type"],
         },
         ar: {
             type: String,
-            enum: types.map(type => type.ar)
+            enum: types.map(type => type.ar),
+            required: [true, "Please add an arabic type"],
         }
     },
     img: {
@@ -60,10 +55,6 @@ const EduventSchema = new mongoose.Schema({
             index: "2dsphere"
         },
         formattedAddress: String,
-        country: String,
-        city: String,
-        zipcode: String,
-        street: String
     },
     url: {
         type: String,
@@ -71,7 +62,7 @@ const EduventSchema = new mongoose.Schema({
         match: [/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/, "Please add a valid URL"]
     },
     featuredUntil: Date,
-    startDate: Date,
+    date: Date,
     endDate: Date,
     user: {
         type: mongoose.Types.ObjectId,
@@ -80,7 +71,7 @@ const EduventSchema = new mongoose.Schema({
     },
     initiative: {
         type: mongoose.Types.ObjectId,
-        //ref: "Initiative"
+        ref: "Initiative"
     },
     clickCount: {
         type: Number,

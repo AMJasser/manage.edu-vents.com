@@ -6,7 +6,7 @@ const User = require("../models/User");
 // @desc    Get Login page
 // @route   GET /login
 exports.getLogin = asyncHandler(async (req, res, next) => {
-    res.status(200);
+    res.status(200).render("login");
 });
 
 // @desc    Login
@@ -60,5 +60,5 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
 
     await user.save();
 
-    sendTokenResponse(user, 200, res);
+    tokenResponse(user, 200, res);
 });

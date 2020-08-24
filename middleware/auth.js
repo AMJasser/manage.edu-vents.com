@@ -4,7 +4,6 @@ const ErrorResponse = require("../utils/errorResponse");
 const User = require("../models/User");
 
 // Protect routes
-
 exports.protect = asyncHandler(async (req, res, next) => {
     let token;
 
@@ -22,6 +21,10 @@ exports.protect = asyncHandler(async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         req.user = await User.findById(decoded.id);
+
+        if (!req.user) {
+            return res.redirect("/login");
+        }
 
         next();
     } catch(err) {

@@ -5,23 +5,34 @@ const Eduvent = require("../models/Eduvent");
 // @desc    get single edu-vent
 // @route   GET /edu-vents/:id
 exports.getEduvent = asyncHandler(async (req, res, next) => {
-    var eduvent = await Eduvent.findById(req.params.id);
+    var eduvent = await Eduvent.findById(req.params.id).populate({
+        path: "initiative",
+        select: "name"
+    });
 
     if (!eduvent) {
         return next(new ErrorResponse(`Edu-vent with id ${req.params.id} not found`, 404));
     }
 
-    res.status(200);
+    res.status(200).render("view", { eduvent, user: req.user }, function(err, html) {
+        if (err) {
+            console.error(err);
+            return next(new ErrorResponse(`Error rendering view`, 500));
+        } else {
+            res.send(html);
+        }
+    });
 });
 
 // @desc    create edu-vent
 // @route   POST /edu-vents
 exports.createEduvent = asyncHandler(async (req, res, next) => {
     req.body.user = req.user.id;
+    req.body.img = req.file.filename;
 
     await Eduvent.create(req.body);
 
-    res.status(200);
+    res.status(200).redirect("/");
 });
 
 // @desc    edit edu-vent

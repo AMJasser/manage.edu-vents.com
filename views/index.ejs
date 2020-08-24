@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>EDU-vents</title>
+    <meta name="description"
+        content="EDU-vents - This website was created solely for the help of Philomaths. It would show the most important educational events happening around the world, providing an easy-to-use portal for them.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyRJB3kHIdgrDM36GLEH-8l4Nh8sNDTx0&callback=initMap&libraries=&v=weekly" defer></script>
+    <link rel="icon" href="/images/seco.ico">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+
+    <% if (typeof msg !== "undefined") { %>
+        <script>alert("<%= msg %>")</script>
+    <% } %>
+</head>
+
+<body>
+    <header>
+        <h1 onclick="location.href='/'">
+            <img alt="logo" src="/images/logo.jpg">
+            <span>EDU-vents</span>
+        </h1>
+        <nav>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+    <h2>Welcome <%= user.username %>!</h2>
+    <div class="sections">
+        <% if (user.role === "admin") { %>
+            <section>
+                <h3>Create User</h3>
+                <form action="/users" method="POST">
+                    <input type="text" name="username" placeholder="Username">
+                    <input type="password" name="password" placeholder="Password">
+                    <label for="isAdmin">isAdmin
+                        <select onchange="admincheck()" name="isAdmin" id="isAdmin">
+                            <option>true</option>
+                            <option>false</option>
+                        </select>
+                    </label>
+                    <input id="Rnames" style="display: none;" type="text" name="Rnames" placeholder="Researcher Names Separated by Commas">
+                    <input id="Wnames" style="display: none;" type="text" name="Wnames" placeholder="Writer Names Separated by Commas">
+                    <input type="submit">
+                </form>
+                <script>
+                    function admincheck() {
+                        if (document.getElementById("isAdmin").value === "false") {
+                            document.getElementById("Rnames").style.display = "unset";
+                            document.getElementById("Wnames").style.display = "unset";
+                        } else {
+                            document.getElementById("Rnames").style.display = "none";
+                            document.getElementById("Wnames").style.display = "none";
+                        }
+                    }
+                </script>
+            </section>
+            <section>
+                <h3>User Control</h3>
+                <table id="user-control">
+                    <tr>
+                        <th>username</th>
+                        <th>is Admin</th>
+                        <th>volunteers</th>
+                        <th>Score</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    <% users.forEach(function(user) { %>
+                        <tr>
+                            <td><%= user.username %></td>
+                            <td><%= user.isAdmin %></td>
+                            <td>
+                                <% if (typeof user.volunteers !== "undefined") { user.volunteers.forEach(function(volunteer) { %>
+                                    <% if (typeof volunteer.name !== "undefined") { %><%= volunteer.name %><% } %>:
+                                    <% if (typeof volunteer.time !== "undefined") { %><%= volunteer.time %><% } %>
+                                <% })} %>
+                            </td>
+                            <td>
+                                <% if (typeof user.score !== "undefind") { %> <%= user.score %> <% } %>
+                            </td>
+                            <td>
+                                <form action="/users/<%= user._id %>/edit" method="GET"><input type="submit" value="Edit"></form>
+                            </td>
+                            <td>
+                                <form action="/users/<%= user._id %>/delete?_method=DELETE" method="POST" name="userDel" onsubmit="return validateDel('<%= user.username %>')"><input type="submit" value="Delete"></form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </table>
+            </section>
+            <section>
+                <% if (typeof initiatives === "object") { %>
+                    <% initiatives.forEach(function(initiative) { %>
+                        <form style="display: block;" action="/initiatives/<%= initiative._id %>/delete?_method=DELETE" method="POST" onsubmit="return validateDel('<%= initiative.name %>  |  <%= initiative.nameAr %>')">
+                            <h4>
+                                <img src="/uploads/<%= initiative.imgPath %>" alt="initiative img" style="width: 50px;">
+                                <%= initiative.name %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= initiative.nameAr %>
+                                <a href="/initiatives/<%= initiative._id %>/edit">Edit</a>
+                                <input type="submit" value="✕" style="display: inline;">
+                            </h4>
+                        </form>
+                    <% }) %>
+                <% } %>
+                <form action="/initiatives" method="POST" enctype="multipart/form-data" name="initiativeForm" onsubmit="return validateInitiativeForm()">
+                    <h3>Add an Initiative</h3>
+                    <label>Name*<input type="text" name="name" placeholder="Name" required></label>
+                    <label>Description*<textarea name="description" placeholder="Description" required></textarea></label>
+                    <label>Image*<input type="file" name="img" required></label>
+                    <label>URL*<input type="url" name="urltoapp" placeholder="URL" required></label>
+                    <label dir="rtl" style="text-align: right;">الاسم*<input dir="rtl" type="text" name="nameAr" placeholder="الاسم" required></label>
+                    <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="descriptionAr" placeholder="الوصف" required></textarea></label>
+                    <input type="submit">
+                </form>
+                <script type="text/javascript">
+                    function validateInitiativeForm() {
+                        var newInitiativeName = document.forms["initiativeForm"]["name"].value.toLowerCase().replace(/ /g, "").replace(/[^a-zA-Z0-9-_\.]/g, '');
+                        var InitiativeNames = "<% if (typeof initiatives === 'object') { %><% initiatives.forEach(function(initiative) { %><%= initiative.name %>,<% }) %><% } %>";
+                        var result = true;
+                        if (InitiativeNames !== "") {
+                            InitiativeNames = InitiativeNames.split(",");
+                            InitiativeNames.forEach(function (InitiativeName) {
+                                if (newInitiativeName === InitiativeName) {
+                                    alert("There is another initiative with the same name: " + InitiativeName);
+                                    result = false;
+                                }
+                            });
+                        }
+                        return result;
+                    }
+                </script>
+            </section>
+        <% } else { %>
+            <section>
+                <a id="timerBut" href="/timer" target="_blank">Open Timer</a>
+            </section>
+        <% } %>
+        <section>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+            <canvas id="chart"></canvas>
+            <script>
+                var chartData = {
+                    names: [],
+                    scores: []
+                }
+            </script>
+            <% chartData.names.forEach(function(name) { %>
+                <script>
+                    chartData.names.push("<%= name %>");
+                </script>
+            <% }) %>
+            <% chartData.scores.forEach(function(score) { %>
+                <script>
+                    chartData.scores.push("<%= score %>")
+                </script>
+            <% }) %>
+            <script>
+                var ctx = document.getElementById("chart").getContext("2d");
+                var chart = new Chart(ctx, {
+                    type: "horizontalBar",
+                    data: {
+                        labels: chartData.names,
+                        datasets: [{
+                            label: "test chart",
+                            backgroundColor: "rgb(28,68,178)",
+                            data: chartData.scores
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            </script>
+        </section>
+        <section>
+            <form action="/edu-vents" method="POST" enctype="multipart/form-data" name="eduventsForm">
+                <h3>Add an EDU-vent</h3>
+                <label>Name*<input type="text" name="name.en" id="name" placeholder="Name" required></label>
+                <label dir="rtl" style="text-align: right;">الاسم*<input dir="rtl" type="text" name="name.ar" id="nameAr" placeholder="الاسم" required></label>
+                <label for="type">Type*
+                    <select name="type.en" id="type" required>
+                        <% types.forEach(function(type) { %>
+                            <option><%= type.en %></option>
+                        <% }) %>
+                    </select>
+                </label>
+                <label for="type" dir="rtl" style="text-align: right;">النوع*
+                    <select dir="ltr" name="type.ar" id="typeAr" required>
+                        <% types.forEach(function(type) { %>
+                            <option><%= type.ar %></option>
+                        <% }) %>
+                    </select>
+                </label>
+                <label>Description*<textarea name="description.en" id="description" placeholder="Description" required></textarea></label>
+                <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="description.ar" id="descriptionAr" placeholder="الوصف" required></textarea></label>
+                <label>Location<input type="text" name="location" id="location" placeholder="Location"></label>
+                <div id="map" style="height: 500px;"></div>
+                <label>URL to Application*<input type="url" name="url" id="url" placeholder="URL to Application" required></label>
+                <label>Start Date <input type="datetime-local" name="date"></label>
+                <label>End Date <input type="datetime-local" name="endDate"></label>
+                <label>Image*<input type="file" name="img" required></label>
+                <label>Initiative
+                    <select name="initiative" id="initiative">
+                        <option>none</option>
+                        <% initiatives.forEach(function(initiative) { %>
+                            <option value="<%= initiative._id %>"><%= initiative.name.en %></option>
+                        <% }) %>
+                    </select>
+                </label>
+                <input type="submit">
+            </form>
+            <script>
+
+            </script>
+            <script>
+                var locationInput = document.getElementById("location");
+                var locationData = {};
+
+                function initMap() {
+                    const map = new google.maps.Map(document.getElementById("map"), {
+                        zoom: 5,
+                        center: {
+                            lat: 24.7136,
+                            lng: 46.6753
+                        }
+                    });
+                    const geocoder = new google.maps.Geocoder();
+
+                    let timeout = null;
+
+                    locationInput.addEventListener("keyup", function() {
+                        clearTimeout(timeout);
+                        timeout = setTimeout(function() {
+                            geocodeAddress(geocoder, map)
+                        }, 3000);
+                    });
+                }
+
+                function geocodeAddress(geocoder, resultsMap) {
+                    const address = locationInput.value;
+                    geocoder.geocode({ address: address }, (results, status) => {
+                        if (status === "OK") {
+                            resultsMap.setCenter(results[0].geometry.location);
+                            new google.maps.Marker({
+                                map: resultsMap,
+                                position: results[0].geometry.location
+                            });
+                            resultsMap.setZoom(17);
+                            locationData.coordinates = [results[0].geometry.location.lng(), results[0].geometry.location.lat()];
+                            locationData.formattedAddress = results[0].formatted_address;
+                        } else {
+                            alert("Geocode was not successful for the following reason: " + status);
+                        }
+                    });
+                }
+            </script>
+            <script>
+                var eduventForm = document.forms["eduventsForm"];
+            
+                eduventForm.addEventListener("submit", (e) => {
+                    e.preventDefault();
+            
+                    if (document.getElementById("name").value === "") {
+                        alert("Please submit a name.");
+                        return false;
+                    }
+                    if (document.getElementById("nameAr").value === "") {
+                        alert("Please submit an Arabic name.");
+                        return false;
+                    }
+                    if (document.getElementById("type").options[document.getElementById("type").selectedIndex].value === "Any" || document.getElementById("type").options[document.getElementById("type").selectedIndex].value === "") {
+                        alert("Please submit a type.");
+                        return false;
+                    }
+                    if (document.getElementById("typeAr").options[document.getElementById("typeAr").selectedIndex].value === "Any" || document.getElementById("typeAr").options[document.getElementById("typeAr").selectedIndex].value === "") {
+                        alert("Please submit an Arabic type.");
+                        return false;
+                    }
+                    if (document.getElementById("description").value === "") {
+                        alert("Please submit a description.");
+                        return false;
+                    }
+                    if (document.getElementById("descriptionAr").value === "") {
+                        alert("Please submit an Arabic description.");
+                        return false;
+                    }
+                    if (document.getElementById("url").value === "") {
+                        alert("Please submit a url.");
+                        return false;
+                    }
+            
+                    eduventForm["location"].value = JSON.stringify(locationData);
+            
+                    e.currentTarget.submit();
+                });
+            
+                function validateDel(name) {
+                    if (confirm("Are you sure you want to delete " + name)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            </script>
+        </section>
+        <section>
+            <% var counter = 1; %>
+            <% eduvents.forEach(function(eduvent) { %>
+                <% if (counter % 3 == 1) { %>
+                    <div class="row" style="display: flex;">
+                <% } %>
+                <div class="edu-vent">
+                    <img alt="EDU-vent img" src="/uploads/<%= eduvent.img %>">
+                    <div class="inner">
+                        <h2><% if (typeof eduvent.name.en !== "undefined") { %><%= eduvent.name.en %><% } %> - <% if (typeof eduvent.name.ar !== "undefined") { %><%= eduvent.name.ar %><% } %></h2>
+                        <p><% if (typeof eduvent.description.en !== "undefined") { %><%- eduvent.description.en.substring(0, 45) %>...<% } %></p>
+                        <p><% if (typeof eduvent.description.ar !== "undefined") { %><%- eduvent.description.ar.substring(0, 45) %>...<% } %></p>
+                        <% if (eduvent.user === user._id || user.role === "admin") { %>
+                            <form action="/edu-vents/<%= eduvent._id %>?_method=DELETE" method="POST" name="eduventEnDel" onsubmit="return validateDel('<%= eduvent.name %>')">
+                                <button>Delete</button>
+                            </form>
+                            <form action="/edu-vents/<%= eduvent._id %>/edit" method="GET">
+                                <button>Edit</button>
+                            </form>
+                        <% } %>
+                        <form action="/edu-vents/<%= eduvent._id %>" method="GET">
+                            <button>View</button>
+                        </form>
+                    </div>
+                </div>
+                <% if (counter % 3 == 0) { %>
+                    </div>
+                <% } %>
+                <% counter++ %>
+            <% }) %>
+        </section>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>EDU-vents</title>
+        <meta name="description" content="EDU-vents - This website was created solely for the help of Philomaths. It would show the most important educational events happening around the world, providing an easy-to-use portal for them.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyRJB3kHIdgrDM36GLEH-8l4Nh8sNDTx0&callback=initMap&libraries=&v=weekly" defer></script>
+        <link rel="icon" href="/images/seco.ico">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/stylesheets/style.css">
+
+        <% if (typeof msg !== "undefined") { %>
+            <script>alert("<%= msg %>")</script>
+        <% } %>
+    </head>
+    <body>
+        <header>
+            <h1 onclick="location.href='/'">
+                <img alt="logo" src="/images/logo.jpg">
+                <span>EDU-vents</span>
+            </h1>
+            <nav>
+                <a href="/logout">Logout</a>
+            </nav>
+        </header>
+        <div class="sections">
+            <section>
+                <h1><%= eduvent.name.en %> - <%= eduvent.name.ar %></h1>
+
+                <img width="750px" src="/uploads/<%= eduvent.img %>">
+                <br>
+
+                <h3><%= eduvent.type.en %> - <%= eduvent.type.ar %></h3>
+                <br>
+
+                <p><%= eduvent.description.en %></p>
+                <p><%= eduvent.description.ar %></p>
+                <br>
+
+                <%
+                    if (typeof eduvent.date !== "undefined") {
+                        var date = ("0" + eduvent.date.getDate()).slice(-2) + "/" + ("0" + (eduvent.date.getMonth() + 1)).slice(-2) + "/" + eduvent.date.getFullYear();
+                        date += " " + eduvent.date.getHours() + ":" + eduvent.date.getMinutes();
+                    }
+                %>
+                <% 
+                    if (typeof eduvent.endDate !== "undefined") {
+                        var endDate = ("0" + eduvent.endDate.getDate()).slice(-2) + "/" + ("0" + (eduvent.endDate.getMonth() + 1)).slice(-2) + "/" + eduvent.endDate.getFullYear();
+                        endDate += " " + eduvent.endDate.getHours() + ":" + eduvent.endDate.getMinutes();
+                    }
+                %>
+
+                <% if (typeof date !== "undefined" && typeof endDate !== "undefined") { %> 
+                    <h3><%= date %> - <%= endDate %></h3>
+                    <br>
+                <% } else if (typeof eduvent.endDate !== "undefined") { %> 
+                    <h3>END DATE: <%= endDate %></h3>
+                    <br>
+                <% } else if (typeof eduvent.startDate !== "undefined") { %>
+                    <h3>START DATE: <%= startDate %></h3>
+                    <br>
+                <% } %>
+
+                <% if (typeof eduvent.location.coordinates !== "undefined") { %> 
+                    <div id="map" style="height: 500px;"></div>
+                    <br>
+                    <script type="text/javascript">
+                        function initMap() {
+                            var loc = {
+                                lat: eval("<%= eduvent.location.coordinates[1] %>"),
+                                lng: eval("<%= eduvent.location.coordinates[0] %>")
+                            }
+
+                            const map = new google.maps.Map(document.getElementById("map"), {
+                                zoom: 17,
+                                center: loc
+                            });
+
+                            const marker = new google.maps.Marker({
+                                position: loc,
+                                map: map,
+                                title: "<%= eduvent.name.en %>"
+                            })
+                        }
+                    </script>
+                <% } %>
+
+                <% if (typeof eduvent.initiative !== "undefined") { %>
+                    <h3>Initiative: <%= eduvent.initiative.name.en %></h3>
+                    <br>
+                <% } %>
+
+                <% if (user.role === "admin") { %>
+                    <% if (typeof eduvent.clickCount !== "undefined") { %> 
+                        <h3>Click Count: <%= eduvent.clickCount %></h3> 
+                        <br>
+                    <% } %> 
+                <% } %> 
+
+                <% if (typeof eduvent.url !== "undefined" && eduvent.url !== "") { %> 
+                    <h3>URL to Application: <a href="<%= eduvent.url %>"><%= eduvent.url %></a></h3>
+                <% } %>
+
+                <% if (typeof eduvent.featuredUntil !== "undefined" && new Date < eduvent.featuredUntil) { %>
+                    <br>
+                    <h3>Featured Until: <%= eduvent.featuredUntil %></h3>
+                <% } %>
+                
+                <% if (eduvent.user === user || user.role === "admin") { %>
+                    <form action="/edu-vents/en/<%= eduvent._id %>/delete?_method=DELETE" method="POST">
+                        <button class="delete">Delete</button>
+                    </form>
+
+                    <form action="/edu-vents/en/<%= eduvent._id %>/edit" method="GET">
+                        <button class="edit">Edit</button>
+                    </form>
+
+                    <% if (user.role === "admin" && (eduvent.featuredUntil !== undefined || new Date < eduvent.featuredUntil)) { %>
+                        <form action="/edu-vents/en/<%= eduvent._id %>/feature" method="GET">
+                            <input type="date" name="featuredUntil" style="display: inline; width: initial;">
+                            <button style="display: inline;">Feature</button>
+                        </form>
+                    <% } %> 
+                <% } %>
+
+                <a href="/">GO BACK</a>
+            </section>
+        </div>
+    </body>
+</html>

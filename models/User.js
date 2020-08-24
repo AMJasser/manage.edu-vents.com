@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { model } = require("./Eduvent");
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -25,11 +24,38 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    time: {
+        type: Number,
+        default: 0
+    },
     team: {
         type: mongoose.Types.ObjectId,
         ref: "Team",
     }
 });
+
+UserSchema.statics.getTotalScoreTime = async function(teamId) {
+    const obj = await this.aggregate([
+        {
+            $match: { team: teamId }
+        },
+        {
+            $group: {
+                _id: "$team",
+                totalScore: { $sum: "$score" },
+                totalTime: { $sum: "$time"}
+            }
+        }
+    ]);
+    try {
+        await this.model("Team").findByIdAndUpdate(teamId, {
+            totalScore: obj[0].totalScore,
+            totalTime: obj[0].totalTime
+        });
+    } catch(err) {
+        console.error(err);
+    }
+}
 
 // Encrypt password using bcrypt
 UserSchema.pre("save", async function(next) {
@@ -39,6 +65,18 @@ UserSchema.pre("save", async function(next) {
 
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
+});
+
+// Get total Score & Time
+UserSchema.post("save", function() {
+    if (this.team) {
+        this.constructor.getTotalScoreTime(this.team);
+    }
+});
+UserSchema.pre("remove", function() {
+    if (this.team) {
+        this.constructor.getTotalScoreTime(this.team);
+    }
 });
 
 // Sign JWT and return
