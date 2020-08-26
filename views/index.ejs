@@ -209,7 +209,7 @@
                 <label>Image*<input type="file" name="img" required></label>
                 <label>Initiative
                     <select name="initiative" id="initiative">
-                        <option>none</option>
+                        <option value="">none</option>
                         <% initiatives.forEach(function(initiative) { %>
                             <option value="<%= initiative._id %>"><%= initiative.name.en %></option>
                         <% }) %>
@@ -222,7 +222,7 @@
             </script>
             <script>
                 var locationInput = document.getElementById("location");
-                var locationData = {};
+                var locationData;
 
                 function initMap() {
                     const map = new google.maps.Map(document.getElementById("map"), {
@@ -236,10 +236,10 @@
 
                     let timeout = null;
 
-                    locationInput.addEventListener("keyup", function() {
+                    locationInput.addEventListener("keyup", function(e) {
                         clearTimeout(timeout);
                         timeout = setTimeout(function() {
-                            geocodeAddress(geocoder, map)
+                            if(e.target.value) geocodeAddress(geocoder, map)
                         }, 3000);
                     });
                 }
@@ -254,8 +254,10 @@
                                 position: results[0].geometry.location
                             });
                             resultsMap.setZoom(17);
-                            locationData.coordinates = [results[0].geometry.location.lng(), results[0].geometry.location.lat()];
-                            locationData.formattedAddress = results[0].formatted_address;
+                            locationData = {
+                                coordinates: [results[0].geometry.location.lng(), results[0].geometry.location.lat()],
+                                formattedAddress: results[0].formatted_address
+                            }
                         } else {
                             alert("Geocode was not successful for the following reason: " + status);
                         }
@@ -267,38 +269,7 @@
             
                 eduventForm.addEventListener("submit", (e) => {
                     e.preventDefault();
-            
-                    if (document.getElementById("name").value === "") {
-                        alert("Please submit a name.");
-                        return false;
-                    }
-                    if (document.getElementById("nameAr").value === "") {
-                        alert("Please submit an Arabic name.");
-                        return false;
-                    }
-                    if (document.getElementById("type").options[document.getElementById("type").selectedIndex].value === "Any" || document.getElementById("type").options[document.getElementById("type").selectedIndex].value === "") {
-                        alert("Please submit a type.");
-                        return false;
-                    }
-                    if (document.getElementById("typeAr").options[document.getElementById("typeAr").selectedIndex].value === "Any" || document.getElementById("typeAr").options[document.getElementById("typeAr").selectedIndex].value === "") {
-                        alert("Please submit an Arabic type.");
-                        return false;
-                    }
-                    if (document.getElementById("description").value === "") {
-                        alert("Please submit a description.");
-                        return false;
-                    }
-                    if (document.getElementById("descriptionAr").value === "") {
-                        alert("Please submit an Arabic description.");
-                        return false;
-                    }
-                    if (document.getElementById("url").value === "") {
-                        alert("Please submit a url.");
-                        return false;
-                    }
-            
-                    eduventForm["location"].value = JSON.stringify(locationData);
-            
+                    eduventForm["location"].value = JSON.stringify(locationData) || "";
                     e.currentTarget.submit();
                 });
             

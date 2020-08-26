@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
 const cookieParser = require("cookie-parser");
+const methodOverride = require('method-override');
 const path = require("path");
 const errorHandler = require("./middleware/error");
 const connectDB = require("./config/db");
@@ -35,6 +36,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Cookie parser
 app.use(cookieParser());
+
+// Method Override
+app.use(methodOverride("_method"));
 
 // Dev logging middleware
 if (process.env.NODE_ENV === "development") {

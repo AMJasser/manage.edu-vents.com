@@ -1,6 +1,8 @@
+const fs = require("fs");
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const Eduvent = require("../models/Eduvent");
+const Initiative = require("../models/Initiative");
 
 // @desc    get single edu-vent
 // @route   GET /edu-vents/:id
@@ -35,10 +37,10 @@ exports.createEduvent = asyncHandler(async (req, res, next) => {
     res.status(200).redirect("/");
 });
 
-// @desc    edit edu-vent
-// @route   PUT /edu-vents/:id
-exports.updateEduvent = asyncHandler(async (req, res, next) => {
-    let eduvent = await Eduvent.findById(req.params.id);
+// @desc    get update page
+// @route   GET /edu-vents/:id/edit
+exports.getUpdate = asyncHandler(async (req, res, next) => {
+    const eduvent = await Eduvent.findById(req.params.id);
 
     if (!eduvent) {
         return next(new ErrorResponse(`EDU-vent with id ${req.params.id} not found`, 404));
@@ -49,11 +51,49 @@ exports.updateEduvent = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`User ${req.params.id} is not authorized to update this EDU-vent`, 401));
     }
 
-    bootcamp = await Eduvent.findByIdAndUpdate(req.params.id, req.body, {
-        runValidators: true
+    const initiatives = await Initiative.find();
+
+    res.status(200).render("edit", { eduvent, types, initiatives }, function(err, html) {
+        if (err) {
+            console.error(err);
+            return next(new ErrorResponse(`Error rendering view`, 500));
+        } else {
+            res.send(html);
+        }
+    });
+});
+
+// @desc    edit edu-vent
+// @route   PUT /edu-vents/:id
+exports.updateEduvent = asyncHandler(async (req, res, next) => {
+    let eduvent = await Eduvent.findById(req.params.id);
+
+    if (!eduvent) {
+        return next(new ErrorResponse(`EDU-vent with id ${req.params.id} not found`, 404));
+    }
+
+    // Make sure user is edu-vent owner
+    if (eduvent.user.toString() !== req.user.id.toString() && req.user.role !== "admin") {
+        return next(new ErrorResponse(`User ${req.params.id} is not authorized to update this EDU-vent`, 401));
+    }
+
+    if (req.body.changePic === "yes") {
+        req.body.img = req.file.filename;
+
+        if (fs.existsSync("./public/uploads/" + eduvent.img)) {
+            fs.unlinkSync("./public/uploads/" + eduvent.img);
+        }
+    }
+
+    req.body.changePic = undefined;
+
+    Object.keys(req.body).forEach(function(field) {
+        eduvent[field] = req.body[field];
     });
 
-    res.status(200);
+    eduvent.save();
+
+    res.status(200).redirect("/");
 });
 
 // @desc    delete edu-vent
