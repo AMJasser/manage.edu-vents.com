@@ -4,6 +4,7 @@ const asyncHandler = require("../middleware/async");
 const Eduvent = require("../models/Eduvent");
 const Initiative = require("../models/Initiative");
 const Team = require("../models/Team");
+const types = require("./utils/types");
 
 const router = express.Router();
 

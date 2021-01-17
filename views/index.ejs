@@ -272,14 +272,6 @@
                     eduventForm["location"].value = JSON.stringify(locationData) || "";
                     e.currentTarget.submit();
                 });
-            
-                function validateDel(name) {
-                    if (confirm("Are you sure you want to delete " + name)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
             </script>
         </section>
         <section>
@@ -314,6 +306,15 @@
             <% }) %>
         </section>
     </div>
+    <script>
+        function validateDel(name) {
+            if (confirm("Are you sure you want to delete " + name)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
 </body>
 
 </html>

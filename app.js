@@ -14,13 +14,6 @@ dotenv.config({ path: "./config/config.env" });
 // Connect to DB
 connectDB();
 
-// Defining EDU-vent types
-global.types = [
-    {en: "MUN", ar: "محاكاة الأمم المتحدة"},
-    {en: "Course", ar: "دورة"},
-    {en: "Webinar", ar: "ويبينار"}
-];
-
 // Route files
 const index = require("./routes/index");
 const auth = require("./routes/auth");

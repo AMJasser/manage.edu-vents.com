@@ -3,6 +3,7 @@ const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const Eduvent = require("../models/Eduvent");
 const Initiative = require("../models/Initiative");
+const types = require("./utils/types");
 
 // @desc    get single edu-vent
 // @route   GET /edu-vents/:id
@@ -106,11 +107,11 @@ exports.deleteEduvent = asyncHandler(async (req, res, next) => {
     }
 
     // Make sure user is edu-vent owner
-    if (eduvent.user.toString() !== req.user.id && req.user.role !== "admin") {
+    if (eduvent.user.toString() !== req.user.id.toString() && req.user.role !== "admin") {
         return next(new ErrorResponse(`User ${req.params.id} is not authorized to update this EDU-vent`, 401));
     }
 
     eduvent.remove();
 
-    res.status(200);
+    res.status(200).redirect("/");
 });

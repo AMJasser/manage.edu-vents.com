@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const types = require("./utils/types");
 
 const EduventSchema = new mongoose.Schema({
     name: {
