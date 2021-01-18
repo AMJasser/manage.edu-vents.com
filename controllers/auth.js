@@ -1,12 +1,13 @@
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const tokenResponse = require("../utils/tokenResponse");
+const viewResponse = require("../utils/viewResponse");
 const User = require("../models/User");
 
 // @desc    Get Login page
 // @route   GET /login
 exports.getLogin = asyncHandler(async (req, res, next) => {
-    res.status(200).render("login");
+    viewResponse("login", {}, res);
 });
 
 // @desc    Login
@@ -43,7 +44,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
         httpOnly: true
     });
 
-    res.status(200);
+    res.status(200).redirect("/");
 });
 
 // @desc    Update password

@@ -1,9 +1,10 @@
 const fs = require("fs");
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
+const types = require("../utils/types");
+const viewResponse = require("../utils/viewResponse");
 const Eduvent = require("../models/Eduvent");
 const Initiative = require("../models/Initiative");
-const types = require("./utils/types");
 
 // @desc    get single edu-vent
 // @route   GET /edu-vents/:id
@@ -17,14 +18,7 @@ exports.getEduvent = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`Edu-vent with id ${req.params.id} not found`, 404));
     }
 
-    res.status(200).render("view", { eduvent, user: req.user }, function(err, html) {
-        if (err) {
-            console.error(err);
-            return next(new ErrorResponse(`Error rendering view`, 500));
-        } else {
-            res.send(html);
-        }
-    });
+    viewResponse("view", { eduvent, user: req.user }, res);
 });
 
 // @desc    create edu-vent
@@ -54,14 +48,7 @@ exports.getUpdate = asyncHandler(async (req, res, next) => {
 
     const initiatives = await Initiative.find();
 
-    res.status(200).render("edit", { eduvent, types, initiatives }, function(err, html) {
-        if (err) {
-            console.error(err);
-            return next(new ErrorResponse(`Error rendering view`, 500));
-        } else {
-            res.send(html);
-        }
-    });
+    viewResponse("edit", { eduvent, types, initiatives }, res);
 });
 
 // @desc    edit edu-vent

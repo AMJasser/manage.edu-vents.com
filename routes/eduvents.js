@@ -9,8 +9,6 @@ const {
     deleteEduvent
 } = require("../controllers/eduvents");
 
-const Eduvent = require("../models/Eduvent");
-
 const router = express.Router();
 
 const { protect } = require("../middleware/auth");
