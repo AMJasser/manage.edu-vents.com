@@ -18,7 +18,7 @@ exports.getEduvent = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`Edu-vent with id ${req.params.id} not found`, 404));
     }
 
-    viewResponse("view", { eduvent, user: req.user }, res);
+    viewResponse("view/edu-vents", { eduvent, user: req.user }, res, next);
 });
 
 // @desc    create edu-vent
@@ -48,7 +48,7 @@ exports.getUpdate = asyncHandler(async (req, res, next) => {
 
     const initiatives = await Initiative.find();
 
-    viewResponse("edit", { eduvent, types, initiatives }, res);
+    viewResponse("edit/edu-vents", { eduvent, types, initiatives }, res, next);
 });
 
 // @desc    edit edu-vent

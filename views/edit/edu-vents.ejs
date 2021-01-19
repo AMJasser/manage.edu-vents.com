@@ -1,0 +1,131 @@
+<%- include("../partials/header") %>
+    
+    <div class="sections">
+        <section>
+            <form action="/edu-vents/<%= eduvent._id %>?_method=PUT" method="POST" enctype="multipart/form-data" name="eduventsForm">
+                <h3>Edit an EDU-vent</h3>
+                <input type="text" name="name.en" placeholder="Name" <% if (typeof eduvent.name.en !== "undefined") { %> value="<%= eduvent.name.en %>" <% } %>>
+                <input type="text" name="name.ar" placeholder="Name" <% if (typeof eduvent.name.ar !== "undefined") { %> value="<%= eduvent.name.ar %>" <% } %>>
+                <label for="type.en">Type
+                    <select name="type.en" id="type.en">
+                        <% types.forEach(function(type) { %>
+                            <option <% if (eduvent.type.en === type.en) { %> selected <% } %>><%= type.en %></option>
+                        <% }) %>
+                    </select>
+                </label>
+                <label for="type.ar">Type
+                    <select name="type.ar" id="type.ar">
+                        <% types.forEach(function(type) { %>
+                            <option <% if (eduvent.type.ar === type.ar) { %> selected <% } %>><%= type.ar %></option>
+                        <% }) %>
+                    </select>
+                </label>
+                <textarea name="description.en" placeholder="Description"><% if (typeof eduvent.description.en !== "undefined") { %> <%= eduvent.description.en %> <% } %></textarea>
+                <textarea name="description.ar" placeholder="Description"><% if (typeof eduvent.description.ar !== "undefined") { %> <%= eduvent.description.ar %> <% } %></textarea>
+                <label>Location<input type="text" name="location" id="location" placeholder="Location" <% if (typeof eduvent.location.formattedAddress !== "undefined") { %> value="<%= eduvent.location.formattedAddress %>" <% } %>></label>
+                <div id="map" style="height: 500px;"></div>
+                <input type="url" name="url" placeholder="URL to Application" <% if (typeof eduvent.url !== "undefined") { %> value="<%= eduvent.url %>" <% } %>>
+        
+                <%
+                    if (typeof eduvent.date !== "undefined") {
+                        var date = eduvent.date.getFullYear() + "-" + ("0" + (eduvent.date.getMonth() + 1)).slice(-2) + "-" + ("0" + eduvent.date.getDate()).slice(-2);
+                        date += "T" + ("0" + (eduvent.date.getHours())).slice(-2) + ":" + ("0" + (eduvent.date.getMinutes())).slice(-2);
+                    }
+                %>
+                <% 
+                    if (typeof eduvent.endDate !== "undefined") {
+                        var endDate = eduvent.endDate.getFullYear() + "-" + ("0" + (eduvent.endDate.getMonth() + 1)).slice(-2) + "-" + ("0" + eduvent.endDate.getDate()).slice(-2);
+                        endDate += "T" + ("0" + (eduvent.endDate.getHours())).slice(-2) + ":" + ("0" + (eduvent.endDate.getMinutes())).slice(-2);
+                    }
+                %>
+        
+                <label>Start Date <input type="datetime-local" name="date" <% if (typeof eduvent.date !== "undefined") { %> value="<%= date %>" <% } %>></label>
+                <label>End Date <input type="datetime-local" name="endDate" <% if (typeof eduvent.endDate !== "undefined") { %> value="<%= endDate %>" <% } %>></label>
+                <label for="initiative">Initiative
+                    <select name="initiative" id="initiative">
+                        <option value="">none</option>
+                        <% initiatives.forEach(function(initiative) { %>
+                            <option <% if (typeof eduvent.initiative !== "undefined" && eduvent.initiative.toString() === initiative._id.toString()) { %> selected <% } %> value="<%= initiative._id %>"><%= initiative.name.en %></option>
+                        <% }) %>
+                    </select>
+                </label>
+                <label for="changePic">Do you want to change the picture?
+                    <select name="changePic" id="changePic">
+                        <option>no</option>
+                        <option>yes</option>
+                    </select>
+                </label>
+                <input style="display: none;" type="file" name="img" id="img">
+                <input type="submit">
+            </form>
+        </section>
+        <script>
+            window.onload = function() {
+                var select = document.getElementById("changePic");
+                var fileInput = document.getElementById("img");
+        
+                select.onchange = function() {
+                    if (select.value === "yes") {
+                        fileInput.style.display = "unset";
+                    } else {
+                        fileInput.style.display = "none";
+                    }
+                }
+            }
+        </script>
+        <script>
+            var locationInput = document.getElementById("location");
+            var locationData;
+        
+            function initMap() {
+                const map = new google.maps.Map(document.getElementById("map"), {
+                    zoom: 5,
+                    center: {
+                        lat: 24.7136,
+                        lng: 46.6753
+                    }
+                });
+                const geocoder = new google.maps.Geocoder();
+        
+                let timeout = null;
+        
+                locationInput.addEventListener("keyup", function(e) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(function() {
+                        if(e.target.value) geocodeAddress(geocoder, map)
+                    }, 3000);
+                });
+            }
+        
+            function geocodeAddress(geocoder, resultsMap) {
+                const address = locationInput.value;
+                geocoder.geocode({ address: address }, (results, status) => {
+                    if (status === "OK") {
+                        resultsMap.setCenter(results[0].geometry.location);
+                        new google.maps.Marker({
+                            map: resultsMap,
+                            position: results[0].geometry.location
+                        });
+                        resultsMap.setZoom(17);
+                        locationData = {
+                            coordinates: [results[0].geometry.location.lng(), results[0].geometry.location.lat()],
+                            formattedAddress: results[0].formatted_address
+                        }
+                    } else {
+                        alert("Geocode was not successful for the following reason: " + status);
+                    }
+                });
+            }
+        </script>
+        <script>
+            var eduventForm = document.forms["eduventsForm"];
+            
+            eduventForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+                eduventForm["location"].value = JSON.stringify(locationData) || "";
+                e.currentTarget.submit();
+            });
+        </script>
+    </div>
+
+<%- include("../partials/footer") %>

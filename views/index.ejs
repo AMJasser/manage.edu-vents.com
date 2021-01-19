@@ -1,32 +1,5 @@
-<!DOCTYPE html>
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>EDU-vents</title>
-    <meta name="description"
-        content="EDU-vents - This website was created solely for the help of Philomaths. It would show the most important educational events happening around the world, providing an easy-to-use portal for them.">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyRJB3kHIdgrDM36GLEH-8l4Nh8sNDTx0&callback=initMap&libraries=&v=weekly" defer></script>
-    <link rel="icon" href="/images/seco.ico">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/stylesheets/style.css">
-
-    <% if (typeof msg !== "undefined") { %>
-        <script>alert("<%= msg %>")</script>
-    <% } %>
-</head>
-
-<body>
-    <header>
-        <h1 onclick="location.href='/'">
-            <img alt="logo" src="/images/logo.jpg">
-            <span>EDU-vents</span>
-        </h1>
-        <nav>
-            <a href="/logout">Logout</a>
-        </nav>
-    </header>
+<%- include("partials/header") %>
+    
     <h2>Welcome <%= user.username %>!</h2>
     <div class="sections">
         <% if (user.role === "admin") { %>
@@ -92,6 +65,24 @@
                 </table>
             </section>
             <section>
+                <% if (typeof teams === "object") { %>
+                    <% teams.forEach(function(team) { %>
+                        <form style="display: block;" action="/teams/<%= team._id %>?_method=DELETE" method="POST" onsubmit="return validateDel('<%= team.name %>')">
+                            <h4>
+                                <a href="/teams/<%= team._id %>"><%= team.name %></a>
+                                <a href="/teams/<%= team._id %>/edit">Edit</a>
+                                <input type="submit" value="✕" style="display: inline;">
+                            </h4>
+                        </form>
+                    <% }) %>
+                <% } %>
+                <form action="/teams" method="POST" enctype="application/x-www-form-urlencoded">
+                    <h3>Add an Team</h3>
+                    <label>Name*<input type="text" name="name" placeholder="Name"></label>
+                    <input type="submit">
+                </form>
+            </section>
+            <section>
                 <% if (typeof initiatives === "object") { %>
                     <% initiatives.forEach(function(initiative) { %>
                         <form style="display: block;" action="/initiatives/<%= initiative._id %>/delete?_method=DELETE" method="POST" onsubmit="return validateDel('<%= initiative.name %>  |  <%= initiative.nameAr %>')">
@@ -104,7 +95,7 @@
                         </form>
                     <% }) %>
                 <% } %>
-                <form action="/initiatives" method="POST" enctype="multipart/form-data" name="initiativeForm" onsubmit="return validateInitiativeForm()">
+                <form action="/initiatives" method="POST" enctype="multipart/form-data">
                     <h3>Add an Initiative</h3>
                     <label>Name*<input type="text" name="name" placeholder="Name" required></label>
                     <label>Description*<textarea name="description" placeholder="Description" required></textarea></label>
@@ -114,23 +105,6 @@
                     <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="descriptionAr" placeholder="الوصف" required></textarea></label>
                     <input type="submit">
                 </form>
-                <script type="text/javascript">
-                    function validateInitiativeForm() {
-                        var newInitiativeName = document.forms["initiativeForm"]["name"].value.toLowerCase().replace(/ /g, "").replace(/[^a-zA-Z0-9-_\.]/g, '');
-                        var InitiativeNames = "<% if (typeof initiatives === 'object') { %><% initiatives.forEach(function(initiative) { %><%= initiative.name %>,<% }) %><% } %>";
-                        var result = true;
-                        if (InitiativeNames !== "") {
-                            InitiativeNames = InitiativeNames.split(",");
-                            InitiativeNames.forEach(function (InitiativeName) {
-                                if (newInitiativeName === InitiativeName) {
-                                    alert("There is another initiative with the same name: " + InitiativeName);
-                                    result = false;
-                                }
-                            });
-                        }
-                        return result;
-                    }
-                </script>
             </section>
         <% } else { %>
             <section>
@@ -315,6 +289,5 @@
             }
         }
     </script>
-</body>
 
-</html>
+<%- include("partials/footer") %>

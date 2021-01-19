@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>EDU-vents</title>
+    <meta name="description"content="EDU-vents - This website was created solely for the help of Philomaths. It would show the most important educational events happening around the world, providing an easy-to-use portal for them.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyRJB3kHIdgrDM36GLEH-8l4Nh8sNDTx0&callback=initMap&libraries=&v=weekly" defer></script>
+    <link rel="icon" href="/images/seco.ico">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+
+    <% if (typeof msg !== "undefined") { %>
+        <script>alert("<%= msg %>")</script>
+    <% } %>
+</head>
+
+<body>
+    <header>
+        <h1 onclick="location.href='/'">
+            <img alt="logo" src="/images/logo.jpg">
+            <span>EDU-vents</span>
+        </h1>
+        <nav>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>

@@ -31,7 +31,7 @@ router.get("/", protect, asyncHandler(async (req, res, next) => {
         chartData.scores.push(team.totalScore);
     });
 
-    viewResponse("index", { user: req.user, chartData, types, initiatives, eduvents, users }, res);
+    viewResponse("index", { user: req.user, chartData, types, initiatives, eduvents, users, teams }, res, next);
 }));
 
 module.exports = router;

@@ -18,6 +18,7 @@ connectDB();
 const index = require("./routes/index");
 const auth = require("./routes/auth");
 const eduvents = require("./routes/eduvents");
+const teams = require("./routes/teams");
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(index);
 app.use(auth);
 app.use("/edu-vents", eduvents);
+app.use("/teams", teams);
 
 app.use(errorHandler);
 

@@ -7,7 +7,7 @@ const User = require("../models/User");
 // @desc    Get Login page
 // @route   GET /login
 exports.getLogin = asyncHandler(async (req, res, next) => {
-    viewResponse("login", {}, res);
+    viewResponse("login", {}, res, next);
 });
 
 // @desc    Login

@@ -1,0 +1,13 @@
+<%- include("../partials/header") %>
+    
+    <div class="sections">
+        <section>
+            <form action="/teams/<%= team._id %>?_method=PUT" method="POST" enctype="application/x-www-form-urlencoded">
+                <h3>Edit a Team</h3>
+                <input type="text" name="name" placeholder="Name" <% if (typeof team.name !== "undefined") { %> value="<%= team.name %>" <% } %>>
+                <input type="submit">
+            </form>
+        </section>
+    </div>
+
+<%- include("../partials/footer") %>
