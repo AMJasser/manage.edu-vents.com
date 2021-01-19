@@ -54,7 +54,7 @@ exports.getUpdate = asyncHandler(async (req, res, next) => {
 // @desc    edit edu-vent
 // @route   PUT /edu-vents/:id
 exports.updateEduvent = asyncHandler(async (req, res, next) => {
-    let eduvent = await Eduvent.findById(req.params.id);
+    const eduvent = await Eduvent.findById(req.params.id);
 
     if (!eduvent) {
         return next(new ErrorResponse(`EDU-vent with id ${req.params.id} not found`, 404));
@@ -75,11 +75,9 @@ exports.updateEduvent = asyncHandler(async (req, res, next) => {
 
     req.body.changePic = undefined;
 
-    Object.keys(req.body).forEach(function(field) {
-        eduvent[field] = req.body[field];
+    await Eduvent.findByIdAndUpdate(req.params.id, req.body, {
+        runValidators: true
     });
-
-    eduvent.save();
 
     res.status(200).redirect("/");
 });

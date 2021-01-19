@@ -19,6 +19,7 @@ const index = require("./routes/index");
 const auth = require("./routes/auth");
 const eduvents = require("./routes/eduvents");
 const teams = require("./routes/teams");
+const users = require("./routes/users");
 
 const app = express();
 
@@ -47,6 +48,7 @@ app.use(index);
 app.use(auth);
 app.use("/edu-vents", eduvents);
 app.use("/teams", teams);
+app.use("/users", users);
 
 app.use(errorHandler);
 

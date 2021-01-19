@@ -1,0 +1,45 @@
+<%- include("../partials/header") %>
+
+    <div class="sections">
+        <section>
+            <form action="/users/<%= user._id %>?_method=PUT" method="POST" enctype="application/x-www-form-urlencoded">
+                <h3>Edit a User</h3>
+                <label>Username<input type="text" name="username" placeholder="Username" value="<%= user.username %>"></label>
+                <label>Role
+                    <select name="role">
+                        <% roles.forEach(function(role) { %>
+                            <option <% if (user.role===role) { %> selected <% } %>><%= role %></option>
+                        <% }) %>
+                    </select>
+                </label>
+                <label>Score<input type="number" name="score" placeholder="Score" value="<%= user.score %>"></label>
+                <label>Time<input type="number" name="time" placeholder="Time" value="<%= user.time %>"></label>
+                <label>Team
+                    <select name="team">
+                        <% teams.forEach(function(team) { %>
+                            <option <% if (user.team===team._id) { %> selected <% } %> value="<%= team._id %>"><%= team.name %></option>
+                        <% }) %>
+                    </select>
+                </label>
+                <label>Do you want to change the password?
+                    <select onchange="passwordCheck()" name="cPassword" id="cPassword">
+                        <option>yes</option>
+                        <option selected>no</option>
+                    </select>
+                </label>
+                <label style="display: none;" id="password">Password<input type="password" name="password" placeholder="Password"></label>
+                <input type="submit">
+            </form>
+            <script>
+                function passwordCheck() {
+                    if (document.getElementById("cPassword").value === "yes") {
+                        document.getElementById("password").style.display = "block";
+                    } else {
+                        document.getElementById("password").style.display = "none";
+                    }
+                }
+            </script>
+        </section>
+    </div>
+
+    <%- include("../partials/footer") %>

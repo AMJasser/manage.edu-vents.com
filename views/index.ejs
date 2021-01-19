@@ -8,14 +8,20 @@
                 <form action="/users" method="POST">
                     <input type="text" name="username" placeholder="Username">
                     <input type="password" name="password" placeholder="Password">
-                    <label for="isAdmin">isAdmin
-                        <select onchange="admincheck()" name="isAdmin" id="isAdmin">
-                            <option>true</option>
-                            <option>false</option>
+                    <label>Role
+                        <select name="role">
+                            <% roles.forEach(function(role) { %>
+                                <option><%= role %></option>
+                            <% }) %>
                         </select>
                     </label>
-                    <input id="Rnames" style="display: none;" type="text" name="Rnames" placeholder="Researcher Names Separated by Commas">
-                    <input id="Wnames" style="display: none;" type="text" name="Wnames" placeholder="Writer Names Separated by Commas">
+                    <label>Team
+                        <select name="team">
+                            <% teams.forEach(function(team) { %>
+                                <option value="<%= team._id %>"><%= team.name %></option>
+                            <% }) %>
+                        </select>
+                    </label>
                     <input type="submit">
                 </form>
                 <script>
@@ -35,8 +41,8 @@
                 <table id="user-control">
                     <tr>
                         <th>username</th>
-                        <th>is Admin</th>
-                        <th>volunteers</th>
+                        <th>role</th>
+                        <th>time</th>
                         <th>Score</th>
                         <th>Edit</th>
                         <th>Delete</th>
@@ -44,21 +50,14 @@
                     <% users.forEach(function(user) { %>
                         <tr>
                             <td><%= user.username %></td>
-                            <td><%= user.isAdmin %></td>
-                            <td>
-                                <% if (typeof user.volunteers !== "undefined") { user.volunteers.forEach(function(volunteer) { %>
-                                    <% if (typeof volunteer.name !== "undefined") { %><%= volunteer.name %><% } %>:
-                                    <% if (typeof volunteer.time !== "undefined") { %><%= volunteer.time %><% } %>
-                                <% })} %>
-                            </td>
-                            <td>
-                                <% if (typeof user.score !== "undefind") { %> <%= user.score %> <% } %>
-                            </td>
+                            <td><%= user.role %></td>
+                            <td><%= user.time %></td>
+                            <td><%= user.score %></td>
                             <td>
                                 <form action="/users/<%= user._id %>/edit" method="GET"><input type="submit" value="Edit"></form>
                             </td>
                             <td>
-                                <form action="/users/<%= user._id %>/delete?_method=DELETE" method="POST" name="userDel" onsubmit="return validateDel('<%= user.username %>')"><input type="submit" value="Delete"></form>
+                                <form action="/users/<%= user._id %>?_method=DELETE" method="POST" name="userDel" onsubmit="return validateDel('<%= user.username %>')"><input type="submit" value="Delete"></form>
                             </td>
                         </tr>
                     <% }) %>
@@ -85,7 +84,7 @@
             <section>
                 <% if (typeof initiatives === "object") { %>
                     <% initiatives.forEach(function(initiative) { %>
-                        <form style="display: block;" action="/initiatives/<%= initiative._id %>/delete?_method=DELETE" method="POST" onsubmit="return validateDel('<%= initiative.name %>  |  <%= initiative.nameAr %>')">
+                        <form style="display: block;" action="/initiatives/<%= initiative._id %>?_method=DELETE" method="POST" onsubmit="return validateDel('<%= initiative.name %>  |  <%= initiative.nameAr %>')">
                             <h4>
                                 <img src="/uploads/<%= initiative.imgPath %>" alt="initiative img" style="width: 50px;">
                                 <%= initiative.name %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= initiative.nameAr %>
