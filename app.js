@@ -17,9 +17,10 @@ connectDB();
 // Route files
 const index = require("./routes/index");
 const auth = require("./routes/auth");
-const eduvents = require("./routes/eduvents");
+const eduvents = require("./routes/edu-vents");
 const teams = require("./routes/teams");
 const users = require("./routes/users");
+const initiatives = require("./routes/initiatives");
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use(auth);
 app.use("/edu-vents", eduvents);
 app.use("/teams", teams);
 app.use("/users", users);
+app.use("/initiatives", initiatives);
 
 app.use(errorHandler);
 

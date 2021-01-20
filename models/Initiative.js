@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const slugify = require("slugify");
 
 const InitiativeSchema = new mongoose.Schema({
     name: {
@@ -48,6 +49,12 @@ InitiativeSchema.virtual("eduvents", {
     localField: "_id",
     foreignField: "initiative",
     justOne: false
+});
+
+// Create Initiative Slug from name
+InitiativeSchema.pre("save", async function(next) {
+    this.slug = slugify(this.name.en, { lower: true });
+    next();
 });
 
 module.exports = mongoose.model("Initiative", InitiativeSchema);

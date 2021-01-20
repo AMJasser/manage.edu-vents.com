@@ -84,10 +84,10 @@
             <section>
                 <% if (typeof initiatives === "object") { %>
                     <% initiatives.forEach(function(initiative) { %>
-                        <form style="display: block;" action="/initiatives/<%= initiative._id %>?_method=DELETE" method="POST" onsubmit="return validateDel('<%= initiative.name %>  |  <%= initiative.nameAr %>')">
+                        <form style="display: block;" action="/initiatives/<%= initiative._id %>?_method=DELETE" method="POST" onsubmit="return validateDel('<%= initiative.name.en %>  |  <%= initiative.name.ar %>')">
                             <h4>
-                                <img src="/uploads/<%= initiative.imgPath %>" alt="initiative img" style="width: 50px;">
-                                <%= initiative.name %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= initiative.nameAr %>
+                                <img src="/uploads/<%= initiative.img %>" alt="initiative img" style="width: 50px;">
+                                <%= initiative.name.en %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= initiative.name.ar %>
                                 <a href="/initiatives/<%= initiative._id %>/edit">Edit</a>
                                 <input type="submit" value="✕" style="display: inline;">
                             </h4>
@@ -96,12 +96,12 @@
                 <% } %>
                 <form action="/initiatives" method="POST" enctype="multipart/form-data">
                     <h3>Add an Initiative</h3>
-                    <label>Name*<input type="text" name="name" placeholder="Name" required></label>
-                    <label>Description*<textarea name="description" placeholder="Description" required></textarea></label>
+                    <label>Name*<input type="text" name="name.en" placeholder="Name" required></label>
+                    <label>Description*<textarea name="description.en" placeholder="Description" required></textarea></label>
                     <label>Image*<input type="file" name="img" required></label>
-                    <label>URL*<input type="url" name="urltoapp" placeholder="URL" required></label>
-                    <label dir="rtl" style="text-align: right;">الاسم*<input dir="rtl" type="text" name="nameAr" placeholder="الاسم" required></label>
-                    <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="descriptionAr" placeholder="الوصف" required></textarea></label>
+                    <label>URL*<input type="url" name="url" placeholder="URL" required></label>
+                    <label dir="rtl" style="text-align: right;">الاسم*<input dir="rtl" type="text" name="name.ar" placeholder="الاسم" required></label>
+                    <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="description.ar" placeholder="الوصف" required></textarea></label>
                     <input type="submit">
                 </form>
             </section>

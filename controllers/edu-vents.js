@@ -25,7 +25,6 @@ exports.getEduvent = asyncHandler(async (req, res, next) => {
 // @route   POST /edu-vents
 exports.createEduvent = asyncHandler(async (req, res, next) => {
     req.body.user = req.user.id;
-    req.body.img = req.file.filename;
 
     await Eduvent.create(req.body);
 
@@ -66,14 +65,11 @@ exports.updateEduvent = asyncHandler(async (req, res, next) => {
     }
 
     if (req.body.changePic === "yes") {
-        req.body.img = req.file.filename;
-
         if (fs.existsSync("./public/uploads/" + eduvent.img)) {
             fs.unlinkSync("./public/uploads/" + eduvent.img);
         }
     }
-
-    req.body.changePic = undefined;
+    delete req.body.changePic;
 
     await Eduvent.findByIdAndUpdate(req.params.id, req.body, {
         runValidators: true
