@@ -2,17 +2,18 @@ const express = require("express");
 const upload = require("../middleware/multer");
 const {
     create,
-    edit
+    edit,
 } = require("../middleware/imgHandler");
 const { 
     createInitiative,
     getUpdate,
-    updateInitiative
+    updateInitiative,
+    deleteInitiative
 } = require("../controllers/initiatives");
 
 const router = express.Router();
 
-const { protect } = require("../middleware/auth");
+const { protect, authorize } = require("../middleware/auth");
 
 const Initiative = require("../models/Initiative");
 
@@ -22,7 +23,7 @@ router.get("/:id/edit", protect, getUpdate);
 
 router
     .route("/:id")
-    .put(protect, upload.single("img"), edit(Initiative), updateInitiative);
-    //.delete(protect, deleteEduvent);
+    .put(protect, upload.single("img"), edit(Initiative), updateInitiative)
+    .delete(protect, authorize("admin"), deleteInitiative);
 
 module.exports = router;

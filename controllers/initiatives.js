@@ -38,3 +38,17 @@ exports.updateInitiative = asyncHandler(async (req, res, next) => {
 
     res.status(200).redirect("/");
 });
+
+// @desc    Delete initiative
+// @route   DELETE /initiatives/:id
+exports.deleteInitiative = asyncHandler(async (req, res, next) => {
+    const initiative = await Initiative.findById(req.params.id);
+
+    if (!initiative) {
+        return next(new ErrorResponse(`Initiative with id ${req.params.id} not found`, 404));
+    }
+
+    initiative.remove();
+
+    res.status(200).redirect("/");
+});

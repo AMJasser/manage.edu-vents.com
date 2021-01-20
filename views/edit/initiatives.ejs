@@ -2,7 +2,7 @@
     
     <div class="sections">
         <section>
-            <form action="/edu-vents/<%= initiative._id %>?_method=PUT" method="POST" enctype="multipart/form-data" name="eduventsForm">
+            <form action="/initiatives/<%= initiative._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
                 <h3>Edit an Initiative</h3>
                 <input type="text" name="name.en" placeholder="Name" <% if (typeof initiative.name.en !== "undefined") { %> value="<%= initiative.name.en %>" <% } %>>
                 <input type="text" name="name.ar" placeholder="Name" <% if (typeof initiative.name.ar !== "undefined") { %> value="<%= initiative.name.ar %>" <% } %>>
@@ -10,7 +10,7 @@
                 <textarea name="description.ar" placeholder="Description"><% if (typeof initiative.description.ar !== "undefined") { %> <%= initiative.description.ar %> <% } %></textarea>
                 <input type="url" name="url" placeholder="URL" <% if (typeof initiative.url !== "undefined") { %> value="<%= initiative.url %>" <% } %>>
                 <label for="changePic">Do you want to change the picture?
-                    <select name="changePic" id="changePic" onchange="changePic()">
+                    <select name="changePic" id="changePic" onchange="changePicCheck()">
                         <option>no</option>
                         <option>yes</option>
                     </select>
@@ -19,9 +19,10 @@
                 <input type="submit">
             </form>
             <script>
-                function changePic() {
+                function changePicCheck() {
                     if (document.getElementById("changePic").value === "yes") {
                         document.getElementById("img").style.display = "unset";
+                        document.getElementById("img").value = "";
                     } else {
                         document.getElementById("img").style.display = "none";
                     }
