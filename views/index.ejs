@@ -174,15 +174,15 @@
                 </label>
                 <label>Description*<textarea name="description.en" id="description" placeholder="Description" required></textarea></label>
                 <label dir="rtl" style="text-align: right;">الوصف*<textarea dir="rtl" name="description.ar" id="descriptionAr" placeholder="الوصف" required></textarea></label>
-                <label>Location<input type="text" name="location" id="location" placeholder="Location"></label>
+                <label>Location<input type="text" name="location" id="location" placeholder="Location"><a style="cursor: pointer;" onclick="resetMap()">✕</a></label>
                 <div id="map" style="height: 500px;"></div>
                 <label>URL to Application*<input type="url" name="url" id="url" placeholder="URL to Application" required></label>
-                <label>Start Date <input type="datetime-local" name="date"></label>
-                <label>End Date <input type="datetime-local" name="endDate"></label>
+                <label>Start Date <input type="datetime-local" name="date"><a style="cursor: pointer;" onclick="eduventForm['date'].value = ''">✕</a></label>
+                <label>End Date <input type="datetime-local" name="endDate"><a style="cursor: pointer;" onclick="eduventForm['endDate'].value = ''">✕</a></label>
                 <label>Image*<input type="file" name="img" required></label>
                 <label>Initiative
                     <select name="initiative" id="initiative">
-                        <option value="">none</option>
+                        <option>none</option>
                         <% initiatives.forEach(function(initiative) { %>
                             <option value="<%= initiative._id %>"><%= initiative.name.en %></option>
                         <% }) %>
@@ -190,9 +190,6 @@
                 </label>
                 <input type="submit">
             </form>
-            <script>
-
-            </script>
             <script>
                 var locationInput = document.getElementById("location");
                 var locationData;
@@ -236,13 +233,42 @@
                         }
                     });
                 }
+
+                function resetMap() {
+                    initMap();
+                    locationData = undefined;
+                    locationInput.value = "";
+                }
             </script>
             <script>
                 var eduventForm = document.forms["eduventsForm"];
             
                 eduventForm.addEventListener("submit", (e) => {
                     e.preventDefault();
-                    eduventForm["location"].value = JSON.stringify(locationData) || "";
+                    if (eduventForm["initiative"].value === "none") {
+                        eduventForm["initiative"].remove();
+                    }
+                    if (locationData) {
+                        var coordsEl1 = document.createElement("input");
+                        coordsEl1.type = "checkbox";
+                        coordsEl1.name = "location.coordinates";
+                        coordsEl1.checked = true;
+                        coordsEl1.value = locationData.coordinates[0];
+                        var coordsEl2 = document.createElement("input");
+                        coordsEl2.type = "checkbox";
+                        coordsEl2.name = "location.coordinates";
+                        coordsEl2.checked = true;
+                        coordsEl2.value = locationData.coordinates[1];
+                        var addressEl = document.createElement("input");
+                        addressEl.type = "text";
+                        addressEl.name = "location.formattedAddress";
+                        addressEl.value = locationData.formattedAddress;
+
+                        eduventForm.appendChild(coordsEl1);
+                        eduventForm.appendChild(coordsEl2);
+                        eduventForm.appendChild(addressEl);
+                        document.getElementById("location").remove();
+                    }
                     e.currentTarget.submit();
                 });
             </script>

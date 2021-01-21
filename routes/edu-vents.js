@@ -4,7 +4,6 @@ const {
     create,
     edit
 } = require("../middleware/imgHandler");
-const dataValid = require("../middleware/dataValid");
 const { 
     getEduvent,
     createEduvent,
@@ -17,14 +16,16 @@ const router = express.Router();
 
 const { protect } = require("../middleware/auth");
 
-router.post("/", protect, upload.single("img"), create, dataValid, createEduvent);
+const Eduvent = require("../models/Eduvent");
+
+router.post("/", protect, upload.single("img"), create, createEduvent);
 
 router.get("/:id/edit", protect, getUpdate);
 
 router
     .route("/:id")
     .get(protect, getEduvent)
-    .put(protect, upload.single("img"), edit, dataValid, updateEduvent)
+    .put(protect, upload.single("img"), edit(Eduvent), updateEduvent)
     .delete(protect, deleteEduvent);
 
 module.exports = router;

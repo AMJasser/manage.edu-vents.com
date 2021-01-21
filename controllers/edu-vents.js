@@ -64,13 +64,6 @@ exports.updateEduvent = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`User ${req.params.id} is not authorized to update this EDU-vent`, 401));
     }
 
-    if (req.body.changePic === "yes") {
-        if (fs.existsSync("./public/uploads/" + eduvent.img)) {
-            fs.unlinkSync("./public/uploads/" + eduvent.img);
-        }
-    }
-    delete req.body.changePic;
-
     await Eduvent.findByIdAndUpdate(req.params.id, req.body, {
         runValidators: true
     });

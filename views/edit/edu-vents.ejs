@@ -20,9 +20,9 @@
                         <% }) %>
                     </select>
                 </label>
-                <textarea name="description.en" placeholder="Description"><% if (typeof eduvent.description.en !== "undefined") { %> <%= eduvent.description.en %> <% } %></textarea>
-                <textarea name="description.ar" placeholder="Description"><% if (typeof eduvent.description.ar !== "undefined") { %> <%= eduvent.description.ar %> <% } %></textarea>
-                <label>Location<input type="text" name="location" id="location" placeholder="Location" <% if (typeof eduvent.location.formattedAddress !== "undefined") { %> value="<%= eduvent.location.formattedAddress %>" <% } %>></label>
+                <textarea name="description.en" placeholder="Description"><% if (typeof eduvent.description.en !== "undefined") { %><%= eduvent.description.en %><% } %></textarea>
+                <textarea name="description.ar" placeholder="Description"><% if (typeof eduvent.description.ar !== "undefined") { %><%= eduvent.description.ar %><% } %></textarea>
+                <label>Location<input type="text" name="location" id="location" placeholder="Location" <% if (typeof eduvent.location.formattedAddress !== "undefined") { %> value="<%= eduvent.location.formattedAddress %>" <% } %>><a style="cursor: pointer;" onclick="resetMap()">✕</a></label>
                 <div id="map" style="height: 500px;"></div>
                 <input type="url" name="url" placeholder="URL to Application" <% if (typeof eduvent.url !== "undefined") { %> value="<%= eduvent.url %>" <% } %>>
         
@@ -39,18 +39,18 @@
                     }
                 %>
         
-                <label>Start Date <input type="datetime-local" name="date" <% if (typeof eduvent.date !== "undefined") { %> value="<%= date %>" <% } %>></label>
-                <label>End Date <input type="datetime-local" name="endDate" <% if (typeof eduvent.endDate !== "undefined") { %> value="<%= endDate %>" <% } %>></label>
+                <label>Start Date <input type="datetime-local" name="date" <% if (typeof eduvent.date !== "undefined") { %> value="<%= date %>" <% } %>><a style="cursor: pointer;" onclick="eduventForm['date'].value = ''">✕</a></label>
+                <label>End Date <input type="datetime-local" name="endDate" <% if (typeof eduvent.endDate !== "undefined") { %> value="<%= endDate %>" <% } %>><a style="cursor: pointer;" onclick="eduventForm['endDate'].value = ''">✕</a></label>
                 <label for="initiative">Initiative
                     <select name="initiative" id="initiative">
-                        <option value="">none</option>
+                        <option>none</option>
                         <% initiatives.forEach(function(initiative) { %>
                             <option <% if (typeof eduvent.initiative !== "undefined" && eduvent.initiative.toString() === initiative._id.toString()) { %> selected <% } %> value="<%= initiative._id %>"><%= initiative.name.en %></option>
                         <% }) %>
                     </select>
                 </label>
                 <label for="changePic">Do you want to change the picture?
-                    <select name="changePic" id="changePic">
+                    <select name="changePic" id="changePic" onchange="cPic()">
                         <option>no</option>
                         <option>yes</option>
                     </select>
@@ -60,23 +60,21 @@
             </form>
         </section>
         <script>
-            window.onload = function() {
+            function cPic() {
                 var select = document.getElementById("changePic");
                 var fileInput = document.getElementById("img");
-        
-                select.onchange = function() {
-                    if (select.value === "yes") {
-                        fileInput.style.display = "unset";
-                    } else {
-                        fileInput.style.display = "none";
-                    }
+                if (select.value === "yes") {
+                    fileInput.style.display = "unset";
+                    fileInput.value = "";
+                } else {
+                    fileInput.style.display = "none";
                 }
             }
         </script>
         <script>
             var locationInput = document.getElementById("location");
             var locationData;
-        
+
             function initMap() {
                 const map = new google.maps.Map(document.getElementById("map"), {
                     zoom: 5,
@@ -86,17 +84,21 @@
                     }
                 });
                 const geocoder = new google.maps.Geocoder();
-        
+
                 let timeout = null;
-        
+
                 locationInput.addEventListener("keyup", function(e) {
                     clearTimeout(timeout);
                     timeout = setTimeout(function() {
                         if(e.target.value) geocodeAddress(geocoder, map)
                     }, 3000);
                 });
+
+                window.onload = function() {
+                    geocodeAddress(geocoder, map)
+                }
             }
-        
+
             function geocodeAddress(geocoder, resultsMap) {
                 const address = locationInput.value;
                 geocoder.geocode({ address: address }, (results, status) => {
@@ -116,13 +118,42 @@
                     }
                 });
             }
+
+            function resetMap() {
+                initMap();
+                locationData = undefined;
+                locationInput.value = "";
+            }
         </script>
         <script>
             var eduventForm = document.forms["eduventsForm"];
-            
+        
             eduventForm.addEventListener("submit", (e) => {
                 e.preventDefault();
-                eduventForm["location"].value = JSON.stringify(locationData) || "";
+                if (eduventForm["initiative"].value === "none") {
+                    eduventForm["initiative"].remove();
+                }
+                if (locationData) {
+                    var coordsEl1 = document.createElement("input");
+                    coordsEl1.type = "checkbox";
+                    coordsEl1.name = "location.coordinates";
+                    coordsEl1.checked = true;
+                    coordsEl1.value = locationData.coordinates[0];
+                    var coordsEl2 = document.createElement("input");
+                    coordsEl2.type = "checkbox";
+                    coordsEl2.name = "location.coordinates";
+                    coordsEl2.checked = true;
+                    coordsEl2.value = locationData.coordinates[1];
+                    var addressEl = document.createElement("input");
+                    addressEl.type = "text";
+                    addressEl.name = "location.formattedAddress";
+                    addressEl.value = locationData.formattedAddress;
+
+                    eduventForm.appendChild(coordsEl1);
+                    eduventForm.appendChild(coordsEl2);
+                    eduventForm.appendChild(addressEl);
+                    document.getElementById("location").remove();
+                }
                 e.currentTarget.submit();
             });
         </script>
