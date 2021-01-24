@@ -42,9 +42,20 @@ exports.getUpdate = asyncHandler(async (req, res, next) => {
 // @route   PUT /team/:id
 // @access   Private/Admin
 exports.updateTeam = asyncHandler(async (req, res, next) => {
-    await Team.findByIdAndUpdate(req.params.id, req.body, {
-        runValidators: true
+    let team = await Team.findById(req.params.id);
+    
+    Object.keys(team.schema.paths).forEach(function(field) {
+        if (field !== "__v" && field !== "_id") {
+            field = field.split(".");
+            if (field.length === 1) {
+                team[field[0]] = req.body[field[0]];
+            } else {
+                team[field[0]][field[1]] = req.body[field[0] + "." + field[1]];
+            }
+        }
     });
+
+    team.save();
 
     res.status(200).redirect("/");
 });

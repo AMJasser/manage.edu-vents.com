@@ -26,15 +26,24 @@ exports.getUpdate = asyncHandler(async (req, res, next) => {
 // @desc    Update initiative
 // @route   PUT /initiatives/:id
 exports.updateInitiative = asyncHandler(async (req, res, next) => {
-    const initiative = await Initiative.findById(req.params.id);
+    let initiative = await Initiative.findById(req.params.id);
 
     if (!initiative) {
         return next(new ErrorResponse(`Initiative with id ${req.params.id} not found`, 404));
     }
 
-    await Initiative.findByIdAndUpdate(req.params.id, req.body, {
-        runValidators: true
+    Object.keys(initiative.schema.paths).forEach(function(field) {
+        if (field !== "__v" && field !== "_id" && field !== "img") {
+            field = field.split(".");
+            if (field.length === 1) {
+                initiative[field[0]] = req.body[field[0]];
+            } else {
+                initiative[field[0]][field[1]] = req.body[field[0] + "." + field[1]];
+            }
+        }
     });
+
+    initiative.save();
 
     res.status(200).redirect("/");
 });

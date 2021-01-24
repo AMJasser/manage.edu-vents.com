@@ -53,7 +53,7 @@ exports.getUpdate = asyncHandler(async (req, res, next) => {
 // @desc    edit edu-vent
 // @route   PUT /edu-vents/:id
 exports.updateEduvent = asyncHandler(async (req, res, next) => {
-    const eduvent = await Eduvent.findById(req.params.id);
+    let eduvent = await Eduvent.findById(req.params.id);
 
     if (!eduvent) {
         return next(new ErrorResponse(`EDU-vent with id ${req.params.id} not found`, 404));
@@ -64,9 +64,18 @@ exports.updateEduvent = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`User ${req.params.id} is not authorized to update this EDU-vent`, 401));
     }
 
-    await Eduvent.findByIdAndUpdate(req.params.id, req.body, {
-        runValidators: true
+    Object.keys(eduvent.schema.paths).forEach(function(field) {
+        if (field !== "__v" && field !== "_id" && field !== "img" && field !== "clickCount" && field !== "user" && field !== "location.type") {
+            field = field.split(".");
+            if (field.length === 1) {
+                eduvent[field[0]] = req.body[field[0]];
+            } else {
+                eduvent[field[0]][field[1]] = req.body[field[0] + "." + field[1]];
+            }
+        }
     });
+
+    eduvent.save();
 
     res.status(200).redirect("/");
 });

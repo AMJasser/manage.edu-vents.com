@@ -245,9 +245,15 @@
             
                 eduventForm.addEventListener("submit", (e) => {
                     e.preventDefault();
-                    if (eduventForm["initiative"].value === "none") {
-                        eduventForm["initiative"].remove();
-                    }
+                    eduventForm.childNodes.forEach(function(child) {
+                        if (child.value === "" || child.value === "none") {
+                            child.remove();
+                        } else if (child instanceof HTMLLabelElement) {
+                            if (child.childNodes[1].value === "" || child.childNodes[1].value === "none") {
+                                child.childNodes[1].remove();
+                            }
+                        }
+                    });
                     if (locationData) {
                         var coordsEl1 = document.createElement("input");
                         coordsEl1.type = "checkbox";

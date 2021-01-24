@@ -4,7 +4,7 @@ const fs = require("fs");
 
 const picEdit = (Resource) => {
     return asyncMiddleware(async (req, res, next) => {
-        const resource = await Resource.findById(req.params.id);
+        let resource = await Resource.findById(req.params.id);
 
         if (!resource) {
             return next(new ErrorResponse(`Resource with id ${req.params.id} not found`, 404));
@@ -14,10 +14,12 @@ const picEdit = (Resource) => {
             if (fs.existsSync("./public/uploads/" + resource.img)) {
                 fs.unlinkSync("./public/uploads/" + resource.img);
             }
-            req.body.img = req.file.filename;
-        } else {
-            delete req.body.img
+
+            resource.img = req.file.filename;
+            resource.save();
         }
+        
+        delete req.body.img;
         delete req.body.changePic;
 
         next();
