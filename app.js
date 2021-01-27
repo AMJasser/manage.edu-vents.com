@@ -4,9 +4,11 @@ const morgan = require("morgan");
 const colors = require("colors");
 const cookieParser = require("cookie-parser");
 const methodOverride = require('method-override');
+const schedule = require("node-schedule");
 const path = require("path");
 const errorHandler = require("./middleware/error");
 const connectDB = require("./config/db");
+const dailyDelete = require("./utils/dailyDelete");
 
 // Load ENV vars
 dotenv.config({ path: "./config/config.env" });
@@ -55,6 +57,8 @@ app.use("/users", users);
 app.use("/initiatives", initiatives);
 
 app.use(errorHandler);
+
+schedule.scheduleJob("0 0 * * *", dailyDelete);
 
 const PORT = process.env.PORT || 5000;
 

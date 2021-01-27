@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const fs = require("fs");
 const types = require("../utils/types");
 
 const EduventSchema = new mongoose.Schema({
@@ -78,6 +79,12 @@ const EduventSchema = new mongoose.Schema({
         type: Number,
         default: 0
     }
+});
+
+EduventSchema.pre("remove", function() {
+    if (fs.existsSync("./public/uploads/" + this.img) && this.img !== "no-photo.jpg") {
+        fs.unlinkSync("./public/uploads/" + this.img);
+    };
 });
 
 module.exports = mongoose.model("Eduvent", EduventSchema);

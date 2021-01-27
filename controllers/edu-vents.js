@@ -1,4 +1,3 @@
-const fs = require("fs");
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const types = require("../utils/types");
