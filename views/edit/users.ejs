@@ -2,7 +2,7 @@
 
     <div class="sections">
         <section>
-            <form action="/users/<%= user._id %>?_method=PUT" method="POST" enctype="application/x-www-form-urlencoded">
+            <form action="/users/<%= user._id %>?_method=PUT" method="POST" enctype="application/x-www-form-urlencoded" name="userForm">
                 <h3>Edit a User</h3>
                 <label>Username<input type="text" name="username" placeholder="Username" value="<%= user.username %>"></label>
                 <label>Role
@@ -16,8 +16,9 @@
                 <label>Time<input type="number" name="time" placeholder="Time" value="<%= user.time %>"></label>
                 <label>Team
                     <select name="team">
+                        <option>none</option>
                         <% teams.forEach(function(team) { %>
-                            <option <% if (user.team===team._id) { %> selected <% } %> value="<%= team._id %>"><%= team.name %></option>
+                            <option <% if (typeof user.team !== "undefined" && user.team._id.toString() === team._id.toString()) { %> selected <% } %> value="<%= team._id %>"><%= team.name %></option>
                         <% }) %>
                     </select>
                 </label>
@@ -38,6 +39,23 @@
                         document.getElementById("password").style.display = "none";
                     }
                 }
+            </script>
+            <script>
+                var userForm = document.forms["userForm"];
+
+                userForm.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    userForm.childNodes.forEach(function(child) {
+                        if (child.value === "" || child.value === "none") {
+                            child.remove();
+                        } else if (child instanceof HTMLLabelElement) {
+                            if (child.childNodes[1].value === "" || child.childNodes[1].value === "none") {
+                                child.childNodes[1].remove();
+                            }
+                        }
+                    });
+                    e.currentTarget.submit();
+                })
             </script>
         </section>
     </div>

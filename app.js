@@ -17,6 +17,7 @@ connectDB();
 // Route files
 const index = require("./routes/index");
 const auth = require("./routes/auth");
+const timer = require("./routes/timer");
 const eduvents = require("./routes/edu-vents");
 const teams = require("./routes/teams");
 const users = require("./routes/users");
@@ -47,6 +48,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Mount routers
 app.use(index);
 app.use(auth);
+app.use("/timer", timer);
 app.use("/edu-vents", eduvents);
 app.use("/teams", teams);
 app.use("/users", users);

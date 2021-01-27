@@ -5,7 +5,7 @@
         <% if (user.role === "admin") { %>
             <section>
                 <h3>Create User</h3>
-                <form action="/users" method="POST">
+                <form action="/users" method="POST" enctype="application/x-www-form-urlencoded" name="userForm">
                     <input type="text" name="username" placeholder="Username">
                     <input type="password" name="password" placeholder="Password">
                     <label>Role
@@ -17,6 +17,7 @@
                     </label>
                     <label>Team
                         <select name="team">
+                            <option>none</option>
                             <% teams.forEach(function(team) { %>
                                 <option value="<%= team._id %>"><%= team.name %></option>
                             <% }) %>
@@ -25,15 +26,21 @@
                     <input type="submit">
                 </form>
                 <script>
-                    function admincheck() {
-                        if (document.getElementById("isAdmin").value === "false") {
-                            document.getElementById("Rnames").style.display = "unset";
-                            document.getElementById("Wnames").style.display = "unset";
-                        } else {
-                            document.getElementById("Rnames").style.display = "none";
-                            document.getElementById("Wnames").style.display = "none";
-                        }
-                    }
+                    var userForm = document.forms["userForm"];
+    
+                    userForm.addEventListener("submit", (e) => {
+                        e.preventDefault();
+                        userForm.childNodes.forEach(function(child) {
+                            if (child.value === "" || child.value === "none") {
+                                child.remove();
+                            } else if (child instanceof HTMLLabelElement) {
+                                if (child.childNodes[1].value === "" || child.childNodes[1].value === "none") {
+                                    child.childNodes[1].remove();
+                                }
+                            }
+                        });
+                        e.currentTarget.submit();
+                    })
                 </script>
             </section>
             <section>
@@ -136,7 +143,7 @@
                     data: {
                         labels: chartData.names,
                         datasets: [{
-                            label: "test chart",
+                            label: "teams chart",
                             backgroundColor: "rgb(28,68,178)",
                             data: chartData.scores
                         }]

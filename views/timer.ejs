@@ -1,0 +1,250 @@
+<%- include("partials/header") %>
+
+    <div class="sections">
+        <section id="timerSection">
+            <span id="startTimer" onclick="startTimer()">&#9658;</span>
+            <p id="timerDisplay" style="display: none;">0m 0s</p>
+            <div style="margin: 15px 0;">
+                <button style="background-color: greenyellow; border: none; display: none;" id="pauseButt" onclick="pause()">pause</button>
+                <button style="background-color: grey; border: none; display: none;" id="playButt" onclick="play()">play</button>
+            </div>
+            <button style="display: none; margin: 0 auto;" id="submitBut" onclick="submitTime()">Submit Time</button>
+            <p id="notificationtxt" style="color: red; font-weight: bold; display: none; text-align: center;">NOTIFICATIONS NOT ENABLED CLICK HERE TO *ATTEMPT* TO ENABLE</p>
+        </section>
+
+        <section id="validSection">
+            <button style="border: none; color: white; background-color: grey;" id="validButt">Validate</button>
+            <p style="display: none;" id="validCountdown"><strong>validate before: 2m 30s</strong></p>
+            <p>Every 10 minutes, you will have to validate your existence.</p>
+        </section>
+
+        <script>
+            var timerSection = document.getElementById("timerSection");
+            var playButton = document.getElementById("startTimer");
+            var timerDisplay = document.getElementById("timerDisplay");
+            var pauseButt = document.getElementById("pauseButt");
+            var playButt = document.getElementById("playButt");
+            var submitBut = document.getElementById("submitBut");
+            var validSection = document.getElementById("validSection");
+            var validButt = document.getElementById("validButt");
+            var validCountdown = document.getElementById("validCountdown");
+            var notificationtxt = document.getElementById("notificationtxt");
+            var timeSec = 0;
+            var timeMin = 0;
+            var countdownMin = 2;
+            var countdownSec = 30;
+            var origMin = 0;
+            var origSec = 0;
+            var isPaused = false;
+            var useAlert = false;
+            var validReq = false;
+            var timeCookie;
+
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+            }
+
+            function loadCookie() {
+                if (typeof timeCookie !== "undefined") {
+                    alert("Your time is still saved. Please select your role and start the timer.");
+                    timeMin = timeCookie;
+                    timerDisplay.innerHTML = timeMin + "m " + timeSec + "s";
+                }
+            }
+
+            function startTimer() {
+                playButton.style.display = "none";
+                timerDisplay.style.display = "unset";
+                validSection.style.display = "unset";
+                playButt.style.display = "inline-block";
+                pauseButt.style.display = "inline-block";
+                setInterval(function () {
+                    if (!isPaused) {
+                        timeSec++;
+                        if (timeSec >= 60) {
+                            timeMin++;
+                            timeSec = 0;
+                        }
+                        timerDisplay.innerHTML = timeMin + "m " + timeSec + "s";
+                    }
+                    if (timeMin % 10 === 0 && timeMin !== 0 && timeSec === 0 && isPaused === false) {
+                        validate();
+                    }
+                    if (timeMin % 1 === 0 && timeMin !== 0 && timeSec === 0) {
+                        var dt = new Date;
+                        var newdt = new Date(dt.getTime() + 5*60000);
+                        document.cookie = "time=" + timeMin + "; expires=" + newdt + "; path=/timer;";
+                        document.cookie = "longtime=" + timeMin + "; expires=" + new Date(dt.getTime() + 86400000) + "; path=/timer;";
+                    }
+                }, 1000);
+            }
+
+            function pause() {
+                if (isPaused === false) {
+                    isPaused = true;
+                    playButt.style.backgroundColor = "greenyellow";
+                    pauseButt.style.backgroundColor = "grey";
+                    submitBut.style.display = "block";
+                }
+            }
+
+            function play() {
+                if (isPaused === true && validReq === false) {
+                    isPaused = false;
+                    playButt.style.backgroundColor = "grey";
+                    pauseButt.style.backgroundColor = "greenyellow";
+                    submitBut.style.display = "none";
+                }
+            }
+
+            function checkNotificationPromise() {
+                try {
+                    Notification.requestPermission().then();
+                } catch (e) {
+                    return false;
+                }
+                return true;
+            }
+
+            function askNotificationPermission() {
+                function handlePermission(permission) {
+                    if (!('permission' in Notification)) {
+                        Notification.permission = permission;
+                    }
+                    if (Notification.permission === 'denied' || Notification.permission === 'default') {
+                        notificationtxt.style.display = 'block';
+                        useAlert = true;
+                    } else {
+                        notificationtxt.style.display = 'none';
+                    }
+                }
+                if (!('Notification' in window)) {
+                    alert("This browser does not support notifications. The validation happens every 10 minutes so you can set a timer.");
+                    useAlert = true;
+                } else {
+                    if (checkNotificationPromise()) {
+                        Notification.requestPermission()
+                            .then((permission) => {
+                                handlePermission(permission);
+                            })
+                    } else {
+                        Notification.requestPermission(function (permission) {
+                            handlePermission(permission);
+                        });
+                    }
+                }
+            }
+
+            function notify() {
+                var notification = new Notification('Validate Your Existence', {
+                    icon: '/images/notif_logo.jpg',
+                    body: "Please open up the EDU-vents timer tab to validate that you are still there",
+                });
+                setTimeout(notification.close.bind(notification), 10000);
+            }
+            function validate() {
+                validButt.style.backgroundColor = "red";
+                validCountdown.style.display = "block";
+                validReq = true;
+                countdownMin = 2;
+                countdownSec = 30;
+                origMin = timeMin;
+                origSec = timeSec;
+                var countdownTimer = setInterval(function () {
+                    countdownSec--;
+                    if (countdownSec === -1) {
+                        countdownMin--;
+                        countdownSec = 59;
+                    }
+                    validCountdown.innerHTML = "<strong>validate before: " + countdownMin + "m " + countdownSec + "s</strong>";
+                    if (countdownMin === 0 && countdownSec === 0) {
+                        pause();
+                        timeMin = origMin;
+                        timeSec = origSec;
+                        timerDisplay.innerHTML = timeMin + "m " + timeSec + "s";
+                        clearInterval(countdownTimer);
+                    }
+                }, 1000);
+                if (useAlert === true) {
+                    alert("Validate Your Existence");
+                } else {
+                    notify();
+                }
+                validButt.addEventListener("click", function () {
+                    clearInterval(countdownTimer);
+                    validButt.style.backgroundColor = "grey";
+                    validCountdown.style.display = "none";
+                    validReq = false;
+                });
+            }
+
+            function submitTime() {
+                /*var bodyData = "id=" + role.options[role.selectedIndex].dataset.id + "&time=";
+                if (timeSec >= 30) {
+                    timeMin++;
+                }
+                bodyData = bodyData + timeMin;
+                document.cookie = "time=; expires= Thu, 01 Jan 1970 00:00:00 GMT; path=/timer;";
+                document.cookie = "role=; expires= Thu, 01 Jan 1970 00:00:00 GMT; path=/timer;";
+                const promise = new Promise((resolve, reject) => {
+                    var xhr = new XMLHttpRequest;
+                    xhr.open("POST", "/timer", true);
+                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhr.onload = function() {
+                        if (xhr.status >= 400) {
+                            reject("An error occurred");
+                        } else {
+                            resolve(xhr.response);
+                        }
+                    }
+                    xhr.onerror = function() {
+                        reject("An error occurred");
+                    }
+                    xhr.send(bodyData);
+                })
+                .then(responseData => {
+                    location.href = responseData;
+                })
+                .catch(err => {
+                    alert("There was an error submitting your time. Please take a picture of your time and send it to Abdullah AlJasser.");
+                })*/
+                if (timeSec >= 30) {
+                    timeMin++;
+                }
+
+                let form = document.createElement("form");
+                form.action = "/timer";
+                form.method = "POST";
+                form.enctype = "application/x-www-form-urlencoded";
+                form.style.display = "none";
+
+                let id = document.createElement("input");
+                id.type = "text";
+                id.name = "id";
+                id.value = "<%= user._id %>";
+
+                let time = document.createElement("input");
+                time.type = "number";
+                time.name = "time";
+                time.value = timeMin;
+
+                form.appendChild(id);
+                form.appendChild(time);
+
+                document.cookie = "time=; expires= Thu, 01 Jan 1970 00:00:00 GMT; path=/timer;";
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+         
+            window.onload = function() {
+                checkNotificationPromise();
+                timeCookie = getCookie("time");
+                loadCookie();
+            };
+        </script>        
+    </div>
+
+<%- include("partials/footer") %>

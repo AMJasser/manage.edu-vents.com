@@ -45,8 +45,15 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
     }
     delete req.body.cPassword
 
-    Object.keys(req.body).forEach(function(field) {
-        user[field] = req.body[field];
+    Object.keys(user.schema.paths).forEach(function(field) {
+        if (field !== "__v" && field !== "_id" && field !== "password") {
+            field = field.split(".");
+            if (field.length === 1) {
+                user[field[0]] = req.body[field[0]];
+            } else {
+                user[field[0]][field[1]] = req.body[field[0] + "." + field[1]];
+            }
+        }
     });
 
     user.save();
