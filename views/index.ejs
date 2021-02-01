@@ -71,6 +71,9 @@
                 </table>
             </section>
             <section>
+                <a id="monthBut" href="/new-month">New Month</a>
+            </section>
+            <section>
                 <% if (typeof teams === "object") { %>
                     <% teams.forEach(function(team) { %>
                         <form style="display: block;" action="/teams/<%= team._id %>?_method=DELETE" method="POST" onsubmit="return validateDel('<%= team.name %>')">
@@ -252,15 +255,7 @@
             
                 eduventForm.addEventListener("submit", (e) => {
                     e.preventDefault();
-                    eduventForm.childNodes.forEach(function(child) {
-                        if (child.value === "" || child.value === "none") {
-                            child.remove();
-                        } else if (child instanceof HTMLLabelElement) {
-                            if (child.childNodes[1].value === "" || child.childNodes[1].value === "none") {
-                                child.childNodes[1].remove();
-                            }
-                        }
-                    });
+
                     if (locationData) {
                         var coordsEl1 = document.createElement("input");
                         coordsEl1.type = "checkbox";

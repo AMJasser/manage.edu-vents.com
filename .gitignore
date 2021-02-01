@@ -9,4 +9,7 @@ scripts/
 public/uploads/*
 !public/uploads/.gitkeep
 
+public/reports/*
+!public/reports/.gitkeep
+
 ideas.txt

@@ -1,3 +1,25 @@
+    <script>
+        document.querySelectorAll("form").forEach(function (form) {
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
+                form.childNodes.forEach(function (child) {
+                    if (child.value === "" || child.value === "none") {
+                        child.remove();
+                    } else if (child instanceof HTMLLabelElement) {
+                        if (child.childNodes[1].value === "" || child.childNodes[1].value === "none") {
+                            child.childNodes[1].remove();
+                        }
+                    }
+                });
+                e.currentTarget.submit();
+            });
+        });
+    </script>
+
+    <% if (typeof msg !== "undefined") { %>
+        <script>alert("<%= msg %>")</script>
+    <% } %>
+
 </body>
 
 </html>

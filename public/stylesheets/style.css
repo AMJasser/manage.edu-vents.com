@@ -178,7 +178,7 @@ section button:hover {
     transition: all 0.5s ease;
 }
 
-section #timerBut {
+section #timerBut, section #monthBut {
     border: 1px solid rgb(28,68,178);
     color: rgb(28,68,178);
     padding: 10px 5px;
@@ -188,7 +188,7 @@ section #timerBut {
     font-size: 20px;
 }
 
-section #timerBut:hover {
+section #timerBut:hover, section #monthBut:hover {
     background: rgb(28,68,178);
     color: white;
     cursor: pointer;

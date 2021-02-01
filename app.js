@@ -24,6 +24,7 @@ const eduvents = require("./routes/edu-vents");
 const teams = require("./routes/teams");
 const users = require("./routes/users");
 const initiatives = require("./routes/initiatives");
+const newMonth = require("./routes/new-month");
 
 const app = express();
 
@@ -55,6 +56,7 @@ app.use("/edu-vents", eduvents);
 app.use("/teams", teams);
 app.use("/users", users);
 app.use("/initiatives", initiatives);
+app.use("/new-month", newMonth);
 
 app.use(errorHandler);
 

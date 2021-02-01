@@ -1,4 +1,5 @@
 const ErrorResponse = require("../utils/errorResponse");
+const url = require("url");
 
 const errorHandler = (err, req, res, next) => {
     let error = { ...err };
@@ -26,9 +27,17 @@ const errorHandler = (err, req, res, next) => {
         error = new ErrorResponse(message, 400);
     }
 
+    // Create redirect string
+    const redirect = url.format({
+        pathname: "/",
+        query: {
+            "msg": error.message || "Server Error"
+        }
+    });
+
     res
         .status(error.statusCode || 500)
-        .render("error", { error: error.message || "Server Error" });
+        .redirect(redirect)
 }
 
 module.exports = errorHandler;
