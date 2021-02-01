@@ -28,16 +28,53 @@ const errorHandler = (err, req, res, next) => {
     }
 
     // Create redirect string
-    const redirect = url.format({
+    let redirect = {
         pathname: "/",
         query: {
-            "msg": error.message || "Server Error"
+            msg: error.message || "Server Error"
         }
-    });
+    }
+
+    if (req.method === "POST" && req.url === "/edu-vents") {
+        redirect.query.form = "eduventsForm";
+        Object.keys(req.body).forEach(function(field) {
+            console.log(field);
+            if (field !== "user" && field !== "img") {
+                redirect.query[field] = req.body[field];
+            }
+        });
+    }
+
+    if (req.method === "POST" && req.url === "/initiatives") {
+        redirect.query.form = "initiativesForm";
+        Object.keys(req.body).forEach(function(field) {
+            if (field !== "user" && field !== "img") {
+                redirect.query[field] = req.body[field];
+            }
+        });
+    }
+
+    if (req.method === "POST" && req.url === "/teams") {
+        redirect.query.form = "teamsForm";
+        Object.keys(req.body).forEach(function(field) {
+            if (field !== "user" && field !== "img") {
+                redirect.query[field] = req.body[field];
+            }
+        });
+    }
+
+    if (req.method === "POST" && req.url === "/users") {
+        redirect.query.form = "usersForm";
+        Object.keys(req.body).forEach(function(field) {
+            if (field !== "user" && field !== "img") {
+                redirect.query[field] = req.body[field];
+            }
+        });
+    }
 
     res
         .status(error.statusCode || 500)
-        .redirect(redirect)
+        .redirect(url.format(redirect));
 }
 
 module.exports = errorHandler;
