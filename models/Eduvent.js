@@ -63,16 +63,19 @@ const EduventSchema = new mongoose.Schema({
         required: [true, "Please add a URL"],
         match: [/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/, "Please add a valid URL"]
     },
-    featuredUntil: Date,
+    featured: {
+        type: Boolean,
+        default: false
+    },
     date: Date,
     endDate: Date,
     user: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
     },
     initiative: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Initiative"
     },
     clickCount: {

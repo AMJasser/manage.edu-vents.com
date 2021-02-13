@@ -1,5 +1,4 @@
 const express = require("express");
-const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const viewResponse = require("../utils/viewResponse");
 const Eduvent = require("../models/Eduvent");
