@@ -125,7 +125,7 @@ const teams = [
 const users = [
     {
         username: "admin",
-        password: "admin",
+        password: "admin1122",
         role: "admin",
         score: 200,
         time: 300
